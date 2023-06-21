@@ -1,0 +1,29 @@
+<?php
+// Connect to the database
+require_once 'dbconnect.php';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if the request ID is provided
+    if (isset($_POST['requestId'])) {
+        $requestId = $_POST['requestId'];
+
+        // Perform the delete operation
+        $sql = "DELETE FROM salary_certificate_requests WHERE salary_cer_request_id = '$requestId'";
+        $result = mysqli_query($conn, $sql);
+
+        if ($result) {
+            // Deletion successful
+            echo "success";
+        } else {
+            // Deletion failed
+            echo "error";
+        }
+    } else {
+        // Request ID not provided
+        echo "error";
+    }
+} else {
+    // Invalid request method
+    echo "error";
+}
+?>
