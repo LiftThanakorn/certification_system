@@ -16,7 +16,7 @@ if (isset($_SESSION['user_level'])) {
         $user_id = $_SESSION['user_id'];
 
         // Search for salary certificate requests for the user based on user_id
-        $sql = "SELECT users.fname, salary_certificate_requests.*, certificate_categories.category_name FROM salary_certificate_requests INNER JOIN users ON salary_certificate_requests.user_id = users.user_id LEFT JOIN certificate_categories ON salary_certificate_requests.category_id = certificate_categories.category_id WHERE users.user_id = '$user_id'";
+        $sql = "SELECT users.fname, requestcertificate.*, certificate_categories.category_name FROM requestcertificate INNER JOIN users ON requestcertificate.user_id = users.user_id LEFT JOIN certificate_categories ON requestcertificate.category_id = certificate_categories.category_id WHERE users.user_id = '$user_id'";
         $result = mysqli_query($conn, $sql);
     } else {
         // Redirect to dashboard_m.php for managers or admins
@@ -40,7 +40,8 @@ if (isset($_SESSION['user_level'])) {
     <?php require_once 'assest/head.php'; ?>
     <style>
         .badge {
-            font-size: .90em;
+            font-size: 16px;
+            padding: 10px 15px;
         }
 
         a#request {
@@ -68,10 +69,9 @@ if (isset($_SESSION['user_level'])) {
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" onclick="requestCertificate()">ส่งคำขอใบรับรองเงินเดือน</a>
-                            <!-- เพิ่มปุ่มส่งคำขอใบรับรองเงินเดือน -->
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm mr-2" onclick="requestCertificate()">ส่งคำขอใบรับรองเงินเดือน</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm" onclick="requestCertificateWork()">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
                         </div>
-
                     </div>
 
                     <div class="row">
@@ -95,9 +95,9 @@ if (isset($_SESSION['user_level'])) {
                                                 $index = 1;
                                                 while ($row = mysqli_fetch_assoc($result)) :
                                                 ?>
-                                                    <tr data-request-id="<?php echo $row['salary_cer_request_id']; ?>">
+                                                    <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                         <td><?php echo $index++; ?></td>
-                                                        <td><?php echo $row['salary_cer_request_id']; ?></td>
+                                                        <td><?php echo $row['requestcertificate_id']; ?></td>
                                                         <td>
                                                             <?php
                                                             $status = $row['status'];
@@ -113,7 +113,22 @@ if (isset($_SESSION['user_level'])) {
                                                             }
                                                             ?>
                                                         </td>
-                                                        <td><?php echo $row['category_name']; ?></td>
+                                                        <td>
+                                                            <?php
+                                                            $category_name = $row['category_name'];
+
+                                                            if ($category_name == 'หนังสือรับรองเงินเดือน') {
+                                                                echo "<span class='badge rounded-pill bg-primary text-light'>" . $category_name . "</span>";
+                                                            } elseif ($category_name == 'หนังสือรับรองการปฏิบัติงาน') {
+                                                                echo "<span class='badge rounded-pill bg-secondary text-light'>" . $category_name . "</span>";
+                                                            } elseif ($category_name == 'หนังสือรับรองสถานภาพโสด') {
+                                                                echo "<span class='badge rounded-pill bg-dark text-light'>" . $category_name . "</span>";
+                                                            } else {
+                                                                echo "<span class='badge rounded-pill bg-info text-light'>" . $category_name . "</span>";
+                                                            }
+                                                            ?>
+                                                        </td>
+
                                                         <td><?php echo $row['request_date']; ?></td>
                                                         <td><?php echo $row['update_date']; ?></td>
                                                     </tr>
@@ -198,10 +213,13 @@ if (isset($_SESSION['user_level'])) {
             if (result.isConfirmed) {
                 // Perform the request using Ajax
                 $.ajax({
-                    url: 'requestCertificateSalary.php',
+                    url: 'requestcertificate.php',
                     type: 'POST',
+                    data: {
+                        category_certificate: '1'
+                    },
                     success: function(response) {
-                        // Handle the response from requestCertificateSalary.php
+                        // Handle the response from requestcertificate.php
                         Swal.fire({
                             title: 'ส่งคำขอเรียบร้อยแล้ว',
                             text: 'คำขอใบรับรองเงินเดือนถูกส่งเรียบร้อยแล้ว',
@@ -219,8 +237,54 @@ if (isset($_SESSION['user_level'])) {
                         });
                     }
                 });
+
+
             }
         });
     }
 </script>
 
+<script>
+    function requestCertificateWork() {
+        Swal.fire({
+            title: 'ยืนยันการส่งคำขอ',
+            text: 'คุณต้องการส่งคำขอหนังสือรับรองการปฏิบัติงานหรือไม่?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'ส่ง',
+            cancelButtonText: 'ยกเลิก'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Perform the request using Ajax
+                $.ajax({
+                    url: 'requestcertificate.php',
+                    type: 'POST',
+                    data: {
+                        category_certificate: '1'
+                    },
+                    success: function(response) {
+                        // Handle the response from requestcertificate.php
+                        Swal.fire({
+                            title: 'ส่งคำขอเรียบร้อยแล้ว',
+                            text: 'คำขอหนังสือรับรองการปฏิบัติงานถูกส่งเรียบร้อยแล้ว',
+                            icon: 'success'
+                        }).then(() => {
+                            // Reload the page or perform any other necessary action
+                            location.reload();
+                        });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'เกิดข้อผิดพลาดในการส่งคำขอ',
+                            icon: 'error'
+                        });
+                    }
+                });
+
+            }
+        });
+    }
+</script>

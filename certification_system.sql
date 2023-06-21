@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 21, 2023 at 11:34 AM
+-- Generation Time: Jun 21, 2023 at 08:41 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -45,11 +45,11 @@ INSERT INTO `certificate_categories` (`category_id`, `category_name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `salary_certificate_requests`
+-- Table structure for table `requestcertificate`
 --
 
-CREATE TABLE `salary_certificate_requests` (
-  `salary_cer_request_id` int(11) NOT NULL,
+CREATE TABLE `requestcertificate` (
+  `requestcertificate_id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
   `status` varchar(255) DEFAULT 'รอดำเนินการ',
   `request_date` datetime DEFAULT current_timestamp(),
@@ -58,14 +58,11 @@ CREATE TABLE `salary_certificate_requests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `salary_certificate_requests`
+-- Dumping data for table `requestcertificate`
 --
 
-INSERT INTO `salary_certificate_requests` (`salary_cer_request_id`, `user_id`, `status`, `request_date`, `update_date`, `category_id`) VALUES
-(2, 8, 'ดำเนินการเสร็จเรียบร้อย', '2023-06-21 14:53:27', '2023-06-21 09:23:19', 1),
-(3, 8, 'รอดำเนินการ', '2023-06-21 15:10:35', '2023-06-21 09:19:49', 1),
-(4, 8, 'กำลังดำเนินการ', '2023-06-21 15:53:38', '2023-06-21 09:21:29', 1),
-(5, 8, 'กำลังดำเนินการ', '2023-06-21 15:56:04', '2023-06-21 09:21:32', 1);
+INSERT INTO `requestcertificate` (`requestcertificate_id`, `user_id`, `status`, `request_date`, `update_date`, `category_id`) VALUES
+(0, 8, 'รอดำเนินการ', '2023-06-22 01:37:15', '2023-06-21 18:37:15', 2);
 
 -- --------------------------------------------------------
 
@@ -109,10 +106,10 @@ ALTER TABLE `certificate_categories`
   ADD PRIMARY KEY (`category_id`);
 
 --
--- Indexes for table `salary_certificate_requests`
+-- Indexes for table `requestcertificate`
 --
-ALTER TABLE `salary_certificate_requests`
-  ADD PRIMARY KEY (`salary_cer_request_id`);
+ALTER TABLE `requestcertificate`
+  ADD PRIMARY KEY (`requestcertificate_id`);
 
 --
 -- Indexes for table `users`
@@ -130,12 +127,6 @@ ALTER TABLE `users`
 --
 ALTER TABLE `certificate_categories`
   MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT for table `salary_certificate_requests`
---
-ALTER TABLE `salary_certificate_requests`
-  MODIFY `salary_cer_request_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`

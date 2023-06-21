@@ -76,7 +76,7 @@ if (isset($_SESSION['user_level'])) {
                                                 <?php
                                                 // ดึงข้อมูลคำขอใบรับรองเงินเดือนจากฐานข้อมูล
                                                 $sql = "SELECT sc.*, u.fname, u.lname, u.affiliation, cc.category_name 
-            FROM salary_certificate_requests sc
+            FROM requestcertificate sc
             INNER JOIN users u ON sc.user_id = u.user_id
             INNER JOIN certificate_categories cc ON sc.category_id = cc.category_id"; // เพิ่มการเชื่อมตาราง certificate_categories
                                                 $result = mysqli_query($conn, $sql);
@@ -90,7 +90,7 @@ if (isset($_SESSION['user_level'])) {
                                                         echo "<td>" . $row['fname'] . "</td>";
                                                         echo "<td>" . $row['lname'] . "</td>";
                                                         echo "<td>" . $row['affiliation'] . "</td>";
-                                                        echo "<td>" . $row['salary_cer_request_id'] . "</td>";
+                                                        echo "<td>" . $row['requestcertificate_id'] . "</td>";
                                                         echo "<td>";
 
                                                         // แสดงสถานะของคำขอเป็น Pill badges
@@ -114,7 +114,7 @@ if (isset($_SESSION['user_level'])) {
                                                             $userLevel = $_SESSION['user_level'];
                                                             if ($userLevel == 'แอดมิน' || $userLevel == 'ผู้บริหาร') {
                                                                 // สร้างปุ่มอัพเดตสถานะ
-                                                                echo "<button class='btn btn-warning update-status-btn' data-request-id='" . $row['salary_cer_request_id'] . "'><i class='fas fa-pen'></i></button>";
+                                                                echo "<button class='btn btn-warning update-status-btn' data-request-id='" . $row['requestcertificate_id'] . "'><i class='fas fa-pen'></i></button>";
                                                             } else {
                                                                 // แสดงข้อความว่าไม่มีสิทธิ์อัพเดตสถานะ
                                                                 echo "ไม่มีสิทธิ์";
