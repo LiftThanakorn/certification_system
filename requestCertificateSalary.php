@@ -15,7 +15,7 @@ if (isset($_SESSION['user_level']) && $_SESSION['user_level'] === 'ผู้ใ�
         $category_id = 1;
 
         // Insert the salary certificate request into the database
-        $sql = "INSERT INTO salary_certificate_requests (user_id, category_id) VALUES ('$user_id', '$category_id')";
+        $sql = "INSERT INTO requestcertificate (user_id, category_id) VALUES ('$user_id', '$category_id')";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
@@ -26,3 +26,4 @@ if (isset($_SESSION['user_level']) && $_SESSION['user_level'] === 'ผู้ใ�
     }
 }
 ?>
+

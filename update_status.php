@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $status = $_POST['status'];
 
         // อัปเดตสถานะในฐานข้อมูลโดยใช้ Prepared Statements
-        $stmt = $conn->prepare("UPDATE salary_certificate_requests SET status = ? WHERE salary_cer_request_id = ?");
+        $stmt = $conn->prepare("UPDATE requestcertificate SET status = ? WHERE requestcertificate_id = ?");
         $stmt->bind_param("si", $status, $requestId);
         $result = $stmt->execute();
 

@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $requestId = $_POST['requestId'];
 
         // Perform the delete operation
-        $sql = "DELETE FROM salary_certificate_requests WHERE salary_cer_request_id = '$requestId'";
+        $sql = "DELETE FROM requestcertificate WHERE requestcertificate_id = '$requestId'";
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
