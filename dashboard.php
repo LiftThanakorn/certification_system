@@ -52,30 +52,6 @@ if (isset($_SESSION['user_level'])) {
         a#request {
             text-align: right;
         }
-
-        #Single.bg-info,
-        .btn-info {
-            background-color: #FF8C00 !important;
-        }
-
-
-        #coe.bg-success,
-        .btn-success {
-            background-color: #6f42c1 !important;
-        }
-
-        .cursor-pointer {
-            cursor: pointer;
-        }
-
-        #othercer.bg-secondary,
-        .btn-secondary {
-            background-color: #5a5c69 !important;
-        }
-
-        .custom-swal-content {
-            font-size: 16px;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -99,10 +75,7 @@ if (isset($_SESSION['user_level'])) {
                         <h1 class="h3 mb-0 text-gray-800"></h1>
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm mr-2" onclick="requestCertificate()">ส่งคำขอใบรับรองเงินเดือน</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-success shadow-sm mr-2" onclick="requestCertificateWork()">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm mr-2" onclick="requestCertificateSingle()">ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
-                            <a href="#" id="othercer" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm" onclick="requestCertificate('certificateType')">ส่งคำขอหนังสือรับรองอื่นๆ</a>
-
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm" onclick="requestCertificateWork()">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
                         </div>
                     </div>
 
@@ -118,6 +91,8 @@ if (isset($_SESSION['user_level'])) {
                                             <thead>
                                                 <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                     <th scope="col">ลำดับ</th>
+                                                    <th>รหัสคำขอ</th>
+                                                    <th>สถานะ</th>
                                                     <th>หมวดหมู่</th>
                                                     <th>สถานะ</th>
                                                     <th>วันที่ส่งคำขอ</th>
@@ -132,21 +107,7 @@ if (isset($_SESSION['user_level'])) {
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                         <td><?php echo $index++; ?></td>
-                                                        <td>
-                                                            <?php
-                                                            $category_name = $row['category_name'];
-
-                                                            if ($category_name == 'หนังสือรับรองเงินเดือน') {
-                                                                echo "<span class='badge rounded-pill bg-primary text-light'>" . $category_name . "</span>";
-                                                            } elseif ($category_name == 'หนังสือรับรองการปฏิบัติงาน') {
-                                                                echo "<span id='coe' class='badge rounded-pill bg-success text-light'>" . $category_name . "</span>";
-                                                            } elseif ($category_name == 'หนังสือรับรองสถานภาพโสด') {
-                                                                echo "<span id='Single' class='badge rounded-pill bg-info text-light '>" . $category_name . "</span>";
-                                                            } elseif ($category_name == 'หนังสือรับรองอื่นๆ') {
-                                                                echo "<span class='badge rounded-pill bg-dark text-light cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")'>" . $category_name . " <i class='fas fa-eye'></i></span>";
-                                                            }
-                                                            ?>
-                                                        </td>
+                                                        <td><?php echo $row['requestcertificate_id']; ?></td>
                                                         <td>
                                                             <?php
                                                             $status = $row['status'];
@@ -336,123 +297,6 @@ if (isset($_SESSION['user_level'])) {
                     }
                 });
 
-            }
-        });
-    }
-</script>
-<script>
-    function requestCertificateSingle() {
-        Swal.fire({
-            title: 'ยืนยันการส่งคำขอ',
-            text: 'คุณต้องการส่งคำขอหนังสือรับรองสถานภาพโสดหรือไม่?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'ส่ง',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Perform the request using Ajax
-                $.ajax({
-                    url: 'requestcertificate.php',
-                    type: 'POST',
-                    data: {
-                        category_certificate: '3'
-                    },
-                    success: function(response) {
-                        // Handle the response from requestcertificate.php
-                        Swal.fire({
-                            title: 'ส่งคำขอเรียบร้อยแล้ว',
-                            text: 'คำขอหนังสือรับรองสถานภาพโสดถูกส่งเรียบร้อยแล้ว',
-                            icon: 'success'
-                        }).then(() => {
-                            // Reload the page or perform any other necessary action
-                            location.reload();
-                        });
-                    },
-                    error: function() {
-                        Swal.fire({
-                            title: 'เกิดข้อผิดพลาด',
-                            text: 'เกิดข้อผิดพลาดในการส่งคำขอ',
-                            icon: 'error'
-                        });
-                    }
-                });
-
-            }
-        });
-    }
-</script>
-
-<script>
-    function requestCertificate(certificateType) {
-        Swal.fire({
-            title: 'ยืนยันการส่งคำขอ',
-            text: 'คุณต้องการส่งคำขอหนังสือรับรองหรือไม่?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'ส่ง',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // แสดงกล่องข้อความให้ผู้ใช้กรอกข้อมูลเพิ่มเติม
-                Swal.fire({
-                    title: 'เพิ่มข้อมูลเพิ่มเติม',
-                    html: '<textarea id="additionalData" class="swal2-textarea" placeholder="เช่น หนังสือรับรองธนาคารออมสิน,กรุงไทย"></textarea>',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ส่ง',
-                    cancelButtonText: 'ยกเลิก',
-                    preConfirm: () => {
-                        // รับข้อมูลเพิ่มเติมจากกล่องข้อความ
-                        const additionalData = Swal.getPopup().querySelector('#additionalData').value;
-                        // ส่งคำขอหนังสือรับรองไปยังเซิร์ฟเวอร์พร้อมกับข้อมูลเพิ่มเติม
-                        return $.ajax({
-                            url: 'requestcertificate.php',
-                            type: 'POST',
-                            data: {
-                                category_certificate: '4',
-                                certificateType,
-                                additional_data: additionalData
-                            }
-                        });
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                            title: 'ส่งคำขอเรียบร้อยแล้ว',
-                            text: 'คำขอหนังสือรับรองถูกส่งเรียบร้อยแล้ว',
-                            icon: 'success'
-                        }).then(() => {
-                            location.reload();
-                        });
-                    }
-                }).catch(() => {
-                    Swal.fire({
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'เกิดข้อผิดพลาดในการส่งคำขอ',
-                        icon: 'error'
-                    });
-                });
-            }
-        });
-    }
-</script>
-
-
-<script>
-    function showAdditionalData(additionalData) {
-        Swal.fire({
-            title: 'ข้อมูลเพิ่มเติม',
-            html: '<p style="font-size: 24px;">' + additionalData + '</p>',
-            confirmButtonColor: '#3085d6',
-            confirmButtonText: 'ตกลง',
-            customClass: {
-                content: 'custom-swal-content'
             }
         });
     }
