@@ -87,7 +87,8 @@ if (isset($_SESSION['user_level'])) {
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm mr-2" onclick="requestCertificate()">ส่งคำขอใบรับรองเงินเดือน</a>
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm mr-2" onclick="requestCertificateWork()">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm mr-2" onclick="requestCertificateSingle()">ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm" onclick="othercertifications()">ส่งคำขอหนังสือรับรองอื่นๆ</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm" onclick="requestCertificate('certificateType')">ส่งคำขอหนังสือรับรองอื่นๆ</a>
+
                         </div>
                     </div>
 
@@ -369,4 +370,63 @@ if (isset($_SESSION['user_level'])) {
             }
         });
     }
+</script>
+
+<script>
+    function requestCertificate(certificateType) {
+  Swal.fire({
+    title: 'ยืนยันการส่งคำขอ',
+    text: 'คุณต้องการส่งคำขอหนังสือรับรอง ' + certificateType + ' หรือไม่?',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'ส่ง',
+    cancelButtonText: 'ยกเลิก'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // แสดงกล่องข้อความให้ผู้ใช้กรอกข้อมูลเพิ่มเติม
+      Swal.fire({
+        title: 'เพิ่มข้อมูลเพิ่มเติม',
+        html:
+          '<input type="text" id="additionalData" class="swal2-input" placeholder="ข้อมูลเพิ่มเติม">',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'ส่ง',
+        cancelButtonText: 'ยกเลิก',
+        preConfirm: () => {
+          // รับข้อมูลเพิ่มเติมจากกล่องข้อความ
+          const additionalData = Swal.getPopup().querySelector('#additionalData').value;
+          // ส่งคำขอหนังสือรับรองไปยังเซิร์ฟเวอร์พร้อมกับข้อมูลเพิ่มเติม
+          return $.ajax({
+            url: 'requestcertificate.php',
+            type: 'POST',
+            data: {
+              category_certificate:'4' ,certificateType,
+              additional_data: additionalData
+            }
+          });
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: 'ส่งคำขอเรียบร้อยแล้ว',
+            text: 'คำขอหนังสือรับรอง ' + certificateType + ' ถูกส่งเรียบร้อยแล้ว',
+            icon: 'success'
+          }).then(() => {
+            location.reload();
+          });
+        }
+      }).catch(() => {
+        Swal.fire({
+          title: 'เกิดข้อผิดพลาด',
+          text: 'เกิดข้อผิดพลาดในการส่งคำขอ',
+          icon: 'error'
+        });
+      });
+    }
+  });
+}
+
 </script>

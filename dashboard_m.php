@@ -89,8 +89,7 @@ if (isset($_SESSION['user_level'])) {
                                                         echo "<th scope='row'>" . $count . "</th>";
                                                         echo "<td>" . $row['fname'] . " " . $row['lname'] . "</td>";
                                                         echo "<td>" . $row['affiliation'] . "</td>";
-                                                        echo "<td>" . $row['requestcertificate_id'] . "</td>";
-                                                        echo "<td>" . $row['category_name'] . "</td>"; // เพิ่มหมวดหมู่
+                                                        echo "<td>" . $row['salary_cer_request_id'] . "</td>";
                                                         echo "<td>";
 
                                                         // แสดงสถานะของคำขอเป็น Pill badges
