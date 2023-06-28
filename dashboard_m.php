@@ -222,15 +222,60 @@ $(document).ready(function() {
                     // โหลดหน้าใหม่เพื่อแสดงสถานะที่อัปเดตแล้ว
                     location.reload();
                 });
+                return; // Stop the function execution
             }
+
+            // แสดง SweetAlert2 สำหรับอัปเดตสถานะ
+            Swal.fire({
+                title: 'เลือกสถานะใหม่',
+                input: 'select',
+                inputOptions: {
+                    'รอดำเนินการ': 'รอดำเนินการ',
+                    'กำลังดำเนินการ': 'กำลังดำเนินการ',
+                    'ดำเนินการเสร็จเรียบร้อย': 'ดำเนินการเสร็จเรียบร้อย'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'กรุณาเลือกสถานะ';
+                    }
+                },
+                preConfirm: (status) => {
+                    // ส่งค่าสถานะที่เลือกไปยังไฟล์ update_status.php เพื่ออัปเดตในฐานข้อมูล
+                    return $.ajax({
+                        url: 'update_status.php',
+                        type: 'POST',
+                        data: {
+                            request_id: requestId,
+                            status: status
+                        },
+                        dataType: 'json'
+                    });
+                }
+            }).then((result) => {
+                if (result.value && result.value.success) {
+                    // อัปเดตสถานะเรียบร้อยแล้ว
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'อัปเดตสถานะเรียบร้อยแล้ว',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        // โหลดหน้าใหม่เพื่อแสดงสถานะที่อัปเดตแล้ว
+                        location.reload();
+                    });
+                }
+            });
         });
     });
-});
+</script>
 
 </script>
 
 
-<script>
+/* <script>
     function showAdditionalData(additionalData) {
         Swal.fire({
             title: 'ข้อมูลเพิ่มเติม',
@@ -242,4 +287,4 @@ $(document).ready(function() {
             }
         });
     }
-</script>
+</script> */
