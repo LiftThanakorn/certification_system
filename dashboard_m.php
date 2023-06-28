@@ -275,7 +275,7 @@ $(document).ready(function() {
 </script>
 
 
-/* <script>
+ <script>
     function showAdditionalData(additionalData) {
         Swal.fire({
             title: 'ข้อมูลเพิ่มเติม',
@@ -287,4 +287,4 @@ $(document).ready(function() {
             }
         });
     }
-</script> */
+</script>
