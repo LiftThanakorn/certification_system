@@ -52,16 +52,6 @@ if (isset($_SESSION['user_level'])) {
         a#request {
             text-align: right;
         }
-
-        #Single.bg-info,
-        .btn-info {
-            background-color: #FF8C00 !important;
-        }
-
-        #coe.bg-secondary,
-        .btn-secondary {
-            background-color: #6f42c1 !important;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -85,9 +75,7 @@ if (isset($_SESSION['user_level'])) {
                         <h1 class="h3 mb-0 text-gray-800"></h1>
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm mr-2" onclick="requestCertificate()">ส่งคำขอใบรับรองเงินเดือน</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm mr-2" onclick="requestCertificateWork()">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm mr-2" onclick="requestCertificateSingle()">ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm" onclick="othercertifications()">ส่งคำขอหนังสือรับรองอื่นๆ</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm" onclick="requestCertificateWork()">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
                         </div>
                     </div>
 
@@ -104,6 +92,7 @@ if (isset($_SESSION['user_level'])) {
                                                 <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                     <th scope="col">ลำดับ</th>
                                                     <th>รหัสคำขอ</th>
+                                                    <th>สถานะ</th>
                                                     <th>หมวดหมู่</th>
                                                     <th>สถานะ</th>
                                                     <th>วันที่ส่งคำขอ</th>
@@ -119,21 +108,6 @@ if (isset($_SESSION['user_level'])) {
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                         <td><?php echo $index++; ?></td>
                                                         <td><?php echo $row['requestcertificate_id']; ?></td>
-                                                        <td>
-                                                            <?php
-                                                            $category_name = $row['category_name'];
-
-                                                            if ($category_name == 'หนังสือรับรองเงินเดือน') {
-                                                                echo "<span class='badge rounded-pill bg-primary text-light'>" . $category_name . "</span>";
-                                                            } elseif ($category_name == 'หนังสือรับรองการปฏิบัติงาน') {
-                                                                echo "<span id='coe' class='badge rounded-pill bg-secondary text-light'>" . $category_name . "</span>";
-                                                            } elseif ($category_name == 'หนังสือรับรองสถานภาพโสด') {
-                                                                echo "<span id='Single' class='badge rounded-pill bg-info text-light '>" . $category_name . "</span>";
-                                                            } else {
-                                                                echo "<span class='badge rounded-pill bg-dark text-light'>" . $category_name . "</span>";
-                                                            }
-                                                            ?>
-                                                        </td>
                                                         <td>
                                                             <?php
                                                             $status = $row['status'];
@@ -160,6 +134,7 @@ if (isset($_SESSION['user_level'])) {
                                                 <?php endwhile; ?>
                                             </tbody>
                                         </table>
+
                                     </div>
                                 </div>
                             </div>
@@ -307,50 +282,6 @@ if (isset($_SESSION['user_level'])) {
                         Swal.fire({
                             title: 'ส่งคำขอเรียบร้อยแล้ว',
                             text: 'คำขอหนังสือรับรองการปฏิบัติงานถูกส่งเรียบร้อยแล้ว',
-                            icon: 'success'
-                        }).then(() => {
-                            // Reload the page or perform any other necessary action
-                            location.reload();
-                        });
-                    },
-                    error: function() {
-                        Swal.fire({
-                            title: 'เกิดข้อผิดพลาด',
-                            text: 'เกิดข้อผิดพลาดในการส่งคำขอ',
-                            icon: 'error'
-                        });
-                    }
-                });
-
-            }
-        });
-    }
-</script>
-<script>
-    function requestCertificateSingle() {
-        Swal.fire({
-            title: 'ยืนยันการส่งคำขอ',
-            text: 'คุณต้องการส่งคำขอหนังสือรับรองสถานภาพโสดหรือไม่?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'ส่ง',
-            cancelButtonText: 'ยกเลิก'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Perform the request using Ajax
-                $.ajax({
-                    url: 'requestcertificate.php',
-                    type: 'POST',
-                    data: {
-                        category_certificate: '3'
-                    },
-                    success: function(response) {
-                        // Handle the response from requestcertificate.php
-                        Swal.fire({
-                            title: 'ส่งคำขอเรียบร้อยแล้ว',
-                            text: 'คำขอหนังสือรับรองสถานภาพโสดถูกส่งเรียบร้อยแล้ว',
                             icon: 'success'
                         }).then(() => {
                             // Reload the page or perform any other necessary action
