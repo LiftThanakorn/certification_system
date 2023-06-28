@@ -10,4 +10,42 @@
     body {
         font-family: 'Prompt', sans-serif;
     }
+
+    #btn-delete {
+            font-size: 14px;
+            padding: 10px 15px;
+        }
+
+        .badge {
+            font-size: 14px;
+            padding: 10px 15px;
+        }
+
+        a#request {
+            text-align: right;
+        }
+
+        #Single.bg-info,
+        .btn-info {
+            background-color: #FF55BB !important;
+        }
+
+
+        #coe.bg-success,
+        .btn-success {
+            background-color: #FF7F3F !important;
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        #othercer.bg-secondary,
+        .btn-secondary {
+            background-color: #CD104D !important;
+        }
+
+        .custom-swal-content {
+            font-size: 16px;
+        }
 </style>

@@ -1,12 +1,3 @@
-<?php
-// Check if user level is set
-if (isset($_SESSION['user_level'])) {
-    $userLevel = $_SESSION['user_level'];
-} else {
-    $userLevel = ''; // Set default value if user level is not set
-}
-?>
-
 <body class="sidebar-toggled">
     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
         <!-- Sidebar - Brand -->
@@ -22,20 +13,19 @@ if (isset($_SESSION['user_level'])) {
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
-            <?php
-            $dashboardLink = '';
-            if ($userLevel === 'ผู้ใช้ทั่วไป') {
-                $dashboardLink = 'dashboard.php';
-            } else if ($userLevel === 'ผู้บริหาร' || $userLevel === 'แอดมิน') {
-                $dashboardLink = 'dashboard_m.php';
-            }
-            ?>
-            <a class="nav-link" href="<?php echo $dashboardLink; ?>">
+            <a class="nav-link" href="dashboard.php">
                 <i class="fas fa-fw fa-tachometer-alt"></i>
-                <span>Dashboard</span>
+                <span>หน้าแรก</span>
             </a>
         </li>
-
+        <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') { ?>
+    <li class="nav-item active">
+        <a class="nav-link" href="dashboard_m.php">
+            <i class="fas fa-fw fa-table"></i>
+            <span>สำหรับผู้บริหารเท่านั้น</span>
+        </a>
+    </li>
+<?php } ?>
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block" />
 
