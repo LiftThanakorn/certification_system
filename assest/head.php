@@ -48,4 +48,22 @@
         .custom-swal-content {
             font-size: 16px;
         }
+        .fade-in-down {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 1s, transform 1s;
+}
+
+.fade-in-down.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+.fa-eye {
+    color: #0000FF;
+  }
+
+  .fa-eye-slash {
+    color: #FF0000;
+  }
+
 </style>

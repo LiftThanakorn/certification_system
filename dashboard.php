@@ -29,9 +29,12 @@ if (isset($_SESSION['user_level'])) {
     <title>Dashboard</title>
     <?php require_once 'assest/head.php'; ?>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+
 </head>
 
-<body id="page-top">
+<body id="page-top" class="fade-in-down">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -51,7 +54,7 @@ if (isset($_SESSION['user_level'])) {
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm mr-2" onclick="requestCertificateSalary()" style="font-size: 16px;">ส่งคำขอหนังสือรับรองเงินเดือน</a>
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-success shadow-sm mr-2" onclick="requestCertificateWork()" style="font-size: 16px;">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm mr-2 text-light" onclick="requestCertificateSingle()" style="font-size: 16px;" >ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm mr-2 text-light" onclick="requestCertificateSingle()" style="font-size: 16px;">ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
                             <a href="#" id="othercer" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm" onclick="requestCertificate('OtherCertificate')" style="font-size: 16px;">ส่งคำขอหนังสือรับรองอื่นๆ</a>
                         </div>
 
@@ -66,7 +69,7 @@ if (isset($_SESSION['user_level'])) {
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="requestTable" class="table table-bordered" width="100%" cellspacing="0">
+                                        <table id="requestTable" class="table table-bordered" width="100%" cellspacing="0" style="text-align: center;">
                                             <thead>
                                                 <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                     <th scope="col">ลำดับ</th>
@@ -79,11 +82,11 @@ if (isset($_SESSION['user_level'])) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $index = 1;
+                                                $index = mysqli_num_rows($result);
                                                 while ($row = mysqli_fetch_assoc($result)) :
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
-                                                        <td><?php echo $index++; ?></td>
+                                                        <td><?php echo $index--; ?></td>
                                                         <td>
                                                             <?php
                                                             $certificate_type_name = $row['certificate_type_name'];
@@ -117,8 +120,8 @@ if (isset($_SESSION['user_level'])) {
                                                         <td><?php echo $row['request_date']; ?></td>
                                                         <td><?php echo $row['update_date']; ?></td>
                                                         <td>
-                                                            <button class="btn btn-sm btn-danger" id="btn-delete" onclick="deleteRequest(<?php echo $row['requestcertificate_id']; ?>)">
-                                                                <i class="fas fa-trash"></i> ยกเลิก
+                                                            <button style="padding: 5px 10px;" class="btn btn-sm btn-danger" id="btn-delete" onclick="deleteRequest(<?php echo $row['requestcertificate_id']; ?>)">
+                                                                <i class="fas fa-times"></i> ยกเลิก
                                                             </button>
                                                         </td>
                                                     </tr>
@@ -142,6 +145,7 @@ if (isset($_SESSION['user_level'])) {
 </body>
 
 </html>
+
 <script>
     $(document).ready(function() {
         $('#requestTable').DataTable();

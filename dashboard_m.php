@@ -25,13 +25,14 @@ if (isset($_SESSION['user_level'])) {
 
 
 $sql = "SELECT sc.*, u.fname, u.lname, u.affiliation, cc.certificate_type_name, a.fname AS approver_fname, a.lname AS approver_lname 
-FROM requestcertificate sc
-INNER JOIN users u ON sc.user_id = u.user_id
-INNER JOIN certificate_type cc ON sc.certificate_type_id = cc.certificate_type_id
-LEFT JOIN users a ON sc.approver_id = a.user_id";
+        FROM requestcertificate sc
+        INNER JOIN users u ON sc.user_id = u.user_id
+        INNER JOIN certificate_type cc ON sc.certificate_type_id = cc.certificate_type_id
+        LEFT JOIN users a ON sc.approver_id = a.user_id
+        ORDER BY sc.request_date";
+
 
 $result = mysqli_query($conn, $sql);
-
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,9 +40,10 @@ $result = mysqli_query($conn, $sql);
 <head>
     <title>Dashboard (Admin/Manager)</title>
     <?php require_once 'assest/head.php'; ?>
+
 </head>
 
-<body id="page-top">
+<body id="page-top" class="fade-in-down">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -57,13 +59,14 @@ $result = mysqli_query($conn, $sql);
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="card shadow mb-4">
+
+                            <div class="card shadow mb-4 ">
                                 <div class="card-header py-3">
-                                    <h3 class="m-0 font-weight-bold text-primary">ตารางข้อมูลผู้ขอใบรับรอง</h3>
+                                    <h3 class="m-0 font-weight-bold text-primary">ตารางคำร้องขอใบรับรอง</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0">
+                                        <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0" style="text-align: center;">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">ลำดับ</th>
@@ -78,11 +81,11 @@ $result = mysqli_query($conn, $sql);
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $index = 1;
+                                                $index = mysqli_num_rows($result); // นับจำนวนแถวทั้งหมดในผลลัพธ์
                                                 while ($row = mysqli_fetch_assoc($result)) :
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
-                                                        <td><?php echo $index++; ?></td>
+                                                        <td><?php echo $index--; ?></td> <!-- ลดค่า $index ทีละหนึ่งทุกครั้ง -->
                                                         <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
                                                         <td><?php echo $row['affiliation']; ?></td>
                                                         <td>
@@ -96,8 +99,23 @@ $result = mysqli_query($conn, $sql);
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
                                                                 echo "<span id='Single' class='badge rounded-pill bg-info text-light '>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองอื่นๆ') {
-                                                                echo "<span id='othercer' class='badge rounded-pill bg-secondary text-light cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")'>" . $certificate_type_name . " <i class='fas fa-eye'></i></span>";
+                                                                echo "<div id='othercer' class='alert alert-primary cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")'>";
+                                                                echo $certificate_type_name;
+                                                            
+                                                                $isClicked = false;
+                                                                $iconClass = 'fas fa-eye-slash';
+                                                            
+                                                                if ($isClicked) {
+                                                                    $isClicked = true;
+                                                                    $iconClass = 'fas fa-eye';
+                                                                }
+                                                            
+                                                                echo "<i id='eye-icon' class='" . $iconClass . "' data-clicked='" . $isClicked . "' onclick='toggleClicked()'></i>";
+                                                                echo "</div>";
                                                             }
+                                                            
+                                                                                                                       
+                                                            
                                                             ?>
                                                         </td>
                                                         <td>
@@ -136,14 +154,16 @@ $result = mysqli_query($conn, $sql);
                                                             }
                                                             ?>
                                                         </td>
-
                                                     </tr>
                                                 <?php endwhile; ?>
                                             </tbody>
                                         </table>
+
+
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -165,68 +185,67 @@ $result = mysqli_query($conn, $sql);
 
 
 <script>
-$(document).ready(function() {
-    $('.update-status-btn').click(function() {
-        var requestId = $(this).data('request-id');
-        var status = $(this).closest('tr').find('.status-badge').text();
-        
-        // ตรวจสอบระดับผู้ใช้ว่าเป็น "แอดมิน" หรือไม่
-        var userLevel = "<?php echo $userLevel; ?>"; // กำหนดค่าตัวแปรนี้ตามระบบการตรวจสอบระดับผู้ใช้ของคุณ
-        
-        if (status === 'ดำเนินการเสร็จเรียบร้อย' && userLevel !== "แอดมิน") {
-            Swal.fire({
-                title: 'ไม่สามารถอัปเดตสถานะได้',
-                text: 'คำขอที่เสร็จเรียบร้อยแล้วไม่สามารถอัปเดตสถานะได้',
-                icon: 'error'
-            });
-            return;
-        }
+    $(document).ready(function() {
+        $('.update-status-btn').click(function() {
+            var requestId = $(this).data('request-id');
+            var status = $(this).closest('tr').find('.status-badge').text();
 
-        Swal.fire({
-            title: 'เลือกสถานะใหม่',
-            input: 'select',
-            inputOptions: {
-                'รอดำเนินการ': 'รอดำเนินการ',
-                'กำลังดำเนินการ': 'กำลังดำเนินการ',
-                'ดำเนินการเสร็จเรียบร้อย': 'ดำเนินการเสร็จเรียบร้อย'
-            },
-            showCancelButton: true,
-            confirmButtonText: 'ยืนยัน',
-            cancelButtonText: 'ยกเลิก',
-            inputValidator: (value) => {
-                if (!value) {
-                    return 'กรุณาเลือกสถานะ';
-                }
-            },
-            preConfirm: (status) => {
-                // ส่งค่าสถานะที่เลือกไปยังไฟล์ update_status.php เพื่ออัปเดตในฐานข้อมูล
-                return $.ajax({
-                    url: 'update_status.php',
-                    type: 'POST',
-                    data: {
-                        request_id: requestId,
-                        status: status
-                    },
-                    dataType: 'json'
-                });
-            }
-        }).then((result) => {
-            if (result.value && result.value.success) {
-                // อัปเดตสถานะเรียบร้อยแล้ว
+            // ตรวจสอบระดับผู้ใช้ว่าเป็น "แอดมิน" หรือไม่
+            var userLevel = "<?php echo $userLevel; ?>"; // กำหนดค่าตัวแปรนี้ตามระบบการตรวจสอบระดับผู้ใช้ของคุณ
+
+            if (status === 'ดำเนินการเสร็จเรียบร้อย' && userLevel !== "แอดมิน") {
                 Swal.fire({
-                    icon: 'success',
-                    title: 'อัปเดตสถานะเรียบร้อยแล้ว',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    // โหลดหน้าใหม่เพื่อแสดงสถานะที่อัปเดตแล้ว
-                    location.reload();
+                    title: 'ไม่สามารถอัปเดตสถานะได้',
+                    text: 'คำขอที่เสร็จเรียบร้อยแล้วไม่สามารถอัปเดตสถานะได้',
+                    icon: 'error'
                 });
+                return;
             }
+
+            Swal.fire({
+                title: 'เลือกสถานะใหม่',
+                input: 'select',
+                inputOptions: {
+                    'รอดำเนินการ': 'รอดำเนินการ',
+                    'กำลังดำเนินการ': 'กำลังดำเนินการ',
+                    'ดำเนินการเสร็จเรียบร้อย': 'ดำเนินการเสร็จเรียบร้อย'
+                },
+                showCancelButton: true,
+                confirmButtonText: 'ยืนยัน',
+                cancelButtonText: 'ยกเลิก',
+                inputValidator: (value) => {
+                    if (!value) {
+                        return 'กรุณาเลือกสถานะ';
+                    }
+                },
+                preConfirm: (status) => {
+                    // ส่งค่าสถานะที่เลือกไปยังไฟล์ update_status.php เพื่ออัปเดตในฐานข้อมูล
+                    return $.ajax({
+                        url: 'update_status.php',
+                        type: 'POST',
+                        data: {
+                            request_id: requestId,
+                            status: status
+                        },
+                        dataType: 'json'
+                    });
+                }
+            }).then((result) => {
+                if (result.value && result.value.success) {
+                    // อัปเดตสถานะเรียบร้อยแล้ว
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'อัปเดตสถานะเรียบร้อยแล้ว',
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        // โหลดหน้าใหม่เพื่อแสดงสถานะที่อัปเดตแล้ว
+                        location.reload();
+                    });
+                }
+            });
         });
     });
-});
-
 </script>
 
 

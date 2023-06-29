@@ -55,6 +55,27 @@ header("Expires: 0");
     .card-title {
       margin-bottom: 0;
     }
+
+    .fade-in-down {
+        animation: fadeInDownAnimation 0.8s ease-in;
+        animation-fill-mode: forwards;
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+
+    @keyframes fadeInDownAnimation {
+        0% {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+
   </style>
   <title>ระบบขอใบรับรอง CertificateSystemRERU</title>
 </head>
@@ -63,7 +84,7 @@ header("Expires: 0");
   <div class="container">
     <div class="row justify-content-center mt-5">
       <div class="col-md-12">
-        <div class="card">
+        <div class="card fade-in-down">
           <div class="card-header">
             <img src="images/stamp.png" alt="Logo" class="card-logo">
             <h4 class="card-title">ลงทะเบียนเข้าใช้งานระบบขอใบรับรอง CertificateSystemRERU</h4>
@@ -115,7 +136,7 @@ header("Expires: 0");
               </div>
               <div class="row mb-3">
                 <div class="col">
-                  <label for="startDate" class="form-label">วันเริ่มงาน</label>
+                  <label for="startDate" class="form-label">วันเริ่มงาน(ค.ศ.)</label>
                   <input type="date" class="form-control" id="startDate" required>
                 </div>
                 <div class="col">

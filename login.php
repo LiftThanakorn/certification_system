@@ -79,10 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-family: 'Prompt', sans-serif;
         }
     </style>
+    <link rel="stylesheet" href="customize.css">
 
 </head>
 
 <body>
+
 
     <div class="login-page bg-light">
         <div class="container">
@@ -196,3 +198,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         myModal.show();
     };
 </script>
+<script src="customize.js"></script>
