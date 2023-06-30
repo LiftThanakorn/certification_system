@@ -3,8 +3,10 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <!-- Custom styles for this template-->
 <link href="css/sb-admin-2.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 <style>
+    
     @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@500&display=swap');
 
     body {
@@ -12,58 +14,99 @@
     }
 
     #btn-delete {
-            font-size: 14px;
-            padding: 10px 15px;
-        }
+        font-size: 14px;
+        padding: 10px 15px;
+    }
 
-        .badge {
-            font-size: 14px;
-            padding: 10px 15px;
-        }
+    .badge {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
 
-        a#request {
-            text-align: right;
-        }
+    a#request {
+        text-align: right;
+    }
 
-        #Single.bg-info,
-        .btn-info {
-            background-color: #FF55BB !important;
-        }
+    #salary.alert-dark,
+    .alert-dark {
+        background-color: #164B60 !important;
+        color:#f8f9fa;
+    }
+
+    .cursor-pointer {
+        cursor: pointer;
+    }
 
 
-        #coe.bg-success,
-        .btn-success {
-            background-color: #FF7F3F !important;
-        }
+    .custom-swal-content {
+        font-size: 16px;
+    }
 
-        .cursor-pointer {
-            cursor: pointer;
-        }
+    .fade-in-down {
+        opacity: 0;
+        transform: translateY(-20px);
+        transition: opacity 1s, transform 1s;
+    }
 
-        #othercer.bg-secondary,
-        .btn-secondary {
-            background-color: #CD104D !important;
-        }
-
-        .custom-swal-content {
-            font-size: 16px;
-        }
-        .fade-in-down {
-  opacity: 0;
-  transform: translateY(-20px);
-  transition: opacity 1s, transform 1s;
-}
-
-.fade-in-down.active {
-  opacity: 1;
-  transform: translateY(0);
-}
-.fa-eye {
-    color: #0000FF;
-  }
-
-  .fa-eye-slash {
-    color: #FF0000;
-  }
-
+    .fade-in-down.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
 </style>
+<style>
+        .fade-in-down {
+            animation: fadeInDownAnimation 1s ease-in;
+            animation-fill-mode: forwards;
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+
+        @keyframes fadeInDownAnimation {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: center;
+            /* เพิ่ม CSS นี้เพื่อจัดให้โลโก้และข้อความตรงกลาง */
+            align-items: center;
+            background-color: #f8f9fa;
+            border-bottom: none;
+            padding: 10px;
+        }
+
+        .card-logo {
+            width: 50px;
+            /* ปรับขนาดโลโก้ตามต้องการ */
+            height: 50px;
+            /* ปรับขนาดโลโก้ตามต้องการ */
+            margin-right: 10px;
+        }
+
+        .card-title {
+            margin-bottom: 0;
+        }
+
+
+        .card-body {
+            padding-bottom: 20px;
+        }
+
+        .card-footer {
+            margin-top: 20px;
+            padding: 10px;
+        }
+    </style>

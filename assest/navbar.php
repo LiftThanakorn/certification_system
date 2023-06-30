@@ -12,6 +12,15 @@ if (isset($_SESSION['user_id'])) {
   $statusResult = mysqli_query($conn, $statusSql);
   $statusRow = mysqli_fetch_assoc($statusResult);
   $pendingRequestCount = $statusRow['pendingCount'];
+
+  // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
+$userSql = "SELECT fname, image FROM users WHERE user_id = '{$_SESSION['user_id']}'";
+$userResult = mysqli_query($conn, $userSql);
+$userRow = mysqli_fetch_assoc($userResult);
+
+// เก็บชื่อไฟล์รูปภาพ
+$image = $userRow['image'];
+
 }
 ?>
 
@@ -40,8 +49,8 @@ if (isset($_SESSION['user_id'])) {
   <!-- Topbar Navbar -->
   <ul class="navbar-nav ml-auto">
         <!-- Nav Item - Pending Requests -->
-        <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') { ?>
-        <?php if (isset($pendingRequestCount)) : ?>
+        <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') { 
+         if (isset($pendingRequestCount)) : ?>
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <span style="color: #858796;">คำร้องขอที่ยังไม่ดำเนินการ
@@ -59,7 +68,7 @@ if (isset($_SESSION['user_id'])) {
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <?php if (isset($_SESSION['user_id'])) : ?>
           <span class="mr-2 d-none d-lg-inline text-gray-600"><?php echo $userRow['fname']; ?></span>
-          <img class="img-profile rounded-circle" src="img/undraw_profile.svg" />
+          <img class="img-profile rounded-circle" src="img/<?php echo $image; ?>" />
         <?php endif; ?>
       </a>
       <!-- Dropdown - User Information -->

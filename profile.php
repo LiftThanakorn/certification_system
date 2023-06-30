@@ -132,8 +132,6 @@ if (isset($_SESSION['user_id'])) {
                                                 <label for="idCardNumber" class="form-label">เลขบัตรประชาชน:</label>
                                                 <input type="text" class="form-control" id="idCardNumber" name="idCardNumber" value="<?php echo $idCardNumber; ?>" required>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <div class="col">
                                                 <label for="nameTitle" class="form-label">คำนำหน้าชื่อ:</label>
                                                 <select class="form-select" id="nameTitle" name="nameTitle" required>
@@ -170,6 +168,13 @@ if (isset($_SESSION['user_id'])) {
                                             <div class="col">
                                                 <label for="startDate" class="form-label">วันเริ่มงาน:</label>
                                                 <input type="date" class="form-control" id="startDate" name="startDate" value="<?php echo $startDate; ?>" required>
+                                            </div>
+                                            <div class="col">
+                                                <label for="startDate" class="form-label">วันเริ่มงาน:(พ.ศ.)</label>
+                                                <?php
+                                                $startDate_buddhist = date('d/m/', strtotime($startDate)) . (date('Y', strtotime($startDate)) + 543);
+                                                ?>
+                                                <input type="text" class="form-control" id="" name="" value="<?php echo $startDate_buddhist; ?>" readonly>
                                             </div>
                                             <div class="col">
                                                 <label for="salary" class="form-label">เงินเดือน:</label>

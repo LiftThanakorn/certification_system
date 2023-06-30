@@ -40,13 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>CertificationSystem</title>
     <meta charset="utf-8">
@@ -80,12 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
     <link rel="stylesheet" href="customize.css">
-
 </head>
-
 <body>
-
-
     <div class="login-page bg-light">
         <div class="container">
             <div class="row">
@@ -108,12 +99,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <input type="text" class="form-control" id="idCardNumber" name="idCardNumber" placeholder="Enter idCardNumber">
                                             </div>
                                         </div>
-
                                         <div class="col-12">
                                             <label>รหัสผ่าน<span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                                                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                                                <button type="button" id="togglePassword" class="btn btn-outline-secondary">
+                                                    <i class="bi bi-eye-fill" aria-hidden="true"></i>
+                                                </button>
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -122,9 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <button type="submit" class="btn btn-primary px-4 mt-4">เข้าสู่ระบบ</button>
                                             </div>
                                         </div>
-
                                     </form>
-
                                 </div>
                             </div>
                             <div class="col-md-5 ps-0 d-none d-md-block">
@@ -140,7 +131,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -198,4 +188,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         myModal.show();
     };
 </script>
-<script src="customize.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#togglePassword').click(function() {
+        var passwordInput = $('#password');
+        var passwordFieldType = passwordInput.attr('type');
+        
+        if (passwordFieldType === 'password') {
+            passwordInput.attr('type', 'text');
+            $(this).find('i').removeClass('bi-eye-fill').addClass('bi-eye-slash-fill');
+        } else {
+            passwordInput.attr('type', 'password');
+            $(this).find('i').removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
+        }
+    });
+});
+</script>

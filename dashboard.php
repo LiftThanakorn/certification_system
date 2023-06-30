@@ -28,13 +28,13 @@ if (isset($_SESSION['user_level'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <?php require_once 'assest/head.php'; ?>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 
 
 
 </head>
 
-<body id="page-top" class="fade-in-down">
+<body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -57,10 +57,7 @@ if (isset($_SESSION['user_level'])) {
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm mr-2 text-light" onclick="requestCertificateSingle()" style="font-size: 16px;">ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
                             <a href="#" id="othercer" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm" onclick="requestCertificate('OtherCertificate')" style="font-size: 16px;">ส่งคำขอหนังสือรับรองอื่นๆ</a>
                         </div>
-
-
                     </div>
-
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="card shadow mb-4">
@@ -69,14 +66,14 @@ if (isset($_SESSION['user_level'])) {
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="requestTable" class="table table-bordered" width="100%" cellspacing="0" style="text-align: center;">
+                                        <table id="requestTable" class="table table-bordered" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                     <th scope="col">ลำดับ</th>
                                                     <th>ประเภทหนังสือรับรอง</th>
                                                     <th>สถานะ</th>
                                                     <th>วันที่ส่งคำขอ</th>
-                                                    <th>วันที่อัปเดต</th>
+                                                    <th>วันที่ - เวลาที่อัปเดต</th>
                                                     <th>ยกเลิกคำขอ</th>
                                                 </tr>
                                             </thead>
@@ -119,7 +116,7 @@ if (isset($_SESSION['user_level'])) {
                                                         </td>
                                                         <td><?php echo $row['request_date']; ?></td>
                                                         <td><?php echo $row['update_date']; ?></td>
-                                                        <td>
+                                                        <td style="text-align: center;">
                                                             <button style="padding: 5px 10px;" class="btn btn-sm btn-danger" id="btn-delete" onclick="deleteRequest(<?php echo $row['requestcertificate_id']; ?>)">
                                                                 <i class="fas fa-times"></i> ยกเลิก
                                                             </button>

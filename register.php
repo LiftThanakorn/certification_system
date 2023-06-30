@@ -1,8 +1,3 @@
-<?php
-header("Cache-Control: private, no-cache, no-store, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,25 +52,23 @@ header("Expires: 0");
     }
 
     .fade-in-down {
-        animation: fadeInDownAnimation 0.8s ease-in;
-        animation-fill-mode: forwards;
-        opacity: 0;
-        transform: translateY(-50px);
+      animation: fadeInDownAnimation 0.8s ease-in;
+      animation-fill-mode: forwards;
+      opacity: 0;
+      transform: translateY(-50px);
     }
 
     @keyframes fadeInDownAnimation {
-        0% {
-            opacity: 0;
-            transform: translateY(-50px);
-        }
+      0% {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
 
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
-
-
   </style>
   <title>ระบบขอใบรับรอง CertificateSystemRERU</title>
 </head>
@@ -90,7 +83,7 @@ header("Expires: 0");
             <h4 class="card-title">ลงทะเบียนเข้าใช้งานระบบขอใบรับรอง CertificateSystemRERU</h4>
           </div>
           <div class="card-body">
-            <form id="registrationForm">
+            <form id="registrationForm" enctype="multipart/form-data">
               <div class="row mb-3">
                 <div class="col">
                   <label for="idCardNumber" class="form-label">เลขบัตรประชาชน</label>
@@ -133,10 +126,17 @@ header("Expires: 0");
                   <label for="employmentContract" class="form-label">สัญญาจ้าง</label>
                   <input type="text" class="form-control" id="employmentContract" required>
                 </div>
+                <div class="col">
+                  <label for="staffType" class="form-label">ระดับประเภทตำแหน่ง</label>
+                  <select class="form-select" id="staffType" required>
+                    <option value="สายวิชาการ">สายวิชาการ</option>
+                    <option value="สายสนับสนุน">สายสนับสนุน</option>
+                  </select>
+                </div>
               </div>
               <div class="row mb-3">
                 <div class="col">
-                  <label for="startDate" class="form-label">วันเริ่มงาน(ค.ศ.)</label>
+                  <label for="startDate" class="form-label">วันเริ่มงาน</label>
                   <input type="date" class="form-control" id="startDate" required>
                 </div>
                 <div class="col">
@@ -158,7 +158,12 @@ header("Expires: 0");
                   </select>
                 </div>
               </div>
-
+              <div class="row mb-3">
+                <div class="col">
+                  <label for="profileImage" class="form-label">รูปภาพโปรไฟล์</label>
+                  <input type="file" class="form-control" id="profileImage" accept="image/*" required>
+                </div>
+              </div>
               <button type="submit" class="btn btn-primary" id="submitButton">ลงทะเบียนเข้าใช้งาน</button>
             </form>
 
@@ -194,26 +199,34 @@ header("Expires: 0");
       var salary = $('#salary').val();
       var otherIncome = $('#otherIncome').val();
       var maritalStatus = $('#maritalStatus').val();
+      var staffType = $('#staffType').val(); // เพิ่มการรับค่า staffType
+      var profileImage = $('#profileImage')[0].files[0]; // เพิ่มการรับค่ารูปภาพ
+
+      // สร้าง FormData เพื่อส่งข้อมูลผ่าน AJAX
+      var formData = new FormData();
+      formData.append('idCardNumber', idCardNumber);
+      formData.append('password', password);
+      formData.append('nameTitle', nameTitle);
+      formData.append('fname', fname);
+      formData.append('lname', lname);
+      formData.append('position', position);
+      formData.append('affiliation', affiliation);
+      formData.append('employmentContract', employmentContract);
+      formData.append('startDate', startDate);
+      formData.append('salary', salary);
+      formData.append('otherIncome', otherIncome);
+      formData.append('maritalStatus', maritalStatus);
+      formData.append('staffType', staffType);
+      formData.append('profileImage', profileImage); // เพิ่มข้อมูลรูปภาพใน FormData
 
       // ส่งข้อมูลไปยังไฟล์ process_register.php โดยใช้ AJAX
       $.ajax({
         url: 'process_register.php',
         method: 'POST',
-        data: {
-          idCardNumber: idCardNumber,
-          password: password,
-          nameTitle: nameTitle,
-          fname: fname,
-          lname: lname,
-          position: position,
-          affiliation: affiliation,
-          employmentContract: employmentContract,
-          startDate: startDate,
-          salary: salary,
-          otherIncome: otherIncome,
-          maritalStatus: maritalStatus
-        },
+        data: formData, // ใช้ FormData เป็นข้อมูลที่จะส่ง
         dataType: 'json',
+        contentType: false, // ไม่ตั้งค่า contentType เป็นค่าเริ่มต้น
+        processData: false, // ไม่ต้องประมวลผลข้อมูลที่ส่ง
         success: function(response) {
           if (response.redirect) {
             // แสดงข้อความลงทะเบียนสำเร็จและเปลี่ยนเส้นทางไปยังหน้า login.php

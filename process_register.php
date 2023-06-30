@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $salary = $_POST['salary'];
   $otherIncome = $_POST['otherIncome'];
   $maritalStatus = $_POST['maritalStatus'];
+  $staffType = $_POST['staffType'];
 
   // ตรวจสอบว่ามีข้อมูลผู้ใช้งานที่มีเลขบัตรประชาชนนี้แล้วหรือไม่
   $query = "SELECT * FROM users WHERE idCardNumber = ?";
@@ -23,14 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   mysqli_stmt_bind_param($stmt, "s", $idCardNumber);
   mysqli_stmt_execute($stmt);
   $result = mysqli_stmt_get_result($stmt);
-  
+
   if (mysqli_num_rows($result) > 0) {
     // ส่งข้อมูลกลับเป็น JSON ในกรณีที่มีข้อมูลผู้ใช้งานนี้แล้ว
     $response = array(
       'title' => 'ลงทะเบียนไม่สำเร็จ',
       'message' => 'มีผู้ใช้งานที่ใช้เลขบัตรประชาชนนี้แล้ว',
-      'icon' => 'error',
-      /* 'redirect' => 'register.php' */
+      'icon' => 'error'
     );
     echo json_encode($response);
     exit();
@@ -38,11 +38,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // เข้ารหัสรหัสผ่าน
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // เพิ่มข้อมูลผู้ใช้งานลงในฐานข้อมูล
-    $query = "INSERT INTO users (idCardNumber, password, nameTitle, fname, lname, position, affiliation, employmentContract, startDate, salary, otherIncome, maritalStatus)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = mysqli_prepare($conn, $query);
-    mysqli_stmt_bind_param($stmt, "ssssssssssss", $idCardNumber, $hashedPassword, $nameTitle, $fname, $lname, $position, $affiliation, $employmentContract, $startDate, $salary, $otherIncome, $maritalStatus);
+    // รับไฟล์รูปภาพที่อัปโหลดจากฟอร์ม
+    $profileImage = $_FILES['profileImage'];
+
+    // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
+    if (!empty($profileImage['name'])) {
+      // ตรวจสอบว่ามีข้อผิดพลาดในการอัปโหลดไฟล์รูปภาพหรือไม่
+      if ($profileImage['error'] === 0) {
+        // สร้างชื่อไฟล์รูปภาพที่ไม่ซ้ำกัน
+        $filename = uniqid() . '_' . $profileImage['name'];
+
+        // ย้ายไฟล์รูปภาพไปยังโฟลเดอร์ที่ต้องการบันทึก
+        move_uploaded_file($profileImage['tmp_name'], 'img/' . $filename);
+
+        // เพิ่มชื่อไฟล์รูปภาพในฐานข้อมูล
+        $query = "INSERT INTO users (idCardNumber, password, nameTitle, fname, lname, position, affiliation, employmentContract, startDate, salary, otherIncome, maritalStatus, staffType, image)
+              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $query);
+        mysqli_stmt_bind_param($stmt, "ssssssssssssss", $idCardNumber, $hashedPassword, $nameTitle, $fname, $lname, $position, $affiliation, $employmentContract, $startDate, $salary, $otherIncome, $maritalStatus, $staffType, $filename);
+      } else {
+        // ส่งข้อมูลกลับเป็น JSON ในกรณีที่เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ
+        $response = array(
+          'title' => 'ลงทะเบียนไม่สำเร็จ',
+          'message' => 'เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ',
+          'icon' => 'error'
+        );
+        echo json_encode($response);
+        exit();
+      }
+    } else {
+      // ไม่มีการอัปโหลดรูปภาพ
+      $query = "INSERT INTO users (idCardNumber, password, nameTitle, fname, lname, position, affiliation, employmentContract, startDate, salary, otherIncome, maritalStatus, staffType)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+      $stmt = mysqli_prepare($conn, $query);
+      mysqli_stmt_bind_param($stmt, "sssssssssssss", $idCardNumber, $hashedPassword, $nameTitle, $fname, $lname, $position, $affiliation, $employmentContract, $startDate, $salary, $otherIncome, $maritalStatus, $staffType);
+    }
+
 
     if (mysqli_stmt_execute($stmt)) {
       // ส่งข้อมูลกลับเป็น JSON ในกรณีที่ลงทะเบียนสำเร็จ
@@ -58,11 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $response = array(
         'title' => 'ลงทะเบียนไม่สำเร็จ',
         'message' => 'เกิดข้อผิดพลาดในการลงทะเบียน',
-        'icon' => 'error',
-        'redirect' => 'register.php'
+        'icon' => 'error'
       );
       echo json_encode($response);
-      
       exit();
     }
   }
@@ -71,10 +100,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $response = array(
     'title' => 'ข้อผิดพลาด',
     'message' => 'ไม่สามารถเข้าถึงหน้านี้ได้',
-    'icon' => 'error',
-    'redirect' => 'register.php'
+    'icon' => 'error'
   );
   echo json_encode($response);
   exit();
 }
+
 ?>

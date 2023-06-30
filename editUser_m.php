@@ -34,58 +34,6 @@ $maritalStatus = $row['maritalStatus'];
 $user_level = $row['user_level'];
 $password = $row['password'];
 
-if (isset($_POST['update'])) {
-    $idCardNumber = $_POST['idCardNumber'];
-    $nameTitle = $_POST['nameTitle'];
-    $fname = $_POST['fname'];
-    $lname = $_POST['lname'];
-    $position = $_POST['position'];
-    $affiliation = $_POST['affiliation'];
-    $employmentContract = $_POST['employmentContract'];
-    $startDate = $_POST['startDate'];
-    $salary = $_POST['salary'];
-    $otherIncome = $_POST['otherIncome'];
-    $maritalStatus = $_POST['maritalStatus'];
-    $user_level = $_POST['user_level'];
-    $password = $_POST['password'];
-
-    // ตรวจสอบค่าที่รับเข้ามาเพื่อป้องกันการโจมตี SQL Injection
-    $idCardNumber = mysqli_real_escape_string($conn, $idCardNumber);
-    $nameTitle = mysqli_real_escape_string($conn, $nameTitle);
-    $fname = mysqli_real_escape_string($conn, $fname);
-    $lname = mysqli_real_escape_string($conn, $lname);
-    $position = mysqli_real_escape_string($conn, $position);
-    $affiliation = mysqli_real_escape_string($conn, $affiliation);
-    $employmentContract = mysqli_real_escape_string($conn, $employmentContract);
-    $startDate = mysqli_real_escape_string($conn, $startDate);
-    $salary = mysqli_real_escape_string($conn, $salary);
-    $otherIncome = mysqli_real_escape_string($conn, $otherIncome);
-    $maritalStatus = mysqli_real_escape_string($conn, $maritalStatus);
-    $user_level = mysqli_real_escape_string($conn, $user_level);
-    $password = mysqli_real_escape_string($conn, $password);
-
-    $sql = "UPDATE users SET
-        idCardNumber='$idCardNumber',
-        nameTitle='$nameTitle',
-        fname='$fname',
-        lname='$lname',
-        position='$position',
-        affiliation='$affiliation',
-        employmentContract='$employmentContract',
-        startDate='$startDate',
-        salary='$salary',
-        otherIncome='$otherIncome',
-        maritalStatus='$maritalStatus',
-        user_level='$user_level',
-        password='$password'
-        WHERE user_id = '$userId'";
-
-    mysqli_query($conn, $sql);
-    // Alert user that the update was successful
-    echo "<script>alert('แก้ไขข้อมูลสำเร็จ');</script>";
-    header("Location: usersprofile.php");
-    exit;
-}
 ?>
 
 
@@ -94,67 +42,10 @@ if (isset($_POST['update'])) {
 
 <head>
     <title>Profile</title>
-    <style>
-        .fade-in-down {
-            animation: fadeInDownAnimation 1s ease-in;
-            animation-fill-mode: forwards;
-            opacity: 0;
-            transform: translateY(-50px);
-        }
-
-        @keyframes fadeInDownAnimation {
-            0% {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card {
-            margin-bottom: 20px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: center;
-            /* เพิ่ม CSS นี้เพื่อจัดให้โลโก้และข้อความตรงกลาง */
-            align-items: center;
-            background-color: #f8f9fa;
-            border-bottom: none;
-            padding: 10px;
-        }
-
-        .card-logo {
-            width: 50px;
-            /* ปรับขนาดโลโก้ตามต้องการ */
-            height: 50px;
-            /* ปรับขนาดโลโก้ตามต้องการ */
-            margin-right: 10px;
-        }
-
-        .card-title {
-            margin-bottom: 0;
-        }
-
-
-        .card-body {
-            padding-bottom: 20px;
-        }
-
-        .card-footer {
-            margin-top: 20px;
-            padding: 10px;
-        }
-    </style>
     <?php require_once 'assest/head.php'; ?>
 </head>
 
-<body id="page-top">
+<body id="page-top" class="fade-in-down">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -170,20 +61,18 @@ if (isset($_POST['update'])) {
                 <div class="container">
                     <div class="row justify-content-center mt-5">
                         <div class="col-md-12">
-                            <div class="card fade-in-down">
+                            <div class="card shadow mb-4">
                                 <div class="card-header">
                                     <img src="images/stamp.png" alt="Logo" class="card-logo">
                                     <h4 class="card-title">แก้ไขข้อมูลโปรไฟล์</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form action="<?php echo $_SERVER['PHP_SELF'] . '?id=' . $userId; ?>" method="POST">
+                                    <form id="editProfileForm" method="POST">
                                         <div class="row mb-3">
                                             <div class="col">
                                                 <label for="idCardNumber" class="form-label">เลขบัตรประชาชน:</label>
                                                 <input type="text" class="form-control" id="idCardNumber" name="idCardNumber" value="<?php echo $idCardNumber; ?>" required>
                                             </div>
-                                        </div>
-                                        <div class="row mb-3">
                                             <div class="col">
                                                 <label for="nameTitle" class="form-label">คำนำหน้าชื่อ:</label>
                                                 <select class="form-select" id="nameTitle" name="nameTitle" required>
@@ -222,6 +111,14 @@ if (isset($_POST['update'])) {
                                                 <input type="date" class="form-control" id="startDate" name="startDate" value="<?php echo $startDate; ?>" required>
                                             </div>
                                             <div class="col">
+                                                <label for="startDate" class="form-label">วันเริ่มงาน:(พ.ศ.)</label>
+                                                <?php
+                                                $startDate_buddhist = date('d/m/', strtotime($startDate)) . (date('Y', strtotime($startDate)) + 543);
+                                                ?>
+                                                <input type="text" class="form-control" id="" name="" value="<?php echo $startDate_buddhist; ?>" readonly>
+                                            </div>
+
+                                            <div class="col">
                                                 <label for="salary" class="form-label">เงินเดือน:</label>
                                                 <input type="text" class="form-control" id="salary" name="salary" value="<?php echo $salary; ?>" required>
                                             </div>
@@ -243,19 +140,23 @@ if (isset($_POST['update'])) {
                                         <div class="row mb-3">
                                             <div class="col">
                                                 <label for="password" class="form-label">รหัสผ่าน:</label>
-                                                <input type="password" class="form-control" id="password" name="password" value="<?php echo $password; ?>">
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="password" name="password">
+                                                    <button type="button" id="togglePassword" class="btn btn-outline-secondary">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <label for="user_level" class="form-label">ระดับผู้ใช้:</label>
                                                 <select class="form-select" id="user_level" name="user_level" required>
                                                     <option value="">กรุณาเลือกระดับผู้ใช้</option>
-                                                    <option value="ผู้ใช้งานทั่วไป" <?php if ($user_level == 'ผู้ใช้งานทั่วไป') echo 'selected'; ?>>ผู้ใช้งานทั่วไป</option>
+                                                    <option value="ผู้ใช้ทั่วไป" <?php if ($user_level == 'ผู้ใช้ทั่วไป') echo 'selected'; ?>>ผู้ใช้ทั่วไป</option>
                                                     <option value="ผู้บริหาร" <?php if ($user_level == 'ผู้บริหาร') echo 'selected'; ?>>ผู้บริหาร</option>
                                                     <option value="แอดมิน" <?php if ($user_level == 'แอดมิน') echo 'selected'; ?>>แอดมิน</option>
                                                 </select>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <div class="col">
                                                 <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
@@ -275,3 +176,72 @@ if (isset($_POST['update'])) {
         </div>
     </div>
 </body>
+
+
+<script>
+    $(document).ready(function() {
+        // ดักจับการส่งฟอร์มแก้ไขโปรไฟล์ผู้ใช้
+        $('#editProfileForm').submit(function(event) {
+            event.preventDefault(); // ไม่ให้ฟอร์มทำการ submit โดยปกติ
+
+            // รับค่าที่กรอกในฟอร์ม
+            var formData = $(this).serialize();
+
+            // ส่ง AJAX request
+            $.ajax({
+                url: 'process_editUsers.php?user_id=<?php echo $userId; ?>',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // แสดง SweetAlert2 แสดงข้อความสำเร็จ
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ!',
+                            text: response.message,
+                            confirmButtonText: 'ตกลง'
+                        }).then(function() {
+                            // รีโหลดหน้าเพื่อแสดงข้อมูลที่อัปเดตแล้ว
+                            location.reload();
+                        });
+                    } else {
+                        // แสดง SweetAlert2 แสดงข้อความเกิดข้อผิดพลาด
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด!',
+                            text: response.message,
+                            confirmButtonText: 'ตกลง'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // แสดง SweetAlert2 แสดงข้อความเกิดข้อผิดพลาดในการส่ง AJAX request
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เกิดข้อผิดพลาด!',
+                        text: 'เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error,
+                        confirmButtonText: 'ตกลง'
+                    });
+                }
+            });
+        });
+    });
+</script>
+<!-- สคริปแสดงรหัสผ่าน -->
+<script>
+    $(document).ready(function() {
+        $('#togglePassword').click(function() {
+            var passwordInput = $('#password');
+            var passwordFieldType = passwordInput.attr('type');
+
+            if (passwordFieldType === 'password') {
+                passwordInput.attr('type', 'text');
+                $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+            } else {
+                passwordInput.attr('type', 'password');
+                $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
+            }
+        });
+    });
+</script>

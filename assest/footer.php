@@ -101,18 +101,7 @@ window.onload = function() {
   }
 };
 
-function toggleClicked() {
-  var icon = document.getElementById('eye-icon');
-  var isClicked = icon.dataset.clicked;
 
-  if (isClicked === 'true') {
-    icon.dataset.clicked = 'false';
-    icon.className = 'fas fa-eye-slash';
-  } else {
-    icon.dataset.clicked = 'true';
-    icon.className = 'fas fa-eye';
-  }
-}
 
 
 </script>

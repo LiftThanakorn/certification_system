@@ -43,7 +43,7 @@ $result = mysqli_query($conn, $sql);
 
 </head>
 
-<body id="page-top" class="fade-in-down">
+<body id="page-top">
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -66,16 +66,16 @@ $result = mysqli_query($conn, $sql);
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="dataTable" class="table table-bordered" width="100%" cellspacing="0" style="text-align: center;">
+                                        <table id="dataTable" class="table table-bordered table-hover" width="100%" cellspacing="0" >
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">ลำดับ</th>
-                                                    <th scope="col">ชื่อ-นามสกุล</th>
-                                                    <th scope="col">ฝ่าย</th>
-                                                    <th scope="col">ประเภทหนังสือรับรอง</th>
-                                                    <th scope="col">สถานะ</th>
-                                                    <th scope="col">วันที่ส่งคำขอ</th>
-                                                    <th scope="col">Update</th>
+                                                    <th>ลำดับ</th>
+                                                    <th>ชื่อ-นามสกุล</th>
+                                                    <th>ฝ่าย</th>
+                                                    <th>ประเภทหนังสือรับรอง</th>
+                                                    <th>สถานะ</th>
+                                                    <th>วันที่ส่งคำขอ</th>
+                                                    <th>อัปเดต</th>
                                                     <th>ผู้อนุมัติ</th>
                                                 </tr>
                                             </thead>
@@ -88,34 +88,22 @@ $result = mysqli_query($conn, $sql);
                                                         <td><?php echo $index--; ?></td> <!-- ลดค่า $index ทีละหนึ่งทุกครั้ง -->
                                                         <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
                                                         <td><?php echo $row['affiliation']; ?></td>
-                                                        <td>
+                                                        <td style="width: 25%;">
                                                             <?php
                                                             $certificate_type_name = $row['certificate_type_name'];
 
                                                             if ($certificate_type_name == 'หนังสือรับรองเงินเดือน') {
-                                                                echo "<span class='badge rounded-pill bg-primary text-light'>" . $certificate_type_name . "</span>";
+                                                                echo "<div class='alert alert-dark salary'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองการปฏิบัติงาน') {
-                                                                echo "<span id='coe' class='badge rounded-pill bg-success text-light'>" . $certificate_type_name . "</span>";
+                                                                echo "<div class='alert alert-light '>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
-                                                                echo "<span id='Single' class='badge rounded-pill bg-info text-light '>" . $certificate_type_name . "</span>";
+                                                                echo "<div class='alert alert-secondary '>" . $certificate_type_name . "</div>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองอื่นๆ') {
-                                                                echo "<div id='othercer' class='alert alert-primary cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")'>";
+                                                                echo "<div class='alert alert-primary text-center cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")'>";
                                                                 echo $certificate_type_name;
-                                                            
-                                                                $isClicked = false;
-                                                                $iconClass = 'fas fa-eye-slash';
-                                                            
-                                                                if ($isClicked) {
-                                                                    $isClicked = true;
-                                                                    $iconClass = 'fas fa-eye';
-                                                                }
-                                                            
-                                                                echo "<i id='eye-icon' class='" . $iconClass . "' data-clicked='" . $isClicked . "' onclick='toggleClicked()'></i>";
-                                                                echo "</div>";
-                                                            }
-                                                            
-                                                                                                                       
-                                                            
+                                                                echo " ";
+                                                                echo "<i class='fas fa-eye'></i>";
+                                                            }                                                  
                                                             ?>
                                                         </td>
                                                         <td>
@@ -134,7 +122,7 @@ $result = mysqli_query($conn, $sql);
                                                             ?>
                                                         </td>
                                                         <td><?php echo $row['request_date']; ?></td>
-                                                        <td>
+                                                        <td style="text-align: center;">
                                                             <button class='btn btn-warning update-status-btn' data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                                 <i class='fas fa-pen'></i>
                                                             </button>
