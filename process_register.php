@@ -50,10 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // ย้ายไฟล์รูปภาพไปยังโฟลเดอร์ที่ต้องการบันทึก
         move_uploaded_file($profileImage['tmp_name'], 'img/' . $filename);
+        
+// แปลงวันที่จากพ.ศ. เป็นค.ศ.
+$startDate = date_create_from_format('d-m-Y', $startDate);
+$startDate->modify('-543 years');
+$startDate = $startDate->format('Y-m-d');
 
-        // เพิ่มชื่อไฟล์รูปภาพในฐานข้อมูล
+
+        // เพิ่มชื่อไฟล์รูปภาพในฐานข้อมูลและลงทะเบียนผู้ใช้งาน
         $query = "INSERT INTO users (idCardNumber, password, nameTitle, fname, lname, position, affiliation, employmentContract, startDate, salary, otherIncome, maritalStatus, staffType, image)
-              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $query);
         mysqli_stmt_bind_param($stmt, "ssssssssssssss", $idCardNumber, $hashedPassword, $nameTitle, $fname, $lname, $position, $affiliation, $employmentContract, $startDate, $salary, $otherIncome, $maritalStatus, $staffType, $filename);
       } else {
@@ -105,5 +111,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   echo json_encode($response);
   exit();
 }
-
-?>

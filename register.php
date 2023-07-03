@@ -98,6 +98,7 @@
                 <div class="col">
                   <label for="nameTitle" class="form-label">คำนำหน้าชื่อ</label>
                   <select class="form-select name-title-select" id="nameTitle" required>
+                    <option value="">โปรดเลือก</option>
                     <option value="นาย">นาย</option>
                     <option value="นางสาว">นางสาว</option>
                     <option value="นาง">นาง</option>
@@ -119,16 +120,67 @@
                   <input type="text" class="form-control" id="position" required>
                 </div>
                 <div class="col">
-                  <label for="affiliation" class="form-label">สังกัด</label>
-                  <input type="text" class="form-control" id="affiliation" required>
+                  <label for="affiliation" class="form-label">สังกัด:</label>
+                  <select class="form-select" id="affiliation" name="affiliation" required>
+                    <option value="">โปรดเลือก</option>
+                    <optgroup label="กองกลาง">
+                      <option value="ฝ่ายธุรการ">ฝ่ายธุรการ</option>
+                      <option value="ฝ่ายการเจ้าหน้าที่">ฝ่ายการเจ้าหน้าที่</option>
+                      <option value="ฝ่ายนิติการ">ฝ่ายนิติการ</option>
+                      <option value="ฝ่ายเลขานุการ">ฝ่ายเลขานุการ</option>
+                      <option value="ฝ่ายการเงิน">ฝ่ายการเงิน</option>
+                      <option value="ฝ่ายประกันคุณภาพ">ฝ่ายประกันคุณภาพ</option>
+                      <option value="ฝ่ายกิจการพิเศษ">ฝ่ายกิจการพิเศษ</option>
+                      <option value="ฝ่ายประชาสัมพันธ์">ฝ่ายประชาสัมพันธ์</option>
+                      <option value="ฝ่ายวิเทศสัมพันธ์และการศึกษานานาชาติ">ฝ่ายวิเทศสัมพันธ์และการศึกษานานาชาติ</option>
+                      <option value="ศูนย์นวัตกรรมและสื่อ">ศูนย์นวัตกรรมและสื่อ</option>
+                      <option value="ศูนย์วิทยบริการ">ศูนย์วิทยบริการ</option>
+                      <option value="ศูนย์คอมพิวเตอร์">ศูนย์คอมพิวเตอร์</option>
+                      <option value="สำนักงานเลขานุการสภามหาวิทยาลัย">สำนักงานเลขานุการสภามหาวิทยาลัย</option>
+                    </optgroup>
+                    <optgroup label="กองนโยบายและแผน">
+                      <option value="ฝ่ายแผนงานและนโยบาย">ฝ่ายแผนงานและนโยบาย</option>
+                      <option value="ฝ่ายพัสดุ">ฝ่ายพัสดุ</option>
+                      <option value="ฝ่ายสวัสดิการ">ฝ่ายสวัสดิการ</option>
+                      <option value="ฝ่ายยานพาหนะ">ฝ่ายยานพาหนะ</option>
+                      <option value="ฝ่ายอาคารและสถานที่">ฝ่ายอาคารและสถานที่</option>
+                      <option value="ฝ่ายก่อสร้างและภูมิทัศน์">ฝ่ายก่อสร้างและภูมิทัศน์</option>
+                      <option value="ฝ่ายสาธารณูปโภค">ฝ่ายสาธารณูปโภค</option>
+                    </optgroup>
+                    <optgroup label="คณะ">
+                      <option value="คณะศิลปศาสตร์และวิทยาศาสตร์">คณะศิลปศาสตร์และวิทยาศาสตร์</option>
+                      <option value="คณะครุศาสตร์">คณะครุศาสตร์</option>
+                      <option value="คณะบริหารธุรกิจและการบัญชี">คณะบริหารธุรกิจและการบัญชี</option>
+                      <option value="คณะนิติรัฐศาสตร์">คณะนิติรัฐศาสตร์</option>
+                      <option value="คณะเทคโนโลยีสารสนเทศ">คณะเทคโนโลยีสารสนเทศ</option>
+                      <option value="คณะพยาบาลศาสตร์">คณะพยาบาลศาสตร์</option>
+                    </optgroup>
+                    <optgroup label="หน่วยงานอื่นๆ">
+                      <option value="โครงการจัดตั้งคณะแพทยศาสตร์">โครงการจัดตั้งคณะแพทยศาสตร์</option>
+                      <option value="บัณฑิตวิทยาลัย">บัณฑิตวิทยาลัย</option>
+                      <option value="สำนักวิชาการและประมวลผล">สำนักวิชาการและประมวลผล</option>
+                      <option value="สำนักกิจการนักศึกษา">สำนักกิจการนักศึกษา</option>
+                      <option value="สถาบันวิจัยและพัฒนา">สถาบันวิจัยและพัฒนา</option>
+                      <option value="หน่วยตรวจสอบภายใน">หน่วยตรวจสอบภายใน</option>
+                    </optgroup>
+                  </select>
                 </div>
                 <div class="col">
-                  <label for="employmentContract" class="form-label">สัญญาจ้าง</label>
-                  <input type="text" class="form-control" id="employmentContract" required>
+                  <label for="employmentContract" class="form-label">ประเภทสัญญาจ้าง</label>
+                  <select class="form-select" id="employmentContract" required>
+                    <option value="">โปรดเลือก</option>
+                    <option value="พนักงานมหาวิทยาลัย">พนักงานมหาวิทยาลัย</option>
+                    <option value="จ้างประจำ">จ้างประจำ</option>
+                    <option value="จ้างชั่วคราว">จ้างชั่วคราว</option>
+                    <option value="ข้าราชการ">ข้าราชการ</option>
+                    <option value="พนักงานราชการ">พนักงานราชการ</option>
+                    <option value="พนักงานรัฐวิสาหกิจ">พนักงานรัฐวิสาหกิจ</option>
+                  </select>
                 </div>
                 <div class="col">
                   <label for="staffType" class="form-label">ระดับประเภทตำแหน่ง</label>
                   <select class="form-select" id="staffType" required>
+                    <option value="">โปรดเลือก</option>
                     <option value="สายวิชาการ">สายวิชาการ</option>
                     <option value="สายสนับสนุน">สายสนับสนุน</option>
                   </select>
@@ -137,7 +189,8 @@
               <div class="row mb-3">
                 <div class="col">
                   <label for="startDate" class="form-label">วันเริ่มงาน</label>
-                  <input type="date" class="form-control" id="startDate" required>
+                  <input type="text" class="form-control" id="startDate" pattern="\d{2}-\d{2}-\d{4}" required>
+                  <small>รูปแบบ: 00-00-0000</small>
                 </div>
                 <div class="col">
                   <label for="salary" class="form-label">เงินเดือน</label>
@@ -150,6 +203,7 @@
                 <div class="col">
                   <label for="maritalStatus" class="form-label">สถานะภาพ</label>
                   <select class="form-select" id="maritalStatus" required>
+                    <option value="">โปรดเลือก</option>
                     <option value="โสด">โสด</option>
                     <option value="สมรส">สมรส</option>
                     <option value="หม้าย">หม้าย</option>
@@ -256,5 +310,20 @@
         }
       });
     });
+  });
+</script>
+
+<script>
+  var startDateInput = document.getElementById("startDate");
+
+  startDateInput.addEventListener("input", function() {
+    var inputValue = startDateInput.value;
+    var isValidFormat = /^\d{2}-\d{2}-\d{4}$/.test(inputValue);
+
+    if (!isValidFormat) {
+      startDateInput.setCustomValidity("กรุณาใส่รูปแบบวันที่ให้ถูกต้อง (รูปแบบ: 00-00-0000)");
+    } else {
+      startDateInput.setCustomValidity("");
+    }
   });
 </script>

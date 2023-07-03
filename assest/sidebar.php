@@ -14,7 +14,7 @@
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="dashboard.php">
-                <i class="fas fa-fw fa-tachometer-alt"></i>
+            <i class="fa fa-home" aria-hidden="true"></i>
                 <span style="font-size: 16px;">หน้าแรก</span>
             </a>
         </li>
@@ -42,20 +42,5 @@
         </div>
     </ul>
 
-    <script>
-        // รับเอ็นอาร์เอลไอดีของเมนูและตรวจสอบเมื่อคลิกที่เมนู
-        const menuItems = document.querySelectorAll('.nav-item');
-        menuItems.forEach(item => {
-            item.addEventListener('click', () => {
-                // ลบคลาส "active" ที่มีอยู่ก่อนหน้านี้
-                const activeItems = document.querySelectorAll('.nav-item.active');
-                activeItems.forEach(activeItem => {
-                    activeItem.classList.remove('active');
-                });
-                // เพิ่มคลาส "active" ให้กับเมนูที่ถูกคลิก
-                item.classList.add('active');
-            });
-        });
-    </script>
 </body>
 

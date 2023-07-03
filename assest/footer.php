@@ -91,17 +91,3 @@
 <script src="vendor/sweetalert2/dist/sweetalert2.min.js"></script>
 <link rel="stylesheet" href="vendor/sweetalert2/dist/sweetalert2.min.css">
 <script src="vendor/sweetalert2/dist/sweetalert2.all.min.js"></script>
-
-<script>
-
-window.onload = function() {
-  var pages = document.getElementsByClassName('fade-in-down');
-  for (var i = 0; i < pages.length; i++) {
-    pages[i].classList.add('active');
-  }
-};
-
-
-
-
-</script>

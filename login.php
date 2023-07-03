@@ -5,6 +5,13 @@ require_once 'dbconnect.php';
 // เริ่มต้นเซสชัน
 session_start();
 
+// ตรวจสอบเงื่อนไขว่าผู้ใช้เข้าสู่ระบบแล้วหรือไม่
+if (isset($_SESSION['user_id']) && isset($_SESSION['user_level'])) {
+    // ผู้ใช้เข้าสู่ระบบแล้ว ส่งไปยังหน้า dashboard.php
+    header('Location: dashboard.php');
+    exit;
+}
+
 // ตรวจสอบว่ามีการส่งข้อมูลแบบ POST มาหรือไม่
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // รับค่าที่ส่งมาจากฟอร์ม
@@ -33,6 +40,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } else {
             // รหัสผ่านไม่ถูกต้อง
             $msg = 'รหัสผ่านไม่ถูกต้อง';
+
+            // เช็คว่าเป็นครั้งแรกที่ผิดพลาดหรือไม่
+            if (isset($_SESSION['login_attempts'])) {
+                $_SESSION['login_attempts']++;
+            } else {
+                $_SESSION['login_attempts'] = 1;
+            }
+
+            // ตรวจสอบจำนวนครั้งที่ผิดพลาด
+            if ($_SESSION['login_attempts'] >= 3) {
+                // ลบค่าในเซสชัน
+                session_unset();
+                session_destroy();
+                $msg = 'เกินจำนวนครั้งที่กำหนดให้ล็อกอิน';
+                header('Location: index.php');
+                exit;
+            }
         }
     } else {
         // ไม่พบผู้ใช้ในฐานข้อมูล
@@ -42,13 +66,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>CertificationSystem</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         a {
             text-decoration: none;
@@ -76,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
     <link rel="stylesheet" href="customize.css">
 </head>
+
 <body>
     <div class="login-page bg-light">
         <div class="container">
@@ -105,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                                                 <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
                                                 <button type="button" id="togglePassword" class="btn btn-outline-secondary">
-                                                    <i class="bi bi-eye-fill" aria-hidden="true"></i>
+                                                    <i class="fa fa-eye" aria-hidden="true"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -190,19 +216,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- สคริปแสดงรหัสผ่าน -->
 <script>
-$(document).ready(function() {
-    $('#togglePassword').click(function() {
-        var passwordInput = $('#password');
-        var passwordFieldType = passwordInput.attr('type');
-        
-        if (passwordFieldType === 'password') {
-            passwordInput.attr('type', 'text');
-            $(this).find('i').removeClass('bi-eye-fill').addClass('bi-eye-slash-fill');
-        } else {
-            passwordInput.attr('type', 'password');
-            $(this).find('i').removeClass('bi-eye-slash-fill').addClass('bi-eye-fill');
-        }
+    $(document).ready(function() {
+        $('#togglePassword').click(function() {
+            var passwordInput = $('#password');
+            passwordInput.attr('type', passwordInput.attr('type') === 'password' ? 'text' : 'password');
+            $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+        });
     });
-});
 </script>
