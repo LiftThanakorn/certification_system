@@ -40,7 +40,6 @@ if (isset($_SESSION['user_level'])) {
         <!-- Sidebar -->
         <?php require_once 'assest/sidebar.php'; ?>
         <!-- End of Sidebar -->
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
             <!-- Main Content -->
@@ -52,10 +51,10 @@ if (isset($_SESSION['user_level'])) {
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800"></h1>
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary shadow-sm mr-2" onclick="requestCertificateSalary()" style="font-size: 16px;">ส่งคำขอหนังสือรับรองเงินเดือน</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-success shadow-sm mr-2" onclick="requestCertificateWork()" style="font-size: 16px;">ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
-                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info shadow-sm mr-2 text-light" onclick="requestCertificateSingle()" style="font-size: 16px;">ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
-                            <a href="#" id="othercer" class="d-none d-sm-inline-block btn btn-lg btn-secondary shadow-sm" onclick="requestCertificate('OtherCertificate')" style="font-size: 16px;">ส่งคำขอหนังสือรับรองอื่นๆ</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary mr-2 text-light" onclick="requestCertificateSalary()" style="font-size: 16px;" id='certificate-salary'>ส่งคำขอหนังสือรับรองเงินเดือน</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-success mr-2 text-light" onclick="requestCertificateWork()" style="font-size: 16px;" id='certificate-work'>ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info mr-2 text-light" onclick="requestCertificateSingle()" style="font-size: 16px;" id='certificate-status'>ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
+                            <a href="#"  class="d-none d-sm-inline-block btn btn-lg btn-secondary text-light " onclick="requestCertificate('OtherCertificate')" style="font-size: 16px;" id='certificate-other'>ส่งคำขอหนังสือรับรองอื่นๆ</a>
                         </div>
                     </div>
                     <div class="row">
@@ -66,7 +65,7 @@ if (isset($_SESSION['user_level'])) {
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">
-                                        <table id="requestTable" class="table table-bordered" width="100%" cellspacing="0">
+                                        <table id="requestTable" class="table table-bordered table-hover" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                     <th scope="col">ลำดับ</th>
@@ -84,31 +83,35 @@ if (isset($_SESSION['user_level'])) {
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                         <td><?php echo $index--; ?></td>
-                                                        <td>
+                                                        <td style="width: 22%; text-align: center;">
                                                             <?php
                                                             $certificate_type_name = $row['certificate_type_name'];
 
                                                             if ($certificate_type_name == 'หนังสือรับรองเงินเดือน') {
-                                                                echo "<span class='badge rounded-pill bg-primary text-light'>" . $certificate_type_name . "</span>";
+                                                                echo "<div class='alert alert-dark salary' id='certificate-salary'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองการปฏิบัติงาน') {
-                                                                echo "<span id='coe' class='badge rounded-pill bg-success text-light'>" . $certificate_type_name . "</span>";
+                                                                echo "<div class='alert alert-dark' id='certificate-work'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
-                                                                echo "<span id='Single' class='badge rounded-pill bg-info text-light '>" . $certificate_type_name . "</span>";
+                                                                echo "<div class='alert alert-dark' id='certificate-status'>" . $certificate_type_name . "</div>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองอื่นๆ') {
-                                                                echo "<span id='othercer' class='badge rounded-pill bg-secondary text-light cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")'>" . $certificate_type_name . " <i class='fas fa-eye'></i></span>";
+                                                                echo "<div class='alert alert-dark  cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-other'>";
+                                                                echo $certificate_type_name;
+                                                                echo " ";
+                                                                echo "<i class='fas fa-eye'></i>";
                                                             }
                                                             ?>
                                                         </td>
                                                         <td>
                                                             <?php
                                                             $status = $row['status'];
-
+                                                            
                                                             if ($status == 'รอดำเนินการ') {
-                                                                echo "<span class='badge rounded-pill bg-info status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-info status-badge '>" . $status . "</span>";
                                                             } elseif ($status == 'กำลังดำเนินการ') {
                                                                 echo "<span class='badge rounded-pill bg-warning text-dark status-badge'>" . $status . "</span>";
                                                             } elseif ($status == 'ดำเนินการเสร็จเรียบร้อย') {
-                                                                echo "<span class='badge rounded-pill bg-success status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-success status-badge '>" . $status . "</span>";
+                                                                echo "<br><small id='respon'>คุณสามารถรับใบรับรองได้ที่ฝ่ายการเจ้าหน้าที่</small>";
                                                             } else {
                                                                 echo "<span class='badge rounded-pill bg-secondary status-badge'>" . $status . "</span>";
                                                             }

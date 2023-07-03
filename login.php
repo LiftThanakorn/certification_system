@@ -122,14 +122,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <label for="idCardNumber" class="form-label">เลขบัตรประชาชน<span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
-                                                <input type="text" class="form-control" id="idCardNumber" name="idCardNumber" placeholder="Enter idCardNumber">
+                                                <input type="text" class="form-control" id="idCardNumber" name="idCardNumber">
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <label>รหัสผ่าน<span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                                                <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                                                <input type="password" class="form-control" id="password" name="password">
                                                 <button type="button" id="togglePassword" class="btn btn-outline-secondary">
                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                 </button>

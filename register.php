@@ -189,16 +189,15 @@
               <div class="row mb-3">
                 <div class="col">
                   <label for="startDate" class="form-label">วันเริ่มงาน</label>
-                  <input type="text" class="form-control" id="startDate" pattern="\d{2}-\d{2}-\d{4}" required>
-                  <small>รูปแบบ: 00-00-0000</small>
+                  <input type="text" class="form-control" id="startDate" pattern="\d{2}-\d{2}-\d{4}" placeholder="รูปแบบ: 00-00-0000" required>
                 </div>
                 <div class="col">
                   <label for="salary" class="form-label">เงินเดือน</label>
-                  <input type="text" class="form-control" id="salary" required>
+                  <input type="number" class="form-control" id="salary" min="1" step="any" required>
                 </div>
                 <div class="col">
                   <label for="otherIncome" class="form-label">เงินรายได้อื่น</label>
-                  <input type="text" class="form-control" id="otherIncome" required>
+                  <input type="number" class="form-control" id="otherIncome" min="0" step="any" placeholder="กรณีไม่มีให้ใส่ 0" required>
                 </div>
                 <div class="col">
                   <label for="maritalStatus" class="form-label">สถานะภาพ</label>
@@ -321,7 +320,7 @@
     var isValidFormat = /^\d{2}-\d{2}-\d{4}$/.test(inputValue);
 
     if (!isValidFormat) {
-      startDateInput.setCustomValidity("กรุณาใส่รูปแบบวันที่ให้ถูกต้อง (รูปแบบ: 00-00-0000)");
+      startDateInput.setCustomValidity("กรุณาใส่รูปแบบวันที่ให้ถูกต้อง (ตัวอย่างรูปแบบ: 01-01-2566)");
     } else {
       startDateInput.setCustomValidity("");
     }

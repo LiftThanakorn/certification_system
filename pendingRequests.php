@@ -29,7 +29,9 @@ $sql = "SELECT sc.*, u.fname, u.lname, u.affiliation, cc.certificate_type_name, 
         INNER JOIN users u ON sc.user_id = u.user_id
         INNER JOIN certificate_type cc ON sc.certificate_type_id = cc.certificate_type_id
         LEFT JOIN users a ON sc.approver_id = a.user_id
+        WHERE sc.status = 'รอดำเนินการ'  -- เพิ่มเงื่อนไขนี้
         ORDER BY sc.request_date";
+
 
 
 $result = mysqli_query($conn, $sql);
@@ -61,7 +63,7 @@ $result = mysqli_query($conn, $sql);
                         <div class="col-lg-12">
                             <div class="card shadow mb-4 ">
                                 <div class="card-header py-3">
-                                    <h3 class="m-0 font-weight-bold text-primary">ตารางคำร้องขอใบรับรอง</h3>
+                                    <h3 class="m-0 font-weight-bold text-primary">ตารางคำร้องขอใบรับรองที่ยังไม่ดำเนินการ</h3>
                                 </div>
                                 <div class="card-body">
                                     <div class="table-responsive">

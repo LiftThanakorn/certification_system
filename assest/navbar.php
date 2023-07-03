@@ -14,55 +14,85 @@ if (isset($_SESSION['user_id'])) {
   $pendingRequestCount = $statusRow['pendingCount'];
 
   // ดึงข้อมูลผู้ใช้จากฐานข้อมูล
-$userSql = "SELECT fname, image FROM users WHERE user_id = '{$_SESSION['user_id']}'";
-$userResult = mysqli_query($conn, $userSql);
-$userRow = mysqli_fetch_assoc($userResult);
+  $userSql = "SELECT fname, image FROM users WHERE user_id = '{$_SESSION['user_id']}'";
+  $userResult = mysqli_query($conn, $userSql);
+  $userRow = mysqli_fetch_assoc($userResult);
 
-// เก็บชื่อไฟล์รูปภาพ
-$image = $userRow['image'];
-
+  // เก็บชื่อไฟล์รูปภาพ
+  $image = $userRow['image'];
 }
 ?>
 
 <style>
   @keyframes shake {
-    0% { transform: rotate(0); }
-  15% { transform: rotate(10deg); }
-  30% { transform: rotate(-10deg); }
-  45% { transform: rotate(8deg); }
-  60% { transform: rotate(-8deg); }
-  75% { transform: rotate(4deg); }
-  85% { transform: rotate(-4deg); }
-  92% { transform: rotate(2deg); }
-  100% { transform: rotate(0); }
+    0% {
+      transform: rotate(0);
+    }
+
+    15% {
+      transform: rotate(10deg);
+    }
+
+    30% {
+      transform: rotate(-10deg);
+    }
+
+    45% {
+      transform: rotate(8deg);
+    }
+
+    60% {
+      transform: rotate(-8deg);
+    }
+
+    75% {
+      transform: rotate(4deg);
+    }
+
+    85% {
+      transform: rotate(-4deg);
+    }
+
+    92% {
+      transform: rotate(2deg);
+    }
+
+    100% {
+      transform: rotate(0);
+    }
+  }
+
+  .shake-badge {
+    animation: shake 1.5s infinite;
+  }
+  #hoverLink:hover {
+    background-color: yellow;
 }
 
-.shake-badge {
-  animation: shake 1.5s infinite;
-}
-/* .rotate-left {
+
+  /* .rotate-left {
   transform: rotate(45deg);
 } */
-
 </style>
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
   <!-- Topbar Navbar -->
   <ul class="navbar-nav ml-auto">
-        <!-- Nav Item - Pending Requests -->
-        <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') { 
-         if (isset($pendingRequestCount)) : ?>
-      <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <span style="color: #858796;">คำร้องขอที่ยังไม่ดำเนินการ
-          <i class="fas fa-bell fa-fw rotate-left shake-badge"></i></span>
-          <!-- Counter - Alerts -->
-          <span style="padding: 5px 8px 5px 8px; font-size: 16px;" class="badge badge-danger badge-counter "><?php echo $pendingRequestCount; ?></span>
-        </a>
-      </li>
+    <!-- Nav Item - Pending Requests -->
+    <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') {
+      if (isset($pendingRequestCount)) : ?>
+        <li class="nav-item dropdown no-arrow mx-1">
+          <a class="nav-link dropdown-toggle" href="pendingRequests.php" id="alertsDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <span style="color: #858796;">คำร้องขอที่ยังไม่ดำเนินการ
+              <i class="fas fa-bell fa-fw rotate-left shake-badge"></i>
+            </span>
+            <!-- Counter - Alerts -->
+            <span style="padding: 5px 8px 5px 8px; font-size: 16px;" class="badge badge-danger badge-counter "><?php echo $pendingRequestCount; ?></span>
+          </a>
+        </li>
       <?php endif; ?>
-      <?php } ?>
-      
-      <div class="topbar-divider d-none d-sm-block"></div>
+    <?php } ?>
+
+    <div class="topbar-divider d-none d-sm-block"></div>
     <!-- Nav Item - User Information -->
     <li class="nav-item dropdown no-arrow">
       <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -28,9 +28,6 @@ $result = mysqli_query($conn, $sql);
         }
     </style>
 
-
-
-
 </head>
 
 <body id="page-top" class="fade-in-down">
@@ -50,7 +47,7 @@ $result = mysqli_query($conn, $sql);
                         <div class="col-lg-12 d-flex justify-content-center">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h4 class="card-title">ข้อมูล</h4>
+                                    <h4 class="card-title m-0 font-weight-bold text-primary">ข้อมูล</h4>
                                     <div id="usersTable_wrapper" class="dataTables_wrapper">
                                         <div class="dataTables_filter">
                                             <!-- ส่วนของปุ่ม Export -->
