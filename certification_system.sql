@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 29, 2023 at 08:38 AM
+-- Generation Time: Jun 30, 2023 at 11:28 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -59,23 +59,6 @@ CREATE TABLE `requestcertificate` (
   `additional_data` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Dumping data for table `requestcertificate`
---
-
-INSERT INTO `requestcertificate` (`requestcertificate_id`, `user_id`, `approver_id`, `certificate_type_id`, `status`, `request_date`, `update_date`, `additional_data`) VALUES
-(1, 3, 1, 1, 'รอดำเนินการ', '2023-06-28 14:06:54', '2023-06-29 10:48:53', ''),
-(2, 2, 1, 1, 'กำลังดำเนินการ', '2023-06-28 14:12:13', '2023-06-29 11:12:32', ''),
-(3, 1, 1, 4, 'ดำเนินการเสร็จเรียบร้อย', '2023-06-28 15:12:22', '2023-06-29 11:48:49', 'เทสจ้า'),
-(4, 1, 1, 1, 'ดำเนินการเสร็จเรียบร้อย', '2023-06-29 11:31:39', '2023-06-29 13:24:01', ''),
-(5, 1, 1, 1, 'ดำเนินการเสร็จเรียบร้อย', '2023-06-29 11:31:40', '2023-06-29 13:24:07', ''),
-(6, 1, NULL, 1, 'รอดำเนินการ', '2023-06-29 11:31:42', '2023-06-29 11:31:42', ''),
-(7, 1, NULL, 1, 'รอดำเนินการ', '2023-06-29 11:31:44', '2023-06-29 11:31:44', ''),
-(8, 1, NULL, 1, 'รอดำเนินการ', '2023-06-29 11:31:45', '2023-06-29 11:31:45', ''),
-(9, 1, NULL, 1, 'รอดำเนินการ', '2023-06-29 11:31:47', '2023-06-29 11:31:47', ''),
-(10, 1, NULL, 1, 'รอดำเนินการ', '2023-06-29 11:31:49', '2023-06-29 11:31:49', ''),
-(11, 1, NULL, 1, 'รอดำเนินการ', '2023-06-29 11:31:52', '2023-06-29 11:31:52', '');
-
 -- --------------------------------------------------------
 
 --
@@ -96,17 +79,17 @@ CREATE TABLE `users` (
   `user_level` enum('ผู้ใช้ทั่วไป','ผู้บริหาร','แอดมิน') DEFAULT 'ผู้ใช้ทั่วไป',
   `salary` decimal(10,2) DEFAULT NULL,
   `otherIncome` decimal(10,2) DEFAULT NULL,
-  `maritalStatus` varchar(255) DEFAULT NULL
+  `maritalStatus` varchar(255) DEFAULT NULL,
+  `staffType` enum('สายวิชาการ','สายสนับสนุน') NOT NULL,
+  `image` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `idCardNumber`, `password`, `nameTitle`, `fname`, `lname`, `position`, `affiliation`, `employmentContract`, `startDate`, `user_level`, `salary`, `otherIncome`, `maritalStatus`) VALUES
-(1, '1450700222957', '$2y$10$Bn2mhhRYp2aS4mIZD2BkG..pZAx2utJpC4AxklvGogww.ICsuKvda', 'นาย', 'admin', 'admin', 'บุคลากร', 'การเจ้าหน้าที่', 'สัญญาจ้างชั่วคราว', '2023-06-08', 'แอดมิน', '90000.00', '10000.00', 'โสด'),
-(2, '12345678910', '$2y$10$WLM..GEuLmMLYmWvDnkjs.UWElxZkqET6vEZWCBSGjvL13Rbk6T7W', 'นาย', 'ผู้บริหาร', 'ผู้บริหาร', 'ผู้บริหาร', 'ผู้บริหาร', 'สัญญาจ้างชั่วคราว', '2019-02-28', 'ผู้บริหาร', '90000.00', '15000.00', 'โสด'),
-(3, '6227527818256', '$2y$10$VD4U/kTo/FhL559zDJ1yL.FgqM.4p1c40oJBhVG/lCWgl2GqWFDuq', 'นางสาว', 'piyapun', 'piyapun', 'เจ้าหน้าที่บริหารงานทั่วไป', 'การเจ้าหน้าที่', 'สัญญาจ้างชั่วคราว', '2023-06-09', 'ผู้ใช้ทั่วไป', '90000.00', '10000.00', 'โสด');
+INSERT INTO `users` (`user_id`, `idCardNumber`, `password`, `nameTitle`, `fname`, `lname`, `position`, `affiliation`, `employmentContract`, `startDate`, `user_level`, `salary`, `otherIncome`, `maritalStatus`, `staffType`, `image`) VALUES
+(1, '1450700222957', '$2y$10$Rukk7H9CpYcUYuOX5H.dM.bwmVdr.FCwPhSgZi5nelHGuIfeYGWRi', 'นาย', 'ธนากร', 'ใจดีจัง', 'บุคลากร', 'การเจ้าหน้าที่', 'สัญญาจ้างชั่วคราว', '2023-06-30', 'ผู้ใช้ทั่วไป', '12000.00', '10000.00', 'โสด', 'สายวิชาการ', '649ea01199509_5.png');
 
 --
 -- Indexes for dumped tables
@@ -142,13 +125,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `requestcertificate`
 --
 ALTER TABLE `requestcertificate`
-  MODIFY `requestcertificate_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `requestcertificate_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
