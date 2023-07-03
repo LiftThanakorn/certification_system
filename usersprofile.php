@@ -26,14 +26,9 @@ $result = mysqli_query($conn, $sql);
         td.dt-center {
             text-align: center;
         }
-
-        div.dt-buttons {
-            margin-bottom: 10px;
-        }
     </style>
 
-    <!-- CSS สำหรับ DataTables Buttons -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css">
+
 
 
 </head>
@@ -138,6 +133,6 @@ $result = mysqli_query($conn, $sql);
 
 
 <!-- JS สำหรับ DataTables Buttons -->
-<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="vendor/datatables/Buttons-2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="vendor/datatables/Buttons-2.3.6/js/buttons.html5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
