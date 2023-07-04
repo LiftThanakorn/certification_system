@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 30, 2023 at 11:28 AM
+-- Generation Time: Jul 03, 2023 at 11:25 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -85,13 +85,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`user_id`, `idCardNumber`, `password`, `nameTitle`, `fname`, `lname`, `position`, `affiliation`, `employmentContract`, `startDate`, `user_level`, `salary`, `otherIncome`, `maritalStatus`, `staffType`, `image`) VALUES
-(1, '1450700222957', '$2y$10$Rukk7H9CpYcUYuOX5H.dM.bwmVdr.FCwPhSgZi5nelHGuIfeYGWRi', 'นาย', 'ธนากร', 'ใจดีจัง', 'บุคลากร', 'การเจ้าหน้าที่', 'สัญญาจ้างชั่วคราว', '2023-06-30', 'ผู้ใช้ทั่วไป', '12000.00', '10000.00', 'โสด', 'สายวิชาการ', '649ea01199509_5.png');
-
---
 -- Indexes for dumped tables
 --
 
@@ -131,7 +124,7 @@ ALTER TABLE `requestcertificate`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
