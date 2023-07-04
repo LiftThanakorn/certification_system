@@ -50,11 +50,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // ย้ายไฟล์รูปภาพไปยังโฟลเดอร์ที่ต้องการบันทึก
         move_uploaded_file($profileImage['tmp_name'], 'img/' . $filename);
-        
-// แปลงวันที่จากพ.ศ. เป็นค.ศ.
-$startDate = date_create_from_format('d-m-Y', $startDate);
-$startDate->modify('-543 years');
-$startDate = $startDate->format('Y-m-d');
+
+        // แปลงวันที่จากพ.ศ. เป็นค.ศ.
+        $startDate = date_create_from_format('d-m-Y', $startDate);
+        $startDate->modify('-543 years');
+        $startDate = $startDate->format('Y-m-d');
 
 
         // เพิ่มชื่อไฟล์รูปภาพในฐานข้อมูลและลงทะเบียนผู้ใช้งาน

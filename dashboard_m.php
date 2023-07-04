@@ -110,11 +110,11 @@ $result = mysqli_query($conn, $sql);
                                                             $status = $row['status'];
 
                                                             if ($status == 'รอดำเนินการ') {
-                                                                echo "<span class='badge rounded-pill bg-info status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-info status-badge text-light'>" . $status . "</span>";
                                                             } elseif ($status == 'กำลังดำเนินการ') {
-                                                                echo "<span class='badge rounded-pill bg-warning text-dark status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-warning text-light status-badge'>" . $status . "</span>";
                                                             } elseif ($status == 'ดำเนินการเสร็จเรียบร้อย') {
-                                                                echo "<span class='badge rounded-pill bg-success status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-success status-badge text-light'>" . $status . "</span>";
                                                             } else {
                                                                 echo "<span class='badge rounded-pill bg-secondary status-badge'>" . $status . "</span>";
                                                             }
@@ -168,8 +168,6 @@ $result = mysqli_query($conn, $sql);
         $('#dataTable').DataTable();
     });
 </script>
-
-
 
 <script>
     $(document).ready(function() {

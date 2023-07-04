@@ -54,7 +54,7 @@ if (isset($_SESSION['user_level'])) {
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-primary mr-2 text-light" onclick="requestCertificateSalary()" style="font-size: 16px;" id='certificate-salary'>ส่งคำขอหนังสือรับรองเงินเดือน</a>
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-success mr-2 text-light" onclick="requestCertificateWork()" style="font-size: 16px;" id='certificate-work'>ส่งคำขอหนังสือรับรองการปฏิบัติงาน</a>
                             <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-info mr-2 text-light" onclick="requestCertificateSingle()" style="font-size: 16px;" id='certificate-status'>ส่งคำขอหนังสือรับรองสถานภาพโสด</a>
-                            <a href="#"  class="d-none d-sm-inline-block btn btn-lg btn-secondary text-light " onclick="requestCertificate('OtherCertificate')" style="font-size: 16px;" id='certificate-other'>ส่งคำขอหนังสือรับรองอื่นๆ</a>
+                            <a href="#" class="d-none d-sm-inline-block btn btn-lg btn-secondary text-light " onclick="requestCertificate('OtherCertificate')" style="font-size: 16px;" id='certificate-other'>ส่งคำขอหนังสือรับรองอื่นๆ</a>
                         </div>
                     </div>
                     <div class="row">
@@ -104,16 +104,16 @@ if (isset($_SESSION['user_level'])) {
                                                         <td>
                                                             <?php
                                                             $status = $row['status'];
-                                                            
+
                                                             if ($status == 'รอดำเนินการ') {
-                                                                echo "<span class='badge rounded-pill bg-info status-badge '>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-info status-badge text-light'>" . $status . "</span>";
                                                             } elseif ($status == 'กำลังดำเนินการ') {
-                                                                echo "<span class='badge rounded-pill bg-warning text-dark status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-warning text-light status-badge'>" . $status . "</span>";
                                                             } elseif ($status == 'ดำเนินการเสร็จเรียบร้อย') {
-                                                                echo "<span class='badge rounded-pill bg-success status-badge '>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-success status-badge text-light'>" . $status . "</span>";
                                                                 echo "<br><small id='respon'>คุณสามารถรับใบรับรองได้ที่ฝ่ายการเจ้าหน้าที่</small>";
                                                             } else {
-                                                                echo "<span class='badge rounded-pill bg-secondary status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-secondary status-badge text-light'>" . $status . "</span>";
                                                             }
                                                             ?>
                                                         </td>
@@ -164,6 +164,14 @@ if (isset($_SESSION['user_level'])) {
                 icon: 'error'
             });
             return; // Stop the function execution
+        } else if (status === 'กำลังดำเนินการ') {
+            Swal.fire({
+                title: 'ไม่สามารถยกเลิกคำขอได้',
+                text: 'คำขอกำลังดำเนินการ ไม่สามารถยกเลิกได้',
+                icon: 'info'
+            });
+            return; // Stop the function execution
+            // Add your code here for when the status is "กำลังดำเนินการ"
         }
 
         Swal.fire({

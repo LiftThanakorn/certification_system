@@ -156,16 +156,14 @@ $password = $row['password'];
 
                                         </div>
                                         <div class="row mb-3">
-                                            <div class="col">
-                                                <label for="startDate" class="form-label">วันเริ่มงาน</label>
+                                        <div class="col">
+                                                <label for="startDate" class="form-label">วันเริ่มงาน:(พ.ศ.)</label>
                                                 <?php
                                                 $startDate_buddhist = date('d-m-Y', strtotime($startDate . '+543 years'));
                                                 ?>
                                                 <input type="text" class="form-control" id="startDate" pattern="\d{2}-\d{2}-\d{4}" name="startDate" value="<?php echo $startDate_buddhist; ?>" required>
-                                                <small>รูปแบบ: 00-00-0000</small>
+                                                <small>รูปแบบ: 01-01-2566</small>
                                             </div>
-
-
                                             <div class="col">
                                                 <label for="salary" class="form-label">เงินเดือน:</label>
                                                 <input type="text" class="form-control" id="salary" name="salary" value="<?php echo $salary; ?>" required>
@@ -226,7 +224,7 @@ $password = $row['password'];
 </body>
 
 
-<!-- สคริปแสดงรหัสผ่าน -->
+
 <script>
     $(document).ready(function() {
         // ดักจับการส่งฟอร์มแก้ไขโปรไฟล์ผู้ใช้

@@ -188,8 +188,8 @@
               </div>
               <div class="row mb-3">
                 <div class="col">
-                  <label for="startDate" class="form-label">วันเริ่มงาน</label>
-                  <input type="text" class="form-control" id="startDate" pattern="\d{2}-\d{2}-\d{4}" placeholder="รูปแบบ: 00-00-0000" required>
+                  <label for="startDate" class="form-label">วันเริ่มงาน(พ.ศ.)</label>
+                  <input type="text" class="form-control" id="startDate" pattern="\d{2}-\d{2}-\d{4}" placeholder="รูปแบบ: 01-01-2566" required>
                 </div>
                 <div class="col">
                   <label for="salary" class="form-label">เงินเดือน</label>

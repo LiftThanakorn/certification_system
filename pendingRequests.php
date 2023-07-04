@@ -40,7 +40,7 @@ $result = mysqli_query($conn, $sql);
 <html>
 
 <head>
-    <title>Dashboard (Admin/Manager)</title>
+    <title>PendingRequests</title>
     <?php require_once 'assest/head.php'; ?>
 
 </head>
@@ -112,7 +112,7 @@ $result = mysqli_query($conn, $sql);
                                                             $status = $row['status'];
 
                                                             if ($status == 'รอดำเนินการ') {
-                                                                echo "<span class='badge rounded-pill bg-info status-badge'>" . $status . "</span>";
+                                                                echo "<span class='badge rounded-pill bg-info status-badge text-light'>" . $status . "</span>";
                                                             } elseif ($status == 'กำลังดำเนินการ') {
                                                                 echo "<span class='badge rounded-pill bg-warning text-dark status-badge'>" . $status . "</span>";
                                                             } elseif ($status == 'ดำเนินการเสร็จเรียบร้อย') {

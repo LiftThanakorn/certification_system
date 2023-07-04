@@ -1,11 +1,14 @@
 <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-<link rel="stylesheet" href="css/bootstrap.min.css">
-<!-- Custom styles for this template-->
-<link href="css/sb-admin-2.min.css" rel="stylesheet" />
-<link href="/vendor/fontawesome-free/css/fontawesome.css" rel="stylesheet" />
-<link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" />
+<link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css"/>
 
-<link href="vendor/fontawesome-free/css/fontawesome.min.css" rel="stylesheet" />
+<!-- Custom styles for this template-->
+<link href="vendor/css/sb-admin-2.min.css" rel="stylesheet" />
+
+<link href="vendor/fontawesome-free/css/fontawesome.css" rel="stylesheet">
+<link href="vendor/fontawesome-free/css/brands.css" rel="stylesheet">
+<link href="vendor/fontawesome-free/css/solid.css" rel="stylesheet">
+
+<link rel="stylesheet" href="vendor/datatables/datatables.css" />
 
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@500&display=swap');
@@ -40,7 +43,6 @@
     }
 
 
-
     /* CSS สำหรับป้ายกำกับหนังสือ */
     #certificate-salary {
         background-color: #0B409C;
@@ -66,28 +68,11 @@
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 1);
     }
 
+    /* เพิ่มเงา ข้อความหลังจากสถานะเป็นดำเนินการเสร็จเรียบร้อย*/
     #respon {
         color: red;
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-        /* เพิ่มเงาด้วยคุณสมบัติ text-shadow */
-    }
-    .fade-in-down {
-        animation: fadeInDownAnimation 1s ease-in;
-        animation-fill-mode: forwards;
-        opacity: 0;
-        transform: translateY(-50px);
-    }
 
-    @keyframes fadeInDownAnimation {
-        0% {
-            opacity: 0;
-            transform: translateY(-50px);
-        }
-
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
     }
 
     .card {
@@ -126,4 +111,10 @@
         margin-top: 20px;
         padding: 10px;
     }
+    /* รูปโปรไฟล์ */ 
+    .small-image {
+    width: 100px;
+    height: 100px;
+}
+
 </style>

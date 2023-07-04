@@ -81,11 +81,12 @@
 <script src="js/sb-admin-2.min.js"></script>
 
 <!-- Page level plugins -->
-<link href="vendor/datatables/datatables.min.css" rel="stylesheet" />
-<script src="vendor/datatables/datatables.min.js"></script>
+ <link href="vendor/datatables/datatables.min.css" rel="stylesheet" />
+ <script src="vendor/datatables/datatables.min.js"></script>
+<!--  <script src="vendor/datatables/datatables.js"></script>  --> 
 
-<!-- Page level custom scripts -->
-<script src="js/demo/datatables-demo.js"></script>
+  
+<!-- <script src="js/demo/datatables-demo.js"></script> -->
 
 <!-- SweetAlert2 -->
 <script src="vendor/sweetalert2/dist/sweetalert2.min.js"></script>

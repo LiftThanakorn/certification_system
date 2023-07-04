@@ -14,15 +14,27 @@
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="dashboard.php">
-            <i class="fa fa-home" aria-hidden="true"></i>
+            <i class="fa-solid fa-house fa-2xl" ></i>
                 <span style="font-size: 16px;">หน้าแรก</span>
             </a>
         </li>
         <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') { ?>
             <li class="nav-item">
                 <a class="nav-link" href="dashboard_m.php">
-                    <i class="fas fa-fw fa-table"></i>
+                <i class="fa-solid fa-circle-exclamation fa-beat" ></i>
                     <span style="font-size: 16px;">คำร้องขอใบรับรอง</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="pendingRequests.php">
+                <i class="fa-solid fa-circle-exclamation fa-beat"></i>
+                    <span style="font-size: 14px;">คำร้องขอใบรับรองที่ยังไม่ได้ดำเนินการ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="inProgressRequests.php">
+                <i class="fa-solid fa-circle-exclamation fa-beat"></i>
+                    <span style="font-size: 14px;">คำร้องขอใบรับรองที่กำลังดำเนินการ</span>
                 </a>
             </li>
         <?php } ?>
@@ -37,9 +49,6 @@
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block" />
         <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0 btn btn-link" id="sidebarToggle"></button>
-        </div>
     </ul>
 
 </body>
