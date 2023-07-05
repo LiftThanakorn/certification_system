@@ -1,23 +1,21 @@
 <?php
+// Add this at the top of the file
 session_start();
 
-require_once 'dbconnect.php';
-
-if (!isset($_SESSION['user_level']) || $_SESSION['user_level'] !== 'แอดมิน') {
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
 
-if (!isset($_GET['user_id'])) {
-    // The user_id is not sent
-    header("Location: usersprofile.php");
-    exit;
-}
+require_once 'dbconnect.php';
 
 $userId = $_GET['user_id'];
 
-$sql = "SELECT * FROM users WHERE user_id = '$userId'";
-$result = mysqli_query($conn, $sql);
+$sql = "SELECT * FROM users WHERE user_id = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $userId);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 $row = mysqli_fetch_assoc($result);
 
 $idCardNumber = $row['idCardNumber'];
@@ -33,8 +31,12 @@ $otherIncome = $row['otherIncome'];
 $maritalStatus = $row['maritalStatus'];
 $user_level = $row['user_level'];
 $password = $row['password'];
+$image = $row['image'];
+
 
 ?>
+
+
 
 
 <!DOCTYPE html>
@@ -45,7 +47,7 @@ $password = $row['password'];
     <?php require_once 'assest/head.php'; ?>
 </head>
 
-<body id="page-top" class="fade-in-down">
+<body id="page-top" >
     <!-- Page Wrapper -->
     <div id="wrapper">
         <!-- Sidebar -->
@@ -60,14 +62,22 @@ $password = $row['password'];
                 <!-- Begin Page Content -->
                 <div class="container">
                     <div class="row justify-content-center mt-5">
-                        <div class="col-md-12">
+                        <div class="col-md-2">
+                            <div class="card shadow mb-4">
+                                <div class="card-header">
+                                   <img src="img/<?php echo $image; ?>" alt="User Image" class="small-image">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
                                     <img src="images/stamp.png" alt="Logo" class="card-logo">
                                     <h4 class="card-title">แก้ไขข้อมูลโปรไฟล์</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form id="editProfileForm" method="POST">
+                                    <form id="editProfileForm" enctype="multipart/form-data">
+                                        <input type="hidden" name="userId" value="<?php echo $userId; ?>">
                                         <div class="row mb-3">
                                             <div class="col">
                                                 <label for="idCardNumber" class="form-label">เลขบัตรประชาชน:</label>
@@ -156,7 +166,7 @@ $password = $row['password'];
 
                                         </div>
                                         <div class="row mb-3">
-                                        <div class="col">
+                                            <div class="col">
                                                 <label for="startDate" class="form-label">วันเริ่มงาน:(พ.ศ.)</label>
                                                 <?php
                                                 $startDate_buddhist = date('d-m-Y', strtotime($startDate . '+543 years'));
@@ -195,12 +205,17 @@ $password = $row['password'];
                                             </div>
                                             <div class="col">
                                                 <label for="user_level" class="form-label">ระดับผู้ใช้:</label>
-                                                <select class="form-select" id="user_level" name="user_level" required>
-                                                    <option value="">กรุณาเลือกระดับผู้ใช้</option>
-                                                    <option value="ผู้ใช้ทั่วไป" <?php if ($user_level == 'ผู้ใช้ทั่วไป') echo 'selected'; ?>>ผู้ใช้ทั่วไป</option>
-                                                    <option value="ผู้บริหาร" <?php if ($user_level == 'ผู้บริหาร') echo 'selected'; ?>>ผู้บริหาร</option>
-                                                    <option value="แอดมิน" <?php if ($user_level == 'แอดมิน') echo 'selected'; ?>>แอดมิน</option>
+                                                <select class="form-select" id="user_level" name="user_level">
+                                                    <option value="ผู้ใช้ทั่วไป" <?php if ($user_level === 'ผู้ใช้ทั่วไป') echo 'selected'; ?>>ผู้ใช้ทั่วไป</option>
+                                                    <option value="ผู้บริหาร" <?php if ($user_level === 'ผู้บริหาร') echo 'selected'; ?>>ผู้บริหาร</option>
+                                                    <option value="แอดมิน" <?php if ($user_level === 'แอดมิน') echo 'selected'; ?>>แอดมิน</option>
                                                 </select>
+                                            </div>
+
+                                            <div class="col">
+                                                <label for="user_level" class="form-label">รูปภาพใหม่</label>
+                                                <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
+                                                <small class="text-danger">*ไฟล์ jpg jpeg png เท่านั้น</small>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -214,7 +229,6 @@ $password = $row['password'];
                         </div>
                     </div>
                 </div>
-
                 <!-- /.container-fluid -->
             </div>
             <?php require_once 'assest/footer.php'; ?>
@@ -222,53 +236,45 @@ $password = $row['password'];
         </div>
     </div>
 </body>
-
-
-
 <script>
     $(document).ready(function() {
-        // ดักจับการส่งฟอร์มแก้ไขโปรไฟล์ผู้ใช้
         $('#editProfileForm').submit(function(event) {
-            event.preventDefault(); // ไม่ให้ฟอร์มทำการ submit โดยปกติ
-
-            // รับค่าที่กรอกในฟอร์ม
-            var formData = $(this).serialize();
-
-            // ส่ง AJAX request
+            event.preventDefault();
+            var formData = new FormData(this);
             $.ajax({
                 url: 'process_editUsers.php?user_id=<?php echo $userId; ?>',
                 type: 'POST',
                 data: formData,
-                dataType: 'json'
-            }).done(function(response) {
-                if (response.status === 'success') {
-                    // แสดง SweetAlert2 แสดงข้อความสำเร็จ
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'สำเร็จ!',
-                        text: response.message,
-                        confirmButtonText: 'ตกลง'
-                    }).then(function() {
-                        // รีโหลดหน้าเพื่อแสดงข้อมูลที่อัปเดตแล้ว
-                        location.reload();
-                    });
-                } else {
-                    // แสดง SweetAlert2 แสดงข้อความเกิดข้อผิดพลาด
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ!',
+                            text: response.message,
+                            confirmButtonText: 'ตกลง'
+                        }).then(function() {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด!',
+                            text: response.message,
+                            confirmButtonText: 'ตกลง'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
                     Swal.fire({
                         icon: 'error',
                         title: 'เกิดข้อผิดพลาด!',
-                        text: response.message,
+                        text: 'เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error,
                         confirmButtonText: 'ตกลง'
                     });
                 }
-            }).fail(function(xhr, status, error) {
-                // แสดง SweetAlert2 แสดงข้อความเกิดข้อผิดพลาดในการส่ง AJAX request
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด!',
-                    text: 'เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error,
-                    confirmButtonText: 'ตกลง'
-                });
             });
         });
     });

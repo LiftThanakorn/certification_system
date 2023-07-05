@@ -42,37 +42,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $profileImage = $_FILES['profileImage'];
 
     // ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
-    if (!empty($profileImage['name'])) {
-      // ตรวจสอบว่ามีข้อผิดพลาดในการอัปโหลดไฟล์รูปภาพหรือไม่
-      if ($profileImage['error'] === 0) {
-        // สร้างชื่อไฟล์รูปภาพที่ไม่ซ้ำกัน
-        $filename = uniqid() . '_' . $profileImage['name'];
+// ตรวจสอบว่ามีการอัปโหลดรูปภาพหรือไม่
+if (!empty($profileImage['name'])) {
+  // ตรวจสอบว่ามีข้อผิดพลาดในการอัปโหลดไฟล์รูปภาพหรือไม่
+  if ($profileImage['error'] === 0) {
+      // ตรวจสอบประเภทของไฟล์ภาพ
+      $allowedExtensions = array('jpg', 'jpeg', 'png');
+      $fileExtension = strtolower(pathinfo($profileImage['name'], PATHINFO_EXTENSION));
 
-        // ย้ายไฟล์รูปภาพไปยังโฟลเดอร์ที่ต้องการบันทึก
-        move_uploaded_file($profileImage['tmp_name'], 'img/' . $filename);
+      if (in_array($fileExtension, $allowedExtensions)) {
+          // สร้างชื่อไฟล์รูปภาพที่ไม่ซ้ำกัน
+          $filename = uniqid() . '_' . $profileImage['name'];
 
-        // แปลงวันที่จากพ.ศ. เป็นค.ศ.
-        $startDate = date_create_from_format('d-m-Y', $startDate);
-        $startDate->modify('-543 years');
-        $startDate = $startDate->format('Y-m-d');
+          // ย้ายไฟล์รูปภาพไปยังโฟลเดอร์ที่ต้องการบันทึก
+          move_uploaded_file($profileImage['tmp_name'], 'img/' . $filename);
 
+          // แปลงวันที่จากพ.ศ. เป็นค.ศ.
+          $startDate = date_create_from_format('d-m-Y', $startDate);
+          $startDate->modify('-543 years');
+          $startDate = $startDate->format('Y-m-d');
 
-        // เพิ่มชื่อไฟล์รูปภาพในฐานข้อมูลและลงทะเบียนผู้ใช้งาน
-        $query = "INSERT INTO users (idCardNumber, password, nameTitle, fname, lname, position, affiliation, employmentContract, startDate, salary, otherIncome, maritalStatus, staffType, image)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $query);
-        mysqli_stmt_bind_param($stmt, "ssssssssssssss", $idCardNumber, $hashedPassword, $nameTitle, $fname, $lname, $position, $affiliation, $employmentContract, $startDate, $salary, $otherIncome, $maritalStatus, $staffType, $filename);
+          // เพิ่มชื่อไฟล์รูปภาพในฐานข้อมูลและลงทะเบียนผู้ใช้งาน
+          $query = "INSERT INTO users (idCardNumber, password, nameTitle, fname, lname, position, affiliation, employmentContract, startDate, salary, otherIncome, maritalStatus, staffType, image)
+                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          $stmt = mysqli_prepare($conn, $query);
+          mysqli_stmt_bind_param($stmt, "ssssssssssssss", $idCardNumber, $hashedPassword, $nameTitle, $fname, $lname, $position, $affiliation, $employmentContract, $startDate, $salary, $otherIncome, $maritalStatus, $staffType, $filename);
       } else {
-        // ส่งข้อมูลกลับเป็น JSON ในกรณีที่เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ
-        $response = array(
+          // ส่งข้อมูลกลับเป็น JSON ในกรณีที่ไม่อนุญาติให้อัปโหลดไฟล์ภาพชนิดนี้
+          $response = array(
+              'title' => 'ลงทะเบียนไม่สำเร็จ',
+              'message' => 'อนุญาติให้อัปโหลดไฟล์ภาพเฉพาะรูปแบบ jpg, jpeg, และ png เท่านั้น',
+              'icon' => 'error'
+          );
+          echo json_encode($response);
+          exit();
+      }
+  } else {
+      // ส่งข้อมูลกลับเป็น JSON ในกรณีที่เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ
+      $response = array(
           'title' => 'ลงทะเบียนไม่สำเร็จ',
           'message' => 'เกิดข้อผิดพลาดในการอัปโหลดรูปภาพ',
           'icon' => 'error'
-        );
-        echo json_encode($response);
-        exit();
-      }
-    } else {
+      );
+      echo json_encode($response);
+      exit();
+  }
+} else {
       // ไม่มีการอัปโหลดรูปภาพ
       $query = "INSERT INTO users (idCardNumber, password, nameTitle, fname, lname, position, affiliation, employmentContract, startDate, salary, otherIncome, maritalStatus, staffType)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

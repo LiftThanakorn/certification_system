@@ -11,8 +11,11 @@ require_once 'dbconnect.php';
 
 $userId = $_GET['user_id'];
 
-$sql = "SELECT * FROM users WHERE user_id = '$userId'";
-$result = mysqli_query($conn, $sql);
+$sql = "SELECT * FROM users WHERE user_id = ?";
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_bind_param($stmt, "i", $userId);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 $row = mysqli_fetch_assoc($result);
 
 $idCardNumber = $row['idCardNumber'];
@@ -56,7 +59,14 @@ $image = $row['image'];
                 <!-- Begin Page Content -->
                 <div class="container">
                     <div class="row justify-content-center mt-5">
-                        <div class="col-md-12">
+                        <div class="col-md-2">
+                        <div class="card shadow mb-4">
+                                <div class="card-header">
+                                <img src="img/<?php echo $image; ?>" alt="User Image" class="small-image">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-10">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
                                     <img src="images/stamp.png" alt="Logo" class="card-logo">
@@ -64,13 +74,7 @@ $image = $row['image'];
                                 </div>
                                 <div class="card-body">
                                     <form id="editProfileForm" enctype="multipart/form-data">
-                                    <input type="hidden" name="user_id" value="<?php echo $userId; ?>">
-                                        <div class="row">
-                                            <div class="col">
-                                                <label for="image" class="form-label">รูปภาพ:</label>
-                                                <img src="img/<?php echo $image; ?>" alt="User Image" class="small-image">
-                                            </div>
-                                        </div>
+                                        <input type="hidden" name="userId" value="<?php echo $userId; ?>">
                                         <div class="row mb-3">
                                             <div class="col">
                                                 <label for="idCardNumber" class="form-label">เลขบัตรประชาชน:</label>
@@ -199,16 +203,12 @@ $image = $row['image'];
                                             <div class="col">
                                                 <label for="user_level" class="form-label">ระดับผู้ใช้:</label>
                                                 <input type="text" class="form-control" id="user_level" name="user_level" value="<?php echo $user_level; ?>" readonly>
-                                            </div>
+                                            </div>                 
                                             <div class="col">
-                                                <label for="image" class="form-label">รูปภาพ:</label>
-                                                <?php if (!empty($image)) { ?>
-                                                    <img src="img/<?php echo $image; ?>" alt="User Image" class="small-image">
-                                                <?php } else { ?>
-                                                    <img src="img/default-image.jpg" alt="Default Image" class="small-image">
-                                                <?php } ?>
-                                                <input type="file" class="form-control" id="image" name="image" accept="image/*">
-                                            </div>
+                                            <label for="user_level" class="form-label">รูปภาพใหม่</label>
+                                                <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*" required>
+                                                <small class="text-danger">*ไฟล์ jpg jpeg png เท่านั้น</small>
+                                            </div>   
                                         </div>
                                         <div class="row">
                                             <div class="col">
@@ -228,53 +228,45 @@ $image = $row['image'];
         </div>
     </div>
 </body>
-
-
-
 <script>
     $(document).ready(function() {
-        // ดักจับการส่งฟอร์มแก้ไขโปรไฟล์ผู้ใช้
         $('#editProfileForm').submit(function(event) {
-            event.preventDefault(); // ไม่ให้ฟอร์มทำการ submit โดยปกติ
-
-            // รับค่าที่กรอกในฟอร์ม
-            var formData = $(this).serialize();
-
-            // ส่ง AJAX request
+            event.preventDefault();
+            var formData = new FormData(this);
             $.ajax({
                 url: 'process_editUsers.php?user_id=<?php echo $userId; ?>',
                 type: 'POST',
                 data: formData,
-                dataType: 'json'
-            }).done(function(response) {
-                if (response.status === 'success') {
-                    // แสดง SweetAlert2 แสดงข้อความสำเร็จ
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'สำเร็จ!',
-                        text: response.message,
-                        confirmButtonText: 'ตกลง'
-                    }).then(function() {
-                        // รีโหลดหน้าเพื่อแสดงข้อมูลที่อัปเดตแล้ว
-                        location.reload();
-                    });
-                } else {
-                    // แสดง SweetAlert2 แสดงข้อความเกิดข้อผิดพลาด
+                dataType: 'json',
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response.status === 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'สำเร็จ!',
+                            text: response.message,
+                            confirmButtonText: 'ตกลง'
+                        }).then(function() {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'เกิดข้อผิดพลาด!',
+                            text: response.message,
+                            confirmButtonText: 'ตกลง'
+                        });
+                    }
+                },
+                error: function(xhr, status, error) {
                     Swal.fire({
                         icon: 'error',
                         title: 'เกิดข้อผิดพลาด!',
-                        text: response.message,
+                        text: 'เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error,
                         confirmButtonText: 'ตกลง'
                     });
                 }
-            }).fail(function(xhr, status, error) {
-                // แสดง SweetAlert2 แสดงข้อความเกิดข้อผิดพลาดในการส่ง AJAX request
-                Swal.fire({
-                    icon: 'error',
-                    title: 'เกิดข้อผิดพลาด!',
-                    text: 'เกิดข้อผิดพลาดในการส่งข้อมูล: ' + error,
-                    confirmButtonText: 'ตกลง'
-                });
             });
         });
     });
