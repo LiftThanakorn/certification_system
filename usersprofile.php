@@ -27,7 +27,6 @@ $result = mysqli_query($conn, $sql);
             text-align: center;
         }
     </style>
-
 </head>
 
 <body id="page-top" class="fade-in-down">
@@ -66,6 +65,7 @@ $result = mysqli_query($conn, $sql);
                                                 <th>ตำแหน่ง</th>
                                                 <th>ระดับผู้ใช้</th>
                                                 <th>ประเภทบุคลากร</th>
+                                                <th>IMG</th>
                                                 <th>ดูข้อมูล</th>
                                             </tr>
                                         </thead>
@@ -73,15 +73,18 @@ $result = mysqli_query($conn, $sql);
                                             <?php
                                             $count = 1;
                                             while ($row = mysqli_fetch_assoc($result)) {
-                                                echo '<tr>';
-                                                echo '<td>' . $count . '</td>';
-                                                echo '<td>' . $row['fname'] . ' ' . $row['lname'] . '</td>';
-                                                echo '<td>' . $row['affiliation'] . '</td>';
-                                                echo '<td>' . $row['position'] . '</td>';
-                                                echo '<td>' . $row['user_level'] . '</td>';
-                                                echo '<td>' . $row['staffType'] . '</td>';
-                                                echo '<td><a href="editUser_m.php?user_id=' . $row['user_id'] . '" class="btn btn-warning">ดูข้อมูล</a></td>';
-                                                echo '</tr>';
+                                            ?>
+                                                <tr>
+                                                    <td><?php echo $count; ?></td>
+                                                    <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
+                                                    <td><?php echo $row['affiliation']; ?></td>
+                                                    <td><?php echo $row['position']; ?></td>
+                                                    <td><?php echo $row['user_level']; ?></td>
+                                                    <td><?php echo $row['staffType']; ?></td>
+                                                    <td><img src="img/<?php echo $row['image']; ?>" style="max-width: 100px; max-height: 100px;"></td>
+                                                    <td><a href="editUser_m.php?user_id=<?php echo $row['user_id']; ?>" class="btn btn-warning">ดูข้อมูล</a></td>
+                                                </tr>
+                                            <?php
                                                 $count++;
                                             }
                                             ?>
@@ -101,30 +104,24 @@ $result = mysqli_query($conn, $sql);
 
 </html>
 
-<script>
-    $(document).ready(function() {
-        $('#usersTable').DataTable();
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        var table = $('#usersTable').DataTable();
 
-        // เพิ่มปุ่มสำหรับ Export เป็น Excel
-        new $.fn.dataTable.Buttons(table, {
+<script>
+    $(document).ready(function() {
+        var table = $('#usersTable').DataTable({
+            dom: 'Bfrtip',
             buttons: [{
                 extend: 'excel',
                 text: 'Export เป็น Excel',
                 className: 'btn btn-success',
                 exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6]
+                    columns: [0, 1, 2, 3, 4, 5, 6, 7]
                 }
             }]
         });
 
         table.buttons().container()
             .appendTo('#usersTable_wrapper .dataTables_filter .btn-group')
-            .addClass('d-inline-flex align-items-center ml-2'); // เพิ่มระยะห่างระหว่างปุ่มกับช่องค้นหา
+            .addClass('d-inline-flex align-items-center ml-2');
     });
 </script>
 
