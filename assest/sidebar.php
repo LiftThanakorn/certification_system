@@ -14,27 +14,27 @@
         <!-- Nav Item - Dashboard -->
         <li class="nav-item">
             <a class="nav-link" href="dashboard.php">
-            <i class="fa-solid fa-house fa-2xl" ></i>
+                <i class="fa-solid fa-house fa-2xl"></i>
                 <span style="font-size: 16px;">หน้าแรก</span>
             </a>
         </li>
         <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') { ?>
             <li class="nav-item">
                 <a class="nav-link" href="dashboard_m.php">
-                <i class="fa-solid fa-circle-exclamation fa-beat" ></i>
-                    <span style="font-size: 16px;">คำร้องขอใบรับรอง</span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="pendingRequests.php">
-                <i class="fa-solid fa-circle-exclamation fa-beat"></i>
-                    <span style="font-size: 14px;">คำร้องขอใบรับรองที่ยังไม่ได้ดำเนินการ</span>
+                    <i class="fa-solid fa-circle-exclamation fa-beat"></i>
+                    <span style="font-size: 16px;">คำร้องขอใบรับรองทั้งหมด</span>
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="inProgressRequests.php">
-                <i class="fa-solid fa-circle-exclamation fa-beat"></i>
+                    <i class="fa-solid fa-circle-exclamation fa-beat"></i>
                     <span style="font-size: 14px;">คำร้องขอใบรับรองที่กำลังดำเนินการ</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="pendingRequests.php">
+                    <i class="fa-solid fa-circle-exclamation fa-beat"></i>
+                    <span style="font-size: 14px;">คำร้องขอใบรับรองที่ยังไม่ได้ดำเนินการ</span>
                 </a>
             </li>
         <?php } ?>
@@ -52,4 +52,3 @@
     </ul>
 
 </body>
-

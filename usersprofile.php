@@ -46,7 +46,7 @@ $result = mysqli_query($conn, $sql);
                         <div class="col-lg-12 d-flex justify-content-center">
                             <div class="card shadow mb-4">
                                 <div class="card-header d-flex justify-content-between align-items-center">
-                                    <h4 class="card-title m-0 font-weight-bold text-primary">ข้อมูล</h4>
+                                    <h4 class="card-title m-0 font-weight-bold text-primary">ข้อมูลผู้ใช้งานในระบบ</h4>
                                     <div id="usersTable_wrapper" class="dataTables_wrapper">
                                         <div class="dataTables_filter">
                                             <!-- ส่วนของปุ่ม Export -->
@@ -56,7 +56,7 @@ $result = mysqli_query($conn, $sql);
                                 </div>
 
                                 <div class="card-body">
-                                    <table id="usersTable" class="table table-hover" style="width:100%">
+                                    <table id="usersTable" class="table table-bordered table-hover" style="width:100%">
                                         <thead>
                                             <tr>
                                                 <th>ลำดับที่</th>

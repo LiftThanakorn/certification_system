@@ -5,7 +5,7 @@
 
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Prompt:wght@500&display=swap');
@@ -215,6 +215,7 @@
                 <div class="col">
                   <label for="profileImage" class="form-label">รูปภาพโปรไฟล์</label>
                   <input type="file" class="form-control" id="profileImage" accept="image/*" required>
+                  <small class="text-danger">*ไฟล์ jpg jpeg png เท่านั้น</small>
                 </div>
               </div>
               <button type="submit" class="btn btn-primary" id="submitButton">ลงทะเบียนเข้าใช้งาน</button>
@@ -229,10 +230,10 @@
 
 </html>
 
-<script src="js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.2/dist/sweetalert2.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+<script src="vendor/sweetalert2/dist/sweetalert2.min.js"></script>
 <!-- สคริปต์ JavaScript -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="vendor/jquery/jquery.min.js"></script>
 <script>
   $(document).ready(function() {
     // รองรับการคลิกปุ่ม Submit

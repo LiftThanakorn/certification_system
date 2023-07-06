@@ -30,8 +30,6 @@ if (isset($_SESSION['user_level'])) {
     <?php require_once 'assest/head.php'; ?>
 
 
-
-
 </head>
 
 <body id="page-top">
@@ -146,11 +144,6 @@ if (isset($_SESSION['user_level'])) {
 
 </html>
 
-<script>
-    $(document).ready(function() {
-        $('#requestTable').DataTable();
-    });
-</script>
 <script>
     function deleteRequest(requestId) {
         // Get the status of the request

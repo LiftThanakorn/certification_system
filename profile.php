@@ -60,17 +60,17 @@ $image = $row['image'];
                 <div class="container">
                     <div class="row justify-content-center mt-5">
                         <div class="col-md-2">
-                        <div class="card shadow mb-4">
+                            <div class="card shadow mb-4">
                                 <div class="card-header">
-                                <img src="img/<?php echo $image; ?>" alt="User Image" class="small-image">
+                                    <img src="img/<?php echo $image; ?>" alt="User Image" class="small-image">
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-10">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <img src="images/stamp.png" alt="Logo" class="card-logo">
-                                    <h4 class="card-title">แก้ไขข้อมูลโปรไฟล์</h4>
+                                    <img src="images/settings.png" alt="settings" class="card-logo">
+                                    <h4 class="m-0 font-weight-bold text-primary">แก้ไขข้อมูลโปรไฟล์</h4>
                                 </div>
                                 <div class="card-body">
                                     <form id="editProfileForm" enctype="multipart/form-data">
@@ -203,15 +203,15 @@ $image = $row['image'];
                                             <div class="col">
                                                 <label for="user_level" class="form-label">ระดับผู้ใช้:</label>
                                                 <input type="text" class="form-control" id="user_level" name="user_level" value="<?php echo $user_level; ?>" readonly>
-                                            </div>                 
+                                            </div>
                                             <div class="col">
-                                            <label for="user_level" class="form-label">รูปภาพใหม่</label>
-                                                <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*" required>
+                                                <label for="user_level" class="form-label">รูปภาพใหม่</label>
+                                                <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*" >
                                                 <small class="text-danger">*ไฟล์ jpg jpeg png เท่านั้น</small>
-                                            </div>   
+                                            </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col d-flex justify-content-end">
                                                 <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
                                             </div>
                                         </div>

@@ -57,36 +57,23 @@
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Bootstrap core JavaScript-->
 <script src="vendor/jquery/jquery.min.js"></script>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+
 
 <!-- Core plugin JavaScript-->
 <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
 
 <!-- Custom scripts for all pages-->
-<script src="js/sb-admin-2.min.js"></script>
+<script src="js/sb-admin-2.js"></script>
 
 <!-- Page level plugins -->
  <link href="vendor/datatables/datatables.min.css" rel="stylesheet" />
  <script src="vendor/datatables/datatables.min.js"></script>
 <!--  <script src="vendor/datatables/datatables.js"></script>  --> 
 
-  
-<!-- <script src="js/demo/datatables-demo.js"></script> -->
 
 <!-- SweetAlert2 -->
 <script src="vendor/sweetalert2/dist/sweetalert2.min.js"></script>

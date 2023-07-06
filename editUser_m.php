@@ -72,8 +72,8 @@ $image = $row['image'];
                         <div class="col-md-10">
                             <div class="card shadow mb-4">
                                 <div class="card-header">
-                                    <img src="images/stamp.png" alt="Logo" class="card-logo">
-                                    <h4 class="card-title">แก้ไขข้อมูลโปรไฟล์</h4>
+                                    <img src="images/settings.png" alt="settings" class="card-logo">
+                                    <h4 class="m-0 font-weight-bold text-primary">แก้ไขข้อมูลโปรไฟล์</h4>
                                 </div>
                                 <div class="card-body">
                                     <form id="editProfileForm" enctype="multipart/form-data">
@@ -219,7 +219,7 @@ $image = $row['image'];
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col">
+                                            <div class="col d-flex justify-content-end">
                                                 <button type="submit" class="btn btn-primary">บันทึกการเปลี่ยนแปลง</button>
                                             </div>
                                         </div>

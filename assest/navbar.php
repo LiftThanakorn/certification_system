@@ -44,7 +44,7 @@ $loggedInUserImage = $loggedInUserRow['image'] ?? '';
 
     <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') : ?>
       <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="pendingRequests.php" id="alertsDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="pendingRequests.php" id="alertsDropdown1" role="button" aria-haspopup="true" aria-expanded="false">
           <span style="color: #858796;">คำร้องขอที่ยังไม่ดำเนินการ
             <i class="fa-solid fa-bell <?= ($pendingRequestCount > 0) ? 'fa-shake' : ''; ?> fa-lg"></i>
           </span>
@@ -61,10 +61,9 @@ $loggedInUserImage = $loggedInUserRow['image'] ?? '';
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <span class="mr-2 d-none d-lg-inline text-gray-600"><?= $loggedInUserName ?></span>
-          <img class="img-profile rounded-circle" src="img/<?= $loggedInUserImage ?>" />
+          <img class="img-profile rounded-circle" src="img/<?= $loggedInUserImage ?>" alt="userProfile" />
         </a>
-
-        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown1">
           <a class="dropdown-item" href="profile.php?user_id=<?= $_SESSION['user_id'] ?>">
             <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
             Profile

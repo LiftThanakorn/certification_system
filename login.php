@@ -72,8 +72,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         a {
             text-decoration: none;
@@ -90,6 +91,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .form-right i {
             font-size: 100px;
         }
+   
+    /* ปรับขนาดส่วน modal-body ให้มีความสูงสามารถแสดงแถบเลื่อนได้ */
+    .modal-body {
+        max-height: 550px;
+        overflow-y: auto;
+    }
+
     </style>
 
     <style>
@@ -99,7 +107,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-family: 'Prompt', sans-serif;
         }
     </style>
-    <link rel="stylesheet" href="customize.css">
 </head>
 
 <body>
@@ -129,8 +136,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <label>รหัสผ่าน<span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
-                                                <input type="password" class="form-control" id="password" name="password">
-                                                <button type="button" id="togglePassword" class="btn btn-outline-secondary">
+                                                <input type="password" class="form-control" id="password" name="password"  title="กรุณากรอกรหัสผ่าน">
+                                                <button type="button" id="togglePassword" class="btn btn-outline-secondary" title="seepassword">
                                                     <i class="fa fa-eye" aria-hidden="true"></i>
                                                 </button>
                                             </div>
@@ -159,14 +166,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">PDPA RERU</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p>นโยบายการคุ้มครองข้อมูลส่วนบุคคลของอาจารย์และบุคลากร มหาวิทยาลัยราชภัฏร้อยเอ็ด โดยฝ่ายการเจ้าหน้าที่
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">PDPA RERU</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="overflow-y: scroll;">
+                    <p><label for="privacyPolicy" class="form-label">นโยบายการคุ้มครองข้อมูลส่วนบุคคลของอาจารย์และบุคลากร มหาวิทยาลัยราชภัฏร้อยเอ็ด โดยฝ่ายการเจ้าหน้าที่
                         และศูนย์คอมพิวเตอร์ สำนักงานอธิการบดี เข้าใจและเคารพต่อความสำคัญของความเป็นส่วนตัวหรือข้อมูลส่วนบุคคลของท่าน
                         โปรดอ่านและทำความเข้าใจนโยบายคุ้มครองข้อมูลส่วนบุคคล (“นโยบาย”) นี้ก่อนที่ท่านจะลงทะเบียนเข้าสู่ระบบการกรอกข้อมูลบุคลากร
                         ของมหาวิทยาลัยราชภัฏร้อยเอ็ด<br />
@@ -194,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         5. สิทธิของเจ้าของข้อมูลส่วนบุคคล ภายใต้บังคับตามพระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 ท่านมีสิทธิในการเข้าถึงและได้มาซึ่งสำเนาข้อมูลส่วนบุคคล,
                         ขอรับข้อมูลส่วนบุคคล ถอนความยินยอม เปลี่ยนแปลง ลบ ทำลาย หรือทำให้ข้อมูลส่วนบุคคลเป็นข้อมูลที่ไม่สามารถระบุตัวตนได้ ระงับการใช้ข้อมูลส่วนบุคคล
-                        ยื่นคำคัดค้านการประมวลผลข้อมูลส่วนบุคคล กรุณาติดต่อฝ่ายการเจ้าหน้าที่ และศูนย์คอมพิวเตอร์ สำนักงานอธิการบดี ในส่วนท้ายสุดของนโยบายนี้.</p>
+                        ยื่นคำคัดค้านการประมวลผลข้อมูลส่วนบุคคล กรุณาติดต่อฝ่ายการเจ้าหน้าที่ และศูนย์คอมพิวเตอร์ สำนักงานอธิการบดี ในส่วนท้ายสุดของนโยบายนี้.</label></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-bs-dismiss="modal">ปิด</button>
@@ -206,7 +213,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </body>
 
 </html>
-<script src="js/bootstrap.bundle.min.js"></script>
 <script>
     // เปิด modal โดยอัตโนมัติเมื่อหน้าเว็บโหลดเสร็จสมบูรณ์
     window.onload = function() {
@@ -215,7 +221,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     };
 </script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="vendor/jquery/jquery.min.js"></script>
 <!-- สคริปแสดงรหัสผ่าน -->
 <script>
     $(document).ready(function() {
@@ -226,3 +232,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
