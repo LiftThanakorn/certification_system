@@ -11,7 +11,7 @@ if (isset($_SESSION['user_level'])) {
     $user_id = $_SESSION['user_id'];
 
     // ค้นหาคำขอใบรับรองสำหรับผู้ใช้โดยใช้ user_id
-    $sql = "SELECT users.fname, requestcertificate.*, certificate_type.certificate_type_name FROM requestcertificate INNER JOIN users ON requestcertificate.user_id = users.user_id LEFT JOIN certificate_type ON requestcertificate.certificate_type_id = certificate_type.certificate_type_id WHERE users.user_id = '$user_id'";
+    $sql = "SELECT users.fname, requestcertificate.*, certificate_type.certificate_type_name FROM requestcertificate INNER JOIN users ON requestcertificate.user_id = users.user_id LEFT JOIN certificate_type ON requestcertificate.certificate_type_id = certificate_type.certificate_type_id WHERE users.user_id = '$user_id' ORDER BY request_date DESC";
     $result = mysqli_query($conn, $sql);
 } else {
     // ไม่มีเซสชันหรือสถานะผู้ใช้ ให้เปลี่ยนเส้นทางไปที่ login.php
@@ -76,11 +76,11 @@ if (isset($_SESSION['user_level'])) {
                                             </thead>
                                             <tbody>
                                                 <?php
-                                                $index = mysqli_num_rows($result);
+                                                $index = 1;
                                                 while ($row = mysqli_fetch_assoc($result)) :
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
-                                                        <td><?php echo $index--; ?></td>
+                                                        <td><?php echo $index++; ?></td>
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
                                                             $certificate_type_name = $row['certificate_type_name'];

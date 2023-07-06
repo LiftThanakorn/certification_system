@@ -39,7 +39,7 @@ $result = mysqli_query($conn, $sql);
 <html>
 
 <head>
-    <title>PendingRequests</title>
+    <title>inProgressRequests</title>
     <?php require_once 'assest/head.php'; ?>
 
 </head>
