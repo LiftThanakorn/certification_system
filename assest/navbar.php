@@ -27,7 +27,7 @@ $loggedInUserImage = $loggedInUserRow['image'] ?? '';
 
 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
   <ul class="navbar-nav ml-auto">
-    <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') : ?>
+    <?php if ($_SESSION['user_level'] === 'admin' || $_SESSION['user_level'] === 'manager') : ?>
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link dropdown-toggle" href="inProgressRequests.php" id="alertsDropdown" role="button" aria-haspopup="true" aria-expanded="false">
           <span style="color: #858796;">คำร้องขอที่กำลังดำเนินการ
@@ -42,7 +42,7 @@ $loggedInUserImage = $loggedInUserRow['image'] ?? '';
 
     <div class="topbar-divider d-none d-sm-block"></div>
 
-    <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') : ?>
+    <?php if ($_SESSION['user_level'] === 'admin' || $_SESSION['user_level'] === 'manager') : ?>
       <li class="nav-item dropdown no-arrow mx-1">
         <a class="nav-link dropdown-toggle" href="pendingRequests.php" id="alertsDropdown1" role="button" aria-haspopup="true" aria-expanded="false">
           <span style="color: #858796;">คำร้องขอที่ยังไม่ดำเนินการ

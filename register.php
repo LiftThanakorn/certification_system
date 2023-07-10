@@ -178,7 +178,7 @@
                   </select>
                 </div>
                 <div class="col">
-                  <label for="staffType" class="form-label">ระดับประเภทตำแหน่ง</label>
+                  <label for="staffType" class="form-label">ประเภทตำแหน่ง</label>
                   <select class="form-select" id="staffType" required>
                     <option value="">โปรดเลือก</option>
                     <option value="สายวิชาการ">สายวิชาการ</option>
@@ -217,6 +217,8 @@
                   <input type="file" class="form-control" id="profileImage" accept="image/*" required>
                   <small class="text-danger">*ไฟล์ jpg jpeg png เท่านั้น</small>
                 </div>
+                <div class="col"></div>
+                
               </div>
               <button type="submit" class="btn btn-primary" id="submitButton">ลงทะเบียนเข้าใช้งาน</button>
             </form>

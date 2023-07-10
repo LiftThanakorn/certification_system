@@ -11,13 +11,13 @@ if (!isset($_SESSION['user_id'])) {
 
 if (isset($_SESSION['user_level'])) {
     $userLevel = $_SESSION['user_level'];
-    if ($userLevel == 'แอดมิน' || $userLevel == 'ผู้บริหาร') {
-    } elseif ($userLevel == 'ผู้ใช้ทั่วไป') {
-        // ถ้าเป็นผู้ใช้ทั่วไป ให้เปลี่ยนเส้นทางไปยังหน้า dashboard.php หรือหน้าที่คุณต้องการ
+    if ($userLevel == 'admin' || $userLevel == 'manager') {
+    } elseif ($userLevel == 'user') {
+        // ถ้าเป็นuser ให้เปลี่ยนเส้นทางไปยังหน้า dashboard.php หรือหน้าที่คุณต้องการ
         header("Location: dashboard.php");
         exit;
     } else {
-        // ถ้าไม่ใช่แอดมิน ผู้บริหาร หรือผู้ใช้ทั่วไป ให้เปลี่ยนเส้นทางไปยังหน้าที่คุณต้องการ
+        // ถ้าไม่ใช่admin manager หรือuser ให้เปลี่ยนเส้นทางไปยังหน้าที่คุณต้องการ
         header("Location: login.php");
         exit;
     }
@@ -179,10 +179,10 @@ $result = mysqli_query($conn, $sql);
             var requestId = $(this).data('request-id');
             var status = $(this).closest('tr').find('.status-badge').text();
 
-            // ตรวจสอบระดับผู้ใช้ว่าเป็น "แอดมิน" หรือไม่
+            // ตรวจสอบระดับผู้ใช้ว่าเป็น "admi" หรือไม่
             var userLevel = "<?php echo $userLevel; ?>"; // กำหนดค่าตัวแปรนี้ตามระบบการตรวจสอบระดับผู้ใช้ของคุณ
 
-            if (status === 'ดำเนินการเสร็จเรียบร้อย' && userLevel !== "แอดมิน") {
+            if (status === 'ดำเนินการเสร็จเรียบร้อย' && userLevel !== "admin") {
                 Swal.fire({
                     title: 'ไม่สามารถอัปเดตสถานะได้',
                     text: 'คำขอที่เสร็จเรียบร้อยแล้วไม่สามารถอัปเดตสถานะได้',

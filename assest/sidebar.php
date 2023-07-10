@@ -18,7 +18,7 @@
                 <span style="font-size: 16px;">หน้าแรก</span>
             </a>
         </li>
-        <?php if ($_SESSION['user_level'] === 'แอดมิน' || $_SESSION['user_level'] === 'ผู้บริหาร') { ?>
+        <?php if ($_SESSION['user_level'] === 'admin' || $_SESSION['user_level'] === 'manager') { ?>
             <li class="nav-item">
                 <a class="nav-link" href="dashboard_m.php">
                     <i class="fa-solid fa-circle-exclamation fa-beat"></i>
@@ -38,7 +38,7 @@
                 </a>
             </li>
         <?php } ?>
-        <?php if ($_SESSION['user_level'] === 'แอดมิน') { ?>
+        <?php if ($_SESSION['user_level'] === 'admin') { ?>
             <li class="nav-item">
                 <a href="usersprofile.php" class="nav-link active">
                     <i class="fa-solid fa-users"></i>

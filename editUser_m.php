@@ -206,9 +206,9 @@ $image = $row['image'];
                                             <div class="col">
                                                 <label for="user_level" class="form-label">ระดับผู้ใช้:</label>
                                                 <select class="form-select" id="user_level" name="user_level">
-                                                    <option value="ผู้ใช้ทั่วไป" <?php if ($user_level === 'ผู้ใช้ทั่วไป') echo 'selected'; ?>>ผู้ใช้ทั่วไป</option>
-                                                    <option value="ผู้บริหาร" <?php if ($user_level === 'ผู้บริหาร') echo 'selected'; ?>>ผู้บริหาร</option>
-                                                    <option value="แอดมิน" <?php if ($user_level === 'แอดมิน') echo 'selected'; ?>>แอดมิน</option>
+                                                    <option value="user" <?php if ($user_level === 'user') echo 'selected'; ?>>user</option>
+                                                    <option value="manager" <?php if ($user_level === 'manager') echo 'selected'; ?>>manager</option>
+                                                    <option value="admin" <?php if ($user_level === 'admin') echo 'selected'; ?>>admin</option>
                                                 </select>
                                             </div>
 

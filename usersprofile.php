@@ -3,7 +3,7 @@ session_start();
 
 require_once 'dbconnect.php';
 
-if (!isset($_SESSION['user_level']) || $_SESSION['user_level'] !== 'แอดมิน') {
+if (!isset($_SESSION['user_level']) || $_SESSION['user_level'] !== 'admin') {
     header("Location: login.php");
     exit;
 }
