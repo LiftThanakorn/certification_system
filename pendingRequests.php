@@ -11,38 +11,32 @@ if (!isset($_SESSION['user_id'])) {
 
 if (isset($_SESSION['user_level'])) {
     $userLevel = $_SESSION['user_level'];
-    if ($userLevel == 'admin' || $userLevel == 'manager') {
-    } elseif ($userLevel == 'user') {
-        // ถ้าเป็นuser ให้เปลี่ยนเส้นทางไปยังหน้า dashboard.php หรือหน้าที่คุณต้องการ
-        header("Location: dashboard.php");
-        exit;
-    } else {
-        // ถ้าไม่ใช่admin manager หรือuser ให้เปลี่ยนเส้นทางไปยังหน้าที่คุณต้องการ
+    if (!in_array($userLevel, ['admin', 'manager'])) {
+        // ถ้าไม่ใช่ admin หรือ manager ให้เปลี่ยนเส้นทางไปยังหน้าที่คุณต้องการ
         header("Location: login.php");
         exit;
     }
 }
-
 
 $sql = "SELECT sc.*, u.fname, u.lname, u.affiliation, cc.certificate_type_name, a.fname AS approver_fname, a.lname AS approver_lname 
         FROM requestcertificate sc
         INNER JOIN users u ON sc.user_id = u.user_id
         INNER JOIN certificate_type cc ON sc.certificate_type_id = cc.certificate_type_id
         LEFT JOIN users a ON sc.approver_id = a.user_id
-        WHERE sc.status = 'รอดำเนินการ'  -- เพิ่มเงื่อนไขนี้
+        WHERE sc.status = 'รอดำเนินการ'
         ORDER BY sc.request_date";
 
-
-
-$result = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 ?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
-    <title>PendingRequests</title>
+    <title>Pending Requests</title>
     <?php require_once 'assest/head.php'; ?>
-
 </head>
 
 <body id="page-top">
@@ -61,7 +55,7 @@ $result = mysqli_query($conn, $sql);
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="card shadow mb-4 ">
+                            <div class="card shadow mb-4">
                                 <div class="card-header py-3">
                                     <h3 class="m-0 font-weight-bold text-primary">ตารางคำร้องขอใบรับรองที่ยังไม่ดำเนินการ</h3>
                                 </div>
@@ -83,16 +77,23 @@ $result = mysqli_query($conn, $sql);
                                             <tbody id="editTable">
                                                 <?php
                                                 $index = mysqli_num_rows($result); // นับจำนวนแถวทั้งหมดในผลลัพธ์
-                                                while ($row = mysqli_fetch_assoc($result)) :
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    $approver_id = $row['approver_id'];
+                                                    $sql_approver = "SELECT fname, lname FROM users WHERE user_id = ?";
+                                                    $stmt_approver = mysqli_prepare($conn, $sql_approver);
+                                                    mysqli_stmt_bind_param($stmt_approver, "i", $approver_id);
+                                                    mysqli_stmt_execute($stmt_approver);
+                                                    $result_approver = mysqli_stmt_get_result($stmt_approver);
+                                                    $approver = mysqli_fetch_assoc($result_approver);
+                                                    $certificate_type_name = $row['certificate_type_name'];
+                                                    $status = $row['status'];
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
-                                                        <td><?php echo $index--; ?></td> <!-- ลดค่า $index ทีละหนึ่งทุกครั้ง -->
+                                                        <td><?php echo $index--; ?></td>
                                                         <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
                                                         <td><?php echo $row['affiliation']; ?></td>
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
-                                                            $certificate_type_name = $row['certificate_type_name'];
-
                                                             if ($certificate_type_name == 'หนังสือรับรองเงินเดือน') {
                                                                 echo "<div class='alert alert-dark salary' id='certificate-salary'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองการปฏิบัติงาน') {
@@ -100,7 +101,7 @@ $result = mysqli_query($conn, $sql);
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
                                                                 echo "<div class='alert alert-dark' id='certificate-status'>" . $certificate_type_name . "</div>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองอื่นๆ') {
-                                                                echo "<div class='alert alert-dark  cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-other'>";
+                                                                echo "<div class='alert alert-dark cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-other'>";
                                                                 echo $certificate_type_name;
                                                                 echo " ";
                                                                 echo "<i class='fas fa-eye'></i>";
@@ -109,8 +110,6 @@ $result = mysqli_query($conn, $sql);
                                                         </td>
                                                         <td>
                                                             <?php
-                                                            $status = $row['status'];
-
                                                             if ($status == 'รอดำเนินการ') {
                                                                 echo "<span class='badge rounded-pill bg-info status-badge text-light'>" . $status . "</span>";
                                                             } elseif ($status == 'กำลังดำเนินการ') {
@@ -128,31 +127,14 @@ $result = mysqli_query($conn, $sql);
                                                                 <i class='fas fa-pen'></i>
                                                             </button>
                                                         </td>
-                                                        <td>
-                                                            <?php
-                                                            // ดึงข้อมูลผู้อนุมัติจากตาราง users
-                                                            $approver_id = $row['approver_id'];
-                                                            $sql_approver = "SELECT fname, lname FROM users WHERE user_id = '$approver_id'";
-                                                            $result_approver = mysqli_query($conn, $sql_approver);
-                                                            $approver = mysqli_fetch_assoc($result_approver);
-
-                                                            if (mysqli_num_rows($result_approver) > 0) {
-                                                                echo $approver['fname'] . ' ' . $approver['lname'];
-                                                            } else {
-                                                                echo ''; // แสดงค่าว่างเมื่อยังไม่มีผู้อัปเดตสถานะ
-                                                            }
-                                                            ?>
-                                                        </td>
+                                                        <td><?php echo !empty($approver) ? $approver['fname'] . ' ' . $approver['lname'] : ''; ?></td>
                                                     </tr>
-                                                <?php endwhile; ?>
+                                                <?php } ?>
                                             </tbody>
                                         </table>
-
-
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -163,8 +145,8 @@ $result = mysqli_query($conn, $sql);
         </div>
     </div>
 </body>
-
 </html>
+
 <script>
     $(document).ready(function() {
         $('#dataTable').DataTable();
