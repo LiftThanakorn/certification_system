@@ -15,11 +15,11 @@ if (isset($_SESSION['user_id'])) {
         // Check if the certificate_type is set and not empty
         if (isset($_POST['certificate_type']) && !empty($_POST['certificate_type'])) {
             // Get the certificate_type from the request
-            $certificate_type = mysqli_real_escape_string($conn, $_POST['certificate_type']);
-            $additional_data = mysqli_real_escape_string($conn, $_POST['additional_data']);
+            $certificate_type = $_POST['certificate_type'];
+            $additional_data = $_POST['additional_data'];
 
-            $sql = "INSERT INTO requestcertificate (user_id, certificate_type_id, status, request_date, update_date, additional_data) VALUES (?, ?, 'รอดำเนินการ', NOW(), NOW(), ?)";
-            $stmt = mysqli_prepare($conn, $sql);
+            // Prepare the statement
+            $stmt = mysqli_prepare($conn, "INSERT INTO requestcertificate (user_id, certificate_type_id, status, request_date, update_date, additional_data) VALUES (?, ?, 'รอดำเนินการ', NOW(), NOW(), ?)");
 
             // Bind the parameters
             mysqli_stmt_bind_param($stmt, "iss", $user_id, $certificate_type, $additional_data);
@@ -44,4 +44,5 @@ if (isset($_SESSION['user_id'])) {
     header('Location: login.php');
     exit();
 }
+
 ?>

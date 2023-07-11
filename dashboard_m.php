@@ -78,7 +78,7 @@ $result = mysqli_query($conn, $sql);
                                                     <th>ผู้อนุมัติ</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody id="editTable">
                                                 <?php
                                                 $index = mysqli_num_rows($result); // นับจำนวนแถวทั้งหมดในผลลัพธ์
                                                 while ($row = mysqli_fetch_assoc($result)) :
@@ -171,7 +171,7 @@ $result = mysqli_query($conn, $sql);
 
 <script>
     $(document).ready(function() {
-        $('.update-status-btn').click(function() {
+         $('#editTable').on('click', '.update-status-btn', function() {
             var requestId = $(this).data('request-id');
             var status = $(this).closest('tr').find('.status-badge').text();
 

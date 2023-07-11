@@ -145,6 +145,12 @@ if (isset($_SESSION['user_level'])) {
 </html>
 
 <script>
+    $(document).ready(function() {
+        $('#requestTable').DataTable();
+    });
+</script>
+
+<script>
     function deleteRequest(requestId) {
         // Get the status of the request
         var status = $('tr[data-request-id="' + requestId + '"] .status-badge').text();
@@ -252,6 +258,7 @@ if (isset($_SESSION['user_level'])) {
         });
     }
 </script>
+
 
 <script>
     function requestCertificateWork() {
