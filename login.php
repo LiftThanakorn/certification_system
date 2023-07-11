@@ -1,66 +1,36 @@
 <?php
-// เชื่อมต่อกับฐานข้อมูล
 require_once 'dbconnect.php';
-
-// เริ่มต้นเซสชัน
 session_start();
 
-// ตรวจสอบเงื่อนไขว่าผู้ใช้เข้าสู่ระบบแล้วหรือไม่
 if (isset($_SESSION['user_id']) && isset($_SESSION['user_level'])) {
-    // ผู้ใช้เข้าสู่ระบบแล้ว ส่งไปยังหน้า dashboard.php
     header('Location: dashboard.php');
     exit;
 }
 
-// ตรวจสอบว่ามีการส่งข้อมูลแบบ POST มาหรือไม่
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // รับค่าที่ส่งมาจากฟอร์ม
     $idCardNumber = $_POST['idCardNumber'];
     $password = $_POST['password'];
 
-    // ค้นหาผู้ใช้ในฐานข้อมูล
-    $sql = "SELECT * FROM users WHERE idCardNumber = '$idCardNumber'";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM users WHERE idCardNumber = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $idCardNumber);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($result) === 1) {
-        // พบผู้ใช้ในฐานข้อมูล
         $row = mysqli_fetch_assoc($result);
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        
+        $hashedPassword = $row['password'];
 
         if (password_verify($password, $hashedPassword)) {
-            // รหัสผ่านถูกต้อง
-
-            // กำหนดค่าในเซสชัน
             $_SESSION['user_id'] = $row['user_id'];
             $_SESSION['user_level'] = $row['user_level'];
 
-            // เปลี่ยนเส้นทางไปยังหน้า dashboard.php
             header('Location: dashboard.php');
             exit;
         } else {
-            // รหัสผ่านไม่ถูกต้อง
             $msg = 'รหัสผ่านไม่ถูกต้อง';
-
-            // เช็คว่าเป็นครั้งแรกที่ผิดพลาดหรือไม่
-            if (isset($_SESSION['login_attempts'])) {
-                $_SESSION['login_attempts']++;
-            } else {
-                $_SESSION['login_attempts'] = 1;
-            }
-
-            // ตรวจสอบจำนวนครั้งที่ผิดพลาด
-            if ($_SESSION['login_attempts'] >= 3) {
-                // ลบค่าในเซสชัน
-                session_unset();
-                session_destroy();
-                $msg = 'เกินจำนวนครั้งที่กำหนดให้ล็อกอิน';
-                header('Location: index.php');
-                exit;
-            }
         }
     } else {
-        // ไม่พบผู้ใช้ในฐานข้อมูล
         $msg = 'ไม่พบผู้ใช้ในระบบ';
     }
 }
