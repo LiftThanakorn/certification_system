@@ -25,7 +25,7 @@
                     <span style="font-size: 16px;">คำร้องขอใบรับรองทั้งหมด</span>
                 </a>
             </li>
-            <li class="nav-item">
+        <!--     <li class="nav-item">
                 <a class="nav-link" href="inProgressRequests.php">
                     <i class="fa-solid fa-circle-exclamation fa-beat"></i>
                     <span style="font-size: 14px;">คำร้องขอใบรับรองที่กำลังดำเนินการ</span>
@@ -36,7 +36,7 @@
                     <i class="fa-solid fa-circle-exclamation fa-beat"></i>
                     <span style="font-size: 14px;">คำร้องขอใบรับรองที่ยังไม่ได้ดำเนินการ</span>
                 </a>
-            </li>
+            </li> -->
         <?php } ?>
         <?php if ($_SESSION['user_level'] === 'admin') { ?>
             <li class="nav-item">

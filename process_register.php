@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // เข้ารหัสรหัสผ่าน
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
+
     // รับไฟล์รูปภาพที่อัปโหลดจากฟอร์ม
     $profileImage = $_FILES['profileImage'];
 
