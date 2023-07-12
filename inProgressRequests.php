@@ -82,16 +82,21 @@ $result = mysqli_query($conn, $sql);
                                             <tbody id="editTable">
                                                 <?php
                                                 $index = mysqli_num_rows($result); // นับจำนวนแถวทั้งหมดในผลลัพธ์
-                                                while ($row = mysqli_fetch_assoc($result)) :
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    $approver_id = $row['approver_id'];
+                                                    $sql_approver = "SELECT fname, lname FROM users WHERE user_id = '$approver_id'";
+                                                    $result_approver = mysqli_query($conn, $sql_approver);
+                                                    $approver = mysqli_fetch_assoc($result_approver);
+
+                                                    $certificate_type_name = $row['certificate_type_name'];
+                                                    $status = $row['status'];
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
-                                                        <td><?php echo $index--; ?></td> <!-- ลดค่า $index ทีละหนึ่งทุกครั้ง -->
+                                                        <td><?php echo $index--; ?></td>
                                                         <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
                                                         <td><?php echo $row['affiliation']; ?></td>
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
-                                                            $certificate_type_name = $row['certificate_type_name'];
-
                                                             if ($certificate_type_name == 'หนังสือรับรองเงินเดือน') {
                                                                 echo "<div class='alert alert-dark salary' id='certificate-salary'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองการปฏิบัติงาน') {
@@ -99,7 +104,7 @@ $result = mysqli_query($conn, $sql);
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
                                                                 echo "<div class='alert alert-dark' id='certificate-status'>" . $certificate_type_name . "</div>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองอื่นๆ') {
-                                                                echo "<div class='alert alert-dark  cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-other'>";
+                                                                echo "<div class='alert alert-dark cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-other'>";
                                                                 echo $certificate_type_name;
                                                                 echo " ";
                                                                 echo "<i class='fas fa-eye'></i>";
@@ -108,8 +113,6 @@ $result = mysqli_query($conn, $sql);
                                                         </td>
                                                         <td>
                                                             <?php
-                                                            $status = $row['status'];
-
                                                             if ($status == 'รอดำเนินการ') {
                                                                 echo "<span class='badge rounded-pill bg-info status-badge text-light'>" . $status . "</span>";
                                                             } elseif ($status == 'กำลังดำเนินการ') {
@@ -127,27 +130,12 @@ $result = mysqli_query($conn, $sql);
                                                                 <i class='fas fa-pen'></i>
                                                             </button>
                                                         </td>
-                                                        <td>
-                                                            <?php
-                                                            // ดึงข้อมูลผู้อนุมัติจากตาราง users
-                                                            $approver_id = $row['approver_id'];
-                                                            $sql_approver = "SELECT fname, lname FROM users WHERE user_id = '$approver_id'";
-                                                            $result_approver = mysqli_query($conn, $sql_approver);
-                                                            $approver = mysqli_fetch_assoc($result_approver);
-
-                                                            if (mysqli_num_rows($result_approver) > 0) {
-                                                                echo $approver['fname'] . ' ' . $approver['lname'];
-                                                            } else {
-                                                                echo ''; // แสดงค่าว่างเมื่อยังไม่มีผู้อัปเดตสถานะ
-                                                            }
-                                                            ?>
-                                                        </td>
+                                                        <td><?php echo !empty($approver) ? $approver['fname'] . ' ' . $approver['lname'] : ''; ?></td>
                                                     </tr>
-                                                <?php endwhile; ?>
+                                                <?php } ?>
+
                                             </tbody>
                                         </table>
-
-
                                     </div>
                                 </div>
                             </div>
@@ -169,9 +157,6 @@ $result = mysqli_query($conn, $sql);
         $('#dataTable').DataTable();
     });
 </script>
-
-
-
 <script>
     $(document).ready(function() {
         $('#editTable').on('click', '.update-status-btn', function() {

@@ -79,12 +79,13 @@ $result = mysqli_stmt_get_result($stmt);
                                                 $index = mysqli_num_rows($result); // นับจำนวนแถวทั้งหมดในผลลัพธ์
                                                 while ($row = mysqli_fetch_assoc($result)) {
                                                     $approver_id = $row['approver_id'];
-                                                    $sql_approver = "SELECT fname, lname FROM users WHERE user_id = ?";
-                                                    $stmt_approver = mysqli_prepare($conn, $sql_approver);
+
+                                                    $stmt_approver = mysqli_prepare($conn, "SELECT fname, lname FROM users WHERE user_id = ?");
                                                     mysqli_stmt_bind_param($stmt_approver, "i", $approver_id);
                                                     mysqli_stmt_execute($stmt_approver);
                                                     $result_approver = mysqli_stmt_get_result($stmt_approver);
                                                     $approver = mysqli_fetch_assoc($result_approver);
+                                        
                                                     $certificate_type_name = $row['certificate_type_name'];
                                                     $status = $row['status'];
                                                 ?>
