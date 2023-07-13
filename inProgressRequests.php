@@ -98,7 +98,11 @@ $result = mysqli_query($conn, $sql);
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
                                                             if ($certificate_type_name == 'หนังสือรับรองเงินเดือน') {
-                                                                echo "<div class='alert alert-dark salary' id='certificate-salary'>" . $certificate_type_name . "</span>";
+                                                                echo "
+                                                                <div class='alert alert-dark salary  cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-salary'>
+                                                                " . $certificate_type_name . "</span>";
+                                                                echo " ";
+                                                                echo "<i class='fas fa-eye'></i>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองการปฏิบัติงาน') {
                                                                 echo "<div class='alert alert-dark' id='certificate-work'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
