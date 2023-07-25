@@ -18,13 +18,22 @@ if (isset($_SESSION['user_level'])) {
     }
 }
 
-$sql = "SELECT sc.*, u.fname, u.lname, u.affiliation, cc.certificate_type_name, a.fname AS approver_fname, a.lname AS approver_lname 
+$sql = "SELECT sc.*, u.fname, u.lname, u.nameTitle, u.salary, u.otherIncome, u.maritalStatus, u.startDate, u.employmentContract, u.position, 
+               pl.positionlevel_name AS positionlevel_name,  -- Use the correct column name for positionlevel_name
+               cc.certificate_type_name, a.fname AS approver_fname, a.lname AS approver_lname,
+               s.subaffiliation_name, aff.affiliation_name
         FROM requestcertificate sc
         INNER JOIN users u ON sc.user_id = u.user_id
         INNER JOIN certificate_type cc ON sc.certificate_type_id = cc.certificate_type_id
         LEFT JOIN users a ON sc.approver_id = a.user_id
+        LEFT JOIN tbl_subaffiliation s ON u.subaffiliation_id = s.subaffiliation_id
+        LEFT JOIN tbl_affiliation aff ON s.affiliation_id = aff.affiliation_id
+        LEFT JOIN tbl_positionlevel pl ON u.positionlevel_id = pl.positionlevel_id -- LEFT JOIN กับตาราง tbl_positionlevel
         WHERE sc.status = 'รอดำเนินการ'
         ORDER BY sc.request_date";
+
+
+
 
 $stmt = mysqli_prepare($conn, $sql);
 mysqli_stmt_execute($stmt);
@@ -65,8 +74,7 @@ $result = mysqli_stmt_get_result($stmt);
                                             <thead>
                                                 <tr>
                                                     <th>ลำดับ</th>
-                                                    <th>ชื่อ-นามสกุล</th>
-                                                    <th>สังกัด</th>
+                                                    <th>ข้อมูลผู้ร้องขอ</th>
                                                     <th>ประเภทหนังสือรับรอง</th>
                                                     <th>สถานะ</th>
                                                     <th>วันที่ส่งคำขอ</th>
@@ -85,22 +93,95 @@ $result = mysqli_stmt_get_result($stmt);
                                                     mysqli_stmt_execute($stmt_approver);
                                                     $result_approver = mysqli_stmt_get_result($stmt_approver);
                                                     $approver = mysqli_fetch_assoc($result_approver);
-                                        
+
                                                     $certificate_type_name = $row['certificate_type_name'];
                                                     $status = $row['status'];
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                         <td><?php echo $index--; ?></td>
-                                                        <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
-                                                        <td><?php echo $row['affiliation']; ?></td>
+                                                        <td id="userData">
+                                                            <?php
+                                                            $startDate_buddhist = date('d-m-Y', strtotime($row['startDate'] . '+543 years'));
+
+                                                            $months = array(
+                                                                '01' => 'มกราคม',
+                                                                '02' => 'กุมภาพันธ์',
+                                                                '03' => 'มีนาคม',
+                                                                '04' => 'เมษายน',
+                                                                '05' => 'พฤษภาคม',
+                                                                '06' => 'มิถุนายน',
+                                                                '07' => 'กรกฎาคม',
+                                                                '08' => 'สิงหาคม',
+                                                                '09' => 'กันยายน',
+                                                                '10' => 'ตุลาคม',
+                                                                '11' => 'พฤศจิกายน',
+                                                                '12' => 'ธันวาคม'
+                                                            );
+
+                                                            list($day, $month, $year) = explode('-', $startDate_buddhist);
+                                                            $startDate_buddhist = ltrim($day, '0') . ' ' . $months[$month] . ' ' . $year;
+
+
+                                                            /* คำนวณปีที่ทำงาน */
+                                                            $startDate = new DateTime($row['startDate']);
+                                                            $endDate = new DateTime(); // วันปัจจุบัน
+
+                                                            $interval = $startDate->diff($endDate);
+
+                                                            $years = $interval->y; // จำนวนปี
+                                                            $months = $interval->m; // จำนวนเดือน
+                                                            $day = $interval->d; // จำนวนวัน
+                                                            ?>
+
+                                                            <?php
+                                                            echo '<b>ชื่อ - นามสกุล : </b>' . $row['nameTitle'] . ' ' . $row['fname'] . ' ' . $row['lname'] . '</br>' .
+                                                                '<b>ตำแหน่ง : </b>' . $row['position'] . '</br>' .
+                                                                '<b>วิทยฐานะสายสนับสนุน: : </b>' . $row['positionlevel_name'] . '</br>' .
+                                                                '<b>สังกัด : </b>' . $row['affiliation_name'] . '</br>' .
+                                                                '<b>ฝ่ายงาน : </b>' . $row['subaffiliation_name'] . '</br>' .
+                                                                '<b>ประเภทสัญญาจ้าง : </b>' . $row['employmentContract'] . '</br>' .
+                                                                '<b>เงินเดือน : </b>' . $row['salary'] . '</br>' .
+                                                                '<b>เงินรายได้อื่น : </b>' . $row['otherIncome'] . '</br>' .
+                                                                '<b>วันที่เริ่มทำงาน : </b>' . $startDate_buddhist . '</br>' .
+                                                                '<b>จำนวนปีที่ทำงาน : </b>' . $years . ' ปี ' . $months . ' เดือน ' . $day . ' วัน';
+                                                            ?>
+
+                                                            <!-- ปุ่มสำหรับส่งข้อมูลไปยังหน้า certificate_work_pdf.php -->
+                                                            <form action="certificate_work_pdf.php" method="POST">
+                                                                <input type="hidden" name="nameTitle" value="<?php echo $row['nameTitle']; ?>">
+                                                                <input type="hidden" name="fname" value="<?php echo $row['fname']; ?>">
+                                                                <input type="hidden" name="lname" value="<?php echo $row['lname']; ?>">
+                                                                <input type="hidden" name="position" value="<?php echo $row['position']; ?>">
+                                                                <input type="hidden" name="positionlevel_name" value="<?php echo $row['positionlevel_name']; ?>">
+                                                                <input type="hidden" name="affiliation_name" value="<?php echo $row['affiliation_name']; ?>">
+                                                                <input type="hidden" name="subaffiliation_name" value="<?php echo $row['subaffiliation_name']; ?>">
+                                                                <input type="hidden" name="employmentContract" value="<?php echo $row['employmentContract']; ?>">
+                                                                <input type="hidden" name="salary" value="<?php echo $row['salary']; ?>">
+                                                                <input type="hidden" name="otherIncome" value="<?php echo $row['otherIncome']; ?>">
+                                                                <input type="hidden" name="startDate_buddhist" value="<?php echo $startDate_buddhist; ?>">
+                                                                <input type="hidden" name="years" value="<?php echo $years; ?>">
+                                                                <input type="hidden" name="months" value="<?php echo $months; ?>">
+                                                                <input type="hidden" name="day" value="<?php echo $day; ?>">
+
+                                                                <hr>
+                                                                <div class="input-group mb-3">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text" id="basic-addon1">เลข อว.</span>
+                                                                    </div>
+                                                                    <input type="text" class="form-control" name="mhesinumber" aria-label="mhesinumber" aria-describedby="basic-addon1">
+                                                                    <button class="btn btn-info" type="submit"><i class="fa-solid fa-file-pdf"></i></button>
+                                                                </div>
+
+                                                                
+                                                            </form>
+
+
+                                                        </td>
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
                                                             if ($certificate_type_name == 'หนังสือรับรองเงินเดือน') {
-                                                                echo "
-                                                                <div class='alert alert-dark salary  cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-salary'>
-                                                                " . $certificate_type_name . "</span>";
+                                                                echo "<div class='alert alert-dark' id='certificate-salary'>" . $certificate_type_name . "</span>";
                                                                 echo " ";
-                                                                echo "<i class='fas fa-eye'></i>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองการปฏิบัติงาน') {
                                                                 echo "<div class='alert alert-dark' id='certificate-work'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
@@ -150,11 +231,27 @@ $result = mysqli_stmt_get_result($stmt);
         </div>
     </div>
 </body>
+
 </html>
 
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable();
+        $('#dataTable').DataTable({
+            "language": {
+                "lengthMenu": "แสดง _MENU_ ข้อมูล",
+                "zeroRecords": "ไม่มีข้อมูล",
+                "info": "แสดงหน้าที่ _PAGE_ ของ _PAGES_",
+                "infoEmpty": "ไม่มีข้อมูล",
+                "infoFiltered": "(กรองข้อมูลจากทั้งหมด _MAX_ ข้อมูล)",
+                "search": "ค้นหา:",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "ต่อไป",
+                    "previous": "ก่อนหน้า"
+                },
+            }
+        });
     });
 </script>
 

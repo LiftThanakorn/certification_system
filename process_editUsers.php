@@ -1,17 +1,17 @@
 <?php
 require_once 'dbconnect.php';
 
-session_start();
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // รับค่าที่ส่งมาจากฟอร์ม
-    $userId = $_GET['user_id'];
+    $userId = $_POST['userId'];
     $idCardNumber = $_POST['idCardNumber'];
     $nameTitle = $_POST['nameTitle'];
     $fname = $_POST['fname'];
     $lname = $_POST['lname'];
     $position = $_POST['position'];
-    $affiliation = $_POST['affiliation'];
+    $subaffiliation_id = $_POST['affiliation']; // Changed 'subaffiliation_id' to 'affiliation'
+    $academicposition_id = $_POST['academicposition_id'];
+    $executiveposition_id = $_POST['executiveposition_id'];
+    $positionlevel_id = $_POST['positionlevel_id'];
     $employmentContract = $_POST['employmentContract'];
     $startDate = $_POST['startDate'];
     $salary = $_POST['salary'];
@@ -19,6 +19,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $maritalStatus = $_POST['maritalStatus'];
     $user_level = $_POST['user_level'];
     $password = $_POST['password'];
+    $confirmPassword = $_POST['confirmPassword']; // Added confirmPassword field
+
+    // Validate password and confirmPassword match
+    if (!empty($password) && $password !== $confirmPassword) {
+        $response = [
+            'status' => 'error',
+            'message' => 'รหัสผ่านและยืนยันรหัสผ่านใหม่ไม่ตรงกัน'
+        ];
+        echo json_encode($response);
+        exit;
+    }
+
+      // Hash the password
+      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // แปลงรูปแบบวันที่จาก พ.ศ. เป็น ค.ศ.
     $startDate_english = DateTime::createFromFormat('d-m-Y', $startDate);
@@ -39,7 +53,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // อัปโหลดไฟล์
             if (move_uploaded_file($profileImage['tmp_name'], $targetFile)) {
                 // อัปเดตข้อมูลในฐานข้อมูลรวมถึงชื่อรูปภาพใหม่
-                $sql = "UPDATE users SET idCardNumber = '$idCardNumber', nameTitle = '$nameTitle', fname = '$fname', lname = '$lname', position = '$position', affiliation = '$affiliation', employmentContract = '$employmentContract', startDate = '$startDate_english', salary = '$salary', otherIncome = '$otherIncome', maritalStatus = '$maritalStatus', user_level = '$user_level', image = '$uniqueFileName'";
+                $sql = "UPDATE users SET 
+                idCardNumber = '$idCardNumber', 
+                nameTitle = '$nameTitle', 
+                fname = '$fname', 
+                lname = '$lname', 
+                position = '$position', 
+                subaffiliation_id = '$subaffiliation_id', 
+                academicposition_id = '$academicposition_id', 
+                executiveposition_id = '$executiveposition_id', 
+                positionlevel_id = '$positionlevel_id', 
+                employmentContract = '$employmentContract', 
+                startDate = '$startDate_english', 
+                salary = '$salary', 
+                otherIncome = '$otherIncome', 
+                maritalStatus = '$maritalStatus', 
+                user_level = '$user_level', 
+                image = '$uniqueFileName',
+                password = '$hashedPassword' 
+                WHERE user_id = '$userId'";
             } else {
                 $response = [
                     'status' => 'error',
@@ -57,31 +89,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
     } else {
-        // ไม่มีการเลือกรูปภาพใหม่ อัปเดตข้อมูลในฐานข้อมูลโดยไม่รวมฟิลด์รูปภาพ
-        $sql = "UPDATE users SET idCardNumber = '$idCardNumber', nameTitle = '$nameTitle', fname = '$fname', lname = '$lname', position = '$position', affiliation = '$affiliation', employmentContract = '$employmentContract', startDate = '$startDate_english', salary = '$salary', otherIncome = '$otherIncome', maritalStatus = '$maritalStatus', user_level = '$user_level'";
+        // ไม่มีการเลือกรูปภาพใหม่ อัปเดตข้อมูลอย่างอื่นที่ไม่เกี่ยวข้องกับรูปภาพ
+        $sql = "UPDATE users SET 
+                        idCardNumber = '$idCardNumber', 
+                        nameTitle = '$nameTitle', 
+                        fname = '$fname', 
+                        lname = '$lname', 
+                        position = '$position', 
+                        subaffiliation_id = '$subaffiliation_id', 
+                        academicposition_id = '$academicposition_id', 
+                        executiveposition_id = '$executiveposition_id', 
+                        positionlevel_id = '$positionlevel_id', 
+                        employmentContract = '$employmentContract', 
+                        startDate = '$startDate_english', 
+                        salary = '$salary', 
+                        otherIncome = '$otherIncome', 
+                        maritalStatus = '$maritalStatus', 
+                        user_level = '$user_level',
+                        password = '$hashedPassword'
+                        WHERE user_id = '$userId'";
     }
 
-    // เช็ครหัสผ่าน และเพิ่มในการอัปเดตเฉพาะเมื่อมีการระบุรหัสผ่านใหม่
-    if (!empty($password)) {
-        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql .= ", password = '$hashedPassword'";
-    }
-
-    $sql .= " WHERE user_id = '$userId'";
-
+    // ทำการอัปเดตข้อมูลในฐานข้อมูล
     if (mysqli_query($conn, $sql)) {
         $response = [
             'status' => 'success',
             'message' => 'อัปเดตข้อมูลสำเร็จ'
         ];
+        echo json_encode($response);
     } else {
         $response = [
             'status' => 'error',
             'message' => 'เกิดข้อผิดพลาดในการอัปเดตข้อมูล: ' . mysqli_error($conn)
         ];
+        echo json_encode($response);
     }
-
-    // ส่งข้อมูลกลับในรูปแบบ JSON
+} else {
+    $response = [
+        'status' => 'error',
+        'message' => 'ไม่สามารถเรียกใช้งานเมื่อไม่มีการส่งคำขอแบบ POST'
+    ];
     echo json_encode($response);
 }
 ?>

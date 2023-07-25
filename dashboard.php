@@ -11,7 +11,9 @@ if (isset($_SESSION['user_level'])) {
     $user_id = $_SESSION['user_id'];
 
     // ค้นหาคำขอใบรับรองสำหรับผู้ใช้โดยใช้ user_id
-    $sql = "SELECT users.fname, requestcertificate.*, certificate_type.certificate_type_name FROM requestcertificate INNER JOIN users ON requestcertificate.user_id = users.user_id LEFT JOIN certificate_type ON requestcertificate.certificate_type_id = certificate_type.certificate_type_id WHERE users.user_id = '$user_id' ORDER BY request_date DESC";
+    $sql = "SELECT users.fname, requestcertificate.*, certificate_type.certificate_type_name FROM requestcertificate 
+    INNER JOIN users ON requestcertificate.user_id = users.user_id 
+    LEFT JOIN certificate_type ON requestcertificate.certificate_type_id = certificate_type.certificate_type_id WHERE users.user_id = '$user_id' ORDER BY request_date DESC";
     $result = mysqli_query($conn, $sql);
 } else {
     // ไม่มีเซสชันหรือสถานะผู้ใช้ ให้เปลี่ยนเส้นทางไปที่ login.php
@@ -86,11 +88,7 @@ if (isset($_SESSION['user_level'])) {
                                                             $certificate_type_name = $row['certificate_type_name'];
 
                                                             if ($certificate_type_name == 'หนังสือรับรองเงินเดือน') {
-                                                                echo "
-                                                                <div class='alert alert-dark salary  cursor-pointer' onclick='showAdditionalData(\"" . $row['additional_data'] . "\")' id='certificate-salary'>
-                                                                " . $certificate_type_name . "</span>";
-                                                                echo " ";
-                                                                echo "<i class='fas fa-eye'></i>";
+                                                                echo "<div class='alert alert-dark salary' id='certificate-salary'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองการปฏิบัติงาน') {
                                                                 echo "<div class='alert alert-dark' id='certificate-work'>" . $certificate_type_name . "</span>";
                                                             } elseif ($certificate_type_name == 'หนังสือรับรองสถานภาพโสด') {
@@ -178,14 +176,14 @@ if (isset($_SESSION['user_level'])) {
         }
 
         Swal.fire({
-            title: 'ยืนยันการลบคำขอ',
-            text: 'คุณต้องการลบคำขอนี้หรือไม่?',
+            title: 'ยืนยันการยกเลิกคำขอ',
+            text: 'คุณต้องการยกเลิกคำขอนี้หรือไม่?',
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
-            confirmButtonText: 'ลบ',
-            cancelButtonText: 'ยกเลิก'
+            confirmButtonText: 'ยกเลิกคำขอ',
+            cancelButtonText: 'ไม่ยกเลิกคำขอ'
         }).then((result) => {
             if (result.isConfirmed) {
                 // Perform the delete request
@@ -197,8 +195,8 @@ if (isset($_SESSION['user_level'])) {
                     },
                     success: function(response) {
                         Swal.fire({
-                            title: 'ลบคำขอเรียบร้อยแล้ว',
-                            text: 'คำขอถูกลบเรียบร้อยแล้ว',
+                            title: 'ยกเลิกคำขอเรียบร้อยแล้ว',
+                            text: 'คำขอถูกยกเลิกเรียบร้อยแล้ว',
                             icon: 'success'
                         }).then(() => {
                             location.reload();
@@ -218,7 +216,7 @@ if (isset($_SESSION['user_level'])) {
 </script>
 
 <script>
-    function requestCertificateSalary(requestCertificateSalary) {
+    function requestCertificateSalary() {
         Swal.fire({
             title: 'ยืนยันการส่งคำขอ',
             text: 'คุณต้องการส่งคำขอใบรับรองเงินเดือนหรือไม่?',
@@ -230,50 +228,38 @@ if (isset($_SESSION['user_level'])) {
             cancelButtonText: 'ยกเลิก'
         }).then((result) => {
             if (result.isConfirmed) {
-                // แสดงกล่องข้อความให้ผู้ใช้กรอกข้อมูลเพิ่มเติม
-                Swal.fire({
-                    title: 'เพิ่มข้อมูลเพิ่มเติม',
-                    html: '<textarea id="additionalData" class="swal2-textarea" placeholder="เช่น หนังสือรับรองธนาคารออมสิน,กรุงไทย"></textarea><p style="color: red; margin-top: 5px;">*กรณีใบรับรองเงินเดือนปกติให้กดส่งได้เลย</p>',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ส่ง',
-                    cancelButtonText: 'ยกเลิก',
-                    preConfirm: () => {
-                        // รับข้อมูลเพิ่มเติมจากกล่องข้อความ
-                        const additionalData = Swal.getPopup().querySelector('#additionalData').value;
-                        // ส่งคำขอหนังสือรับรองไปยังเซิร์ฟเวอร์พร้อมกับข้อมูลเพิ่มเติม
-                        return $.ajax({
-                            url: 'requestcertificate.php',
-                            type: 'POST',
-                            data: {
-                                certificate_type: '1',
-                                additional_data: additionalData
-                            }
-                        });
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                // Perform the request using Ajax
+                $.ajax({
+                    url: 'requestcertificate.php',
+                    type: 'POST',
+                    data: {
+                        certificate_type: '1'
+                    },
+                    success: function(response) {
+                        // Handle the response from requestcertificate.php
                         Swal.fire({
                             title: 'ส่งคำขอเรียบร้อยแล้ว',
                             text: 'คำขอใบรับรองเงินเดือนถูกส่งเรียบร้อยแล้ว',
                             icon: 'success'
                         }).then(() => {
+                            // Reload the page or perform any other necessary action
                             location.reload();
                         });
+                    },
+                    error: function() {
+                        Swal.fire({
+                            title: 'เกิดข้อผิดพลาด',
+                            text: 'เกิดข้อผิดพลาดในการส่งคำขอ',
+                            icon: 'error'
+                        });
                     }
-                }).catch(() => {
-                    Swal.fire({
-                        title: 'เกิดข้อผิดพลาด',
-                        text: 'เกิดข้อผิดพลาดในการส่งคำขอ',
-                        icon: 'error'
-                    });
                 });
+
+
             }
         });
     }
 </script>
-
 
 
 <script>

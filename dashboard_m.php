@@ -24,12 +24,17 @@ if (isset($_SESSION['user_level'])) {
 }
 
 
-$sql = "SELECT sc.*, u.fname, u.lname, u.affiliation, cc.certificate_type_name, a.fname AS approver_fname, a.lname AS approver_lname 
+$sql = "SELECT sc.*, u.fname, u.lname, u.salary, u.otherIncome, u.maritalStatus, u.startDate, u.employmentContract, u.position, 
+               cc.certificate_type_name, a.fname AS approver_fname, a.lname AS approver_lname,
+               s.subaffiliation_name, aff.affiliation_name
         FROM requestcertificate sc
         INNER JOIN users u ON sc.user_id = u.user_id
         INNER JOIN certificate_type cc ON sc.certificate_type_id = cc.certificate_type_id
         LEFT JOIN users a ON sc.approver_id = a.user_id
+        LEFT JOIN tbl_subaffiliation s ON u.subaffiliation_id = s.subaffiliation_id
+        LEFT JOIN tbl_affiliation aff ON s.affiliation_id = aff.affiliation_id
         ORDER BY sc.request_date";
+
 
 
 $result = mysqli_query($conn, $sql);
@@ -40,6 +45,7 @@ $result = mysqli_query($conn, $sql);
 <head>
     <title>Dashboard (Admin/Manager)</title>
     <?php require_once 'assest/head.php'; ?>
+
 
 </head>
 
@@ -69,8 +75,7 @@ $result = mysqli_query($conn, $sql);
                                             <thead>
                                                 <tr>
                                                     <th>ลำดับ</th>
-                                                    <th>ชื่อ-นามสกุล</th>
-                                                    <th>สังกัด</th>
+                                                    <th>ข้อมูลผู้ร้องขอ</th>
                                                     <th>ประเภทหนังสือรับรอง</th>
                                                     <th>สถานะ</th>
                                                     <th>วันที่ส่งคำขอ</th>
@@ -85,8 +90,51 @@ $result = mysqli_query($conn, $sql);
                                                 ?>
                                                     <tr data-request-id="<?php echo $row['requestcertificate_id']; ?>">
                                                         <td><?php echo $index--; ?></td> <!-- ลดค่า $index ทีละหนึ่งทุกครั้ง -->
-                                                        <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
-                                                        <td><?php echo $row['affiliation']; ?></td>
+                                                        <td id="userData">
+                                                            <?php
+                                                            $startDate_buddhist = date('d-m-Y', strtotime($row['startDate'] . '+543 years'));
+
+                                                            $months = array(
+                                                                '01' => 'มกราคม',
+                                                                '02' => 'กุมภาพันธ์',
+                                                                '03' => 'มีนาคม',
+                                                                '04' => 'เมษายน',
+                                                                '05' => 'พฤษภาคม',
+                                                                '06' => 'มิถุนายน',
+                                                                '07' => 'กรกฎาคม',
+                                                                '08' => 'สิงหาคม',
+                                                                '09' => 'กันยายน',
+                                                                '10' => 'ตุลาคม',
+                                                                '11' => 'พฤศจิกายน',
+                                                                '12' => 'ธันวาคม'
+                                                            );
+
+                                                            list($day, $month, $year) = explode('-', $startDate_buddhist);
+                                                            $startDate_buddhist = $day . ' ' . $months[$month] . ' ' . $year;
+
+
+                                                            /* คำนวณปีที่ทำงาน */
+                                                            $startDate = new DateTime($row['startDate']);
+                                                            $endDate = new DateTime(); // วันปัจจุบัน
+
+                                                            $interval = $startDate->diff($endDate);
+
+                                                            $years = $interval->y; // จำนวนปี
+                                                            $months = $interval->m; // จำนวนเดือน
+                                                            $day = $interval->d; // จำนวนวัน
+                                                            ?>
+
+                                                            <?php echo '<b>ชื่อ - นามสกุล : </b>' . $row['fname'] . ' ' . $row['lname'] . '</br>' .
+                                                                '<b>ตำแหน่ง : </b>' . $row['position'] . '</br>' .
+                                                                '<b>สังกัด : </b>' . $row['affiliation_name'] . '</br>' .
+                                                                '<b>ฝ่ายงาน : </b>' . $row['subaffiliation_name'] . '</br>' .
+                                                                '<b>ประเภทสัญญาจ้าง : </b>' . $row['employmentContract'] . '</br>' .
+                                                                '<b>เงินเดือน : </b>' . $row['salary'] . '</br>' .
+                                                                '<b>เงินรายได้อื่น : </b>' . $row['otherIncome'] . '</br>' .
+                                                                '<b>วันที่เริ่มทำงาน : </b>' . $startDate_buddhist . '</br>' .
+                                                                '<b>จำนวนปีที่ทำงาน : </b>' . $years . ' ปี ' . $months . ' เดือน ' . $day .' วัน';
+                                                            ?>
+                                                        </td>
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
                                                             $certificate_type_name = $row['certificate_type_name'];
@@ -169,13 +217,34 @@ $result = mysqli_query($conn, $sql);
 </html>
 <script>
     $(document).ready(function() {
-        $('#dataTable').DataTable();
+        $('#dataTable').DataTable({
+            "autoWidth": true,
+            "columnDefs": [ 
+            { "width": "300px", "targets": [1] }, // กำหนดความกว้างของคอลัมน์ที่ 1 เป็น px
+        ],
+            "language": {
+                "lengthMenu": "แสดง _MENU_ ข้อมูล",
+                "zeroRecords": "ไม่มีข้อมูลที่คุณค้นหา",
+                "info": "แสดงหน้าที่ _PAGE_ ของ _PAGES_",
+                "infoEmpty": "ไม่มีข้อมูลที่คุณเลือก",
+                "infoFiltered": "(กรองข้อมูลจากทั้งหมด _MAX_ ข้อมูล)",
+                "search": "ค้นหา:",
+                "paginate": {
+                    "first": "First",
+                    "last": "Last",
+                    "next": "ต่อไป",
+                    "previous": "ก่อนหน้า"
+                },
+            }
+        });
     });
 </script>
 
+
+
 <script>
     $(document).ready(function() {
-         $('#editTable').on('click', '.update-status-btn', function() {
+        $('#editTable').on('click', '.update-status-btn', function() {
             var requestId = $(this).data('request-id');
             var status = $(this).closest('tr').find('.status-badge').text();
 

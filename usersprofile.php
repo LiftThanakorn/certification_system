@@ -61,7 +61,6 @@ $result = mysqli_query($conn, $sql);
                                             <tr>
                                                 <th>ลำดับที่</th>
                                                 <th>ชื่อจริง - นามสกุล</th>
-                                                <th>สังกัด</th>
                                                 <th>ตำแหน่ง</th>
                                                 <th>ระดับผู้ใช้</th>
                                                 <th>ประเภทบุคลากร</th>
@@ -77,7 +76,6 @@ $result = mysqli_query($conn, $sql);
                                                 <tr>
                                                     <td><?php echo $count; ?></td>
                                                     <td><?php echo $row['fname'] . ' ' . $row['lname']; ?></td>
-                                                    <td><?php echo $row['affiliation']; ?></td>
                                                     <td><?php echo $row['position']; ?></td>
                                                     <td><?php echo $row['user_level']; ?></td>
                                                     <td><?php echo $row['staffType']; ?></td>
@@ -109,24 +107,46 @@ $result = mysqli_query($conn, $sql);
     $(document).ready(function() {
         var table = $('#usersTable').DataTable({
             dom: 'Bfrtip',
-            buttons: [{
-                extend: 'excel',
-                text: 'Export เป็น Excel',
-                className: 'btn btn-success',
-                exportOptions: {
-                    columns: [0, 1, 2, 3, 4, 5, 6, 7]
+            buttons: [
+              /*   {
+                    extend: 'excel',
+                    text: 'Export เป็น Excel',
+                    className: 'btn btn-success',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    }
+                }, */
+                {
+                    extend: 'pdfHtml5', // Use pdfHtml5 instead of extend: 'pdf'
+                    text: 'Export เป็น PDF',
+                    className: 'btn btn-danger',
+                    exportOptions: {
+                        columns: [0, 1, 2, 3, 4, 5, 6, 7]
+                    },
+                    customize: function(doc) {
+                        // Add a title to the PDF document
+                        doc.content.splice(0, 0, {
+                            text: 'ข้อมูลผู้ใช้งานในระบบ',
+                            fontSize: 16,
+                            alignment: 'center',
+                            margin: [0, 0, 0, 10]
+                        });
+                    }
                 }
-            }]
+            ]
         });
 
         table.buttons().container()
             .appendTo('#usersTable_wrapper .dataTables_filter .btn-group')
             .addClass('d-inline-flex align-items-center ml-2');
     });
+    
 </script>
-
-
 <!-- JS สำหรับ DataTables Buttons -->
 <script src="vendor/datatables/Buttons-2.3.6/js/dataTables.buttons.min.js"></script>
 <script src="vendor/datatables/Buttons-2.3.6/js/buttons.html5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<!-- PDFMake Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts.js"></script>
+

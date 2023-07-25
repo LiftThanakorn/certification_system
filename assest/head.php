@@ -6,8 +6,8 @@
 <link href="css/sb-admin-2.min.css" rel="stylesheet" />
 
 <link href="vendor/fontawesome-free/css/fontawesome.css" rel="stylesheet">
-<link href="vendor/fontawesome-free/css/brands.css" rel="stylesheet">
-<link href="vendor/fontawesome-free/css/solid.css" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/brands.css" rel="stylesheet">
+  <link href="vendor/fontawesome-free/css/solid.css" rel="stylesheet">
 
 <link rel="stylesheet" href="vendor/datatables/datatables.css" />
 
