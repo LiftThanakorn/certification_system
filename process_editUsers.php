@@ -18,21 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $otherIncome = $_POST['otherIncome'];
     $maritalStatus = $_POST['maritalStatus'];
     $user_level = $_POST['user_level'];
-    $password = $_POST['password'];
-    $confirmPassword = $_POST['confirmPassword']; // Added confirmPassword field
-
-    // Validate password and confirmPassword match
-    if (!empty($password) && $password !== $confirmPassword) {
-        $response = [
-            'status' => 'error',
-            'message' => 'รหัสผ่านและยืนยันรหัสผ่านใหม่ไม่ตรงกัน'
-        ];
-        echo json_encode($response);
-        exit;
-    }
-
-      // Hash the password
-      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+  
 
     // แปลงรูปแบบวันที่จาก พ.ศ. เป็น ค.ศ.
     $startDate_english = DateTime::createFromFormat('d-m-Y', $startDate);
@@ -69,8 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 otherIncome = '$otherIncome', 
                 maritalStatus = '$maritalStatus', 
                 user_level = '$user_level', 
-                image = '$uniqueFileName',
-                password = '$hashedPassword' 
+                image = '$uniqueFileName'
                 WHERE user_id = '$userId'";
             } else {
                 $response = [
@@ -105,12 +90,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         salary = '$salary', 
                         otherIncome = '$otherIncome', 
                         maritalStatus = '$maritalStatus', 
-                        user_level = '$user_level',
-                        password = '$hashedPassword'
+                        user_level = '$user_level'
                         WHERE user_id = '$userId'";
     }
 
-    // ทำการอัปเดตข้อมูลในฐานข้อมูล
+      // ทำการอัปเดตข้อมูลในฐานข้อมูล
     if (mysqli_query($conn, $sql)) {
         $response = [
             'status' => 'success',

@@ -129,4 +129,16 @@
 .form-control {
     color: black;
 }
+#basic-addon1 {
+    color:rgba(0, 0, 0, 1)
+}
+.swal2-select {
+        min-width: 100%;
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
 </style>

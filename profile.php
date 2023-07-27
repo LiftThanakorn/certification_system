@@ -30,7 +30,6 @@ $salary = $row['salary'];
 $otherIncome = $row['otherIncome'];
 $maritalStatus = $row['maritalStatus'];
 $user_level = $row['user_level'];
-$password = $row['password'];
 $image = $row['image'];
 $positionlevel_id = $row['positionlevel_id'];
 $academicposition_id = $row['academicposition_id'];
@@ -193,8 +192,8 @@ $executiveposition_id = $row['executiveposition_id'];
                                                 <label for="employmentContract" class="form-label">สัญญาจ้าง:</label>
                                                 <select class="form-select" id="employmentContract" name="employmentContract" required>
                                                     <option value="พนักงานมหาวิทยาลัย" <?php if ($employmentContract === 'พนักงานมหาวิทยาลัย') echo 'selected'; ?>>พนักงานมหาวิทยาลัย</option>
-                                                    <option value="จ้างประจำ" <?php if ($employmentContract === 'จ้างประจำ') echo 'selected'; ?>>จ้างประจำ</option>
-                                                    <option value="จ้างชั่วคราว" <?php if ($employmentContract === 'จ้างชั่วคราว') echo 'selected'; ?>>จ้างชั่วคราว</option>
+                                                    <option value="พนักงานประจำตามสัญญา" <?php if ($employmentContract === 'พนักงานประจำตามสัญญา') echo 'selected'; ?>>จ้างประจำ</option>
+                                                    <option value="พนักงานงานสัญญาจ้างชั่วคราว" <?php if ($employmentContract === 'พนักงานงานสัญญาจ้างชั่วคราว') echo 'selected'; ?>>จ้างชั่วคราว</option>
                                                     <option value="ข้าราชการ" <?php if ($employmentContract === 'ข้าราชการ') echo 'selected'; ?>>ข้าราชการ</option>
                                                     <option value="พนักงานราชการ" <?php if ($employmentContract === 'พนักงานราชการ') echo 'selected'; ?>>พนักงานราชการ</option>
                                                     <option value="พนักงานรัฐวิสาหกิจ" <?php if ($employmentContract === 'พนักงานรัฐวิสาหกิจ') echo 'selected'; ?>>พนักงานรัฐวิสาหกิจ</option>
@@ -246,10 +245,10 @@ $executiveposition_id = $row['executiveposition_id'];
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                        <div class="col">
+ <!--                                        <div class="col">
                                                 <label for="password" class="form-label">รหัสผ่าน:</label>
                                                 <div class="input-group">
-                                                    <input type="password" class="form-control" id="password" name="password">
+                                                    <input type="password" class="form-control" id="password" name="password" value=<?php echo $password; ?>>
                                                     <button type="button" id="togglePassword" class="btn btn-outline-secondary">
                                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                                     </button>
@@ -264,15 +263,18 @@ $executiveposition_id = $row['executiveposition_id'];
                                                     </button>
                                                 </div>
                                             </div>
+                                            </div> -->
+                                            <div class="row mb-3">
                                             <div class="col">
                                                 <label for="profileImage" class="form-label">รูปภาพใหม่</label>
                                                 <input type="file" class="form-control" id="profileImage" name="profileImage" accept="image/*">
                                                 <small class="text-danger">*ไฟล์ jpg jpeg png เท่านั้น</small>
                                             </div>
+                                            </div>
                                             <div class="col">
                                                 <input type="hidden" class="form-control" id="user_level" name="user_level" value="<?php echo $user_level; ?>" readonly>
                                             </div>
-                                        </div>
+                                        
                                         <div class="row">
                                             <div class="col d-flex justify-content-end">
                                                 <input type="hidden" name="user_id" value="<?php echo $userId; ?>">
@@ -328,7 +330,7 @@ $executiveposition_id = $row['executiveposition_id'];
                     }
                 },
                 error: function(xhr, status, error) {
-                    /* console.log(xhr, status, error); */
+                     console.log(xhr, status, error); 
                     Swal.fire({
                         icon: 'error',
                         title: 'เกิดข้อผิดพลาด!',
@@ -342,7 +344,7 @@ $executiveposition_id = $row['executiveposition_id'];
 </script>
 
 <!-- สคริปแสดงรหัสผ่าน -->
-<script>
+<!-- <script>
     $(document).ready(function() {
         $('#togglePassword, #toggleConfirmPassword').click(function() {
             var targetInput = $(this).attr('data-target');
@@ -351,4 +353,4 @@ $executiveposition_id = $row['executiveposition_id'];
             $(this).find('i').toggleClass('fa-eye fa-eye-slash');
         });
     });
-</script>
+</script> -->

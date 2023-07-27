@@ -32,26 +32,27 @@ $mpdf = new \Mpdf\Mpdf([
 
 
 
-// รับข้อมูลที่ถูกส่งมา
-$nameTitle = $_POST['nameTitle'] ?? '';
-$mhesinumber = $_POST['mhesinumber'] ?? '';
-$fname = $_POST['fname'] ?? '';
-$lname = $_POST['lname'] ?? '';
-$maritalStatus = $_POST['maritalStatus'] ?? '';
-$position = $_POST['position'] ?? '';
-$positionlevel_name = ($_POST['positionlevel_name'] ?? '') !== 'ไม่มีรหัสวิทยฐานะ' ? $_POST['positionlevel_name'] ?? '' : '';
-$affiliation_name = $_POST['affiliation_name'] ?? '';
-$subaffiliation_name = $_POST['subaffiliation_name'] ?? '';
-$employmentContract = $_POST['employmentContract'] ?? '';
-$otherIncome = $_POST['otherIncome'] ?? '';
-$startDate_buddhist = $_POST['startDate_buddhist'] ?? '';
-$years = $_POST['years'] ?? '';
-$months = $_POST['months'] ?? '';
-$day = $_POST['day'] ?? '';
+// Check if the form is submitted
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Sanitize and validate the received data (You may need to add more validation)
+    $nameTitle = htmlspecialchars($_POST['nameTitle'] ?? '');
+    $mhesinumber1 = htmlspecialchars($_POST['mhesinumber1'] ?? '');
+    $fname = htmlspecialchars($_POST['fname'] ?? '');
+    $lname = htmlspecialchars($_POST['lname'] ?? '');
+    $maritalStatus = htmlspecialchars($_POST['maritalStatus'] ?? '');
+    $position = htmlspecialchars($_POST['position'] ?? '');
+    $positionlevel_name = htmlspecialchars(($_POST['positionlevel_name'] ?? '') !== 'ไม่มีรหัสวิทยฐานะ' ? $_POST['positionlevel_name'] ?? '' : '');
+    $affiliation_name = htmlspecialchars($_POST['affiliation_name'] ?? '');
+    $subaffiliation_name = htmlspecialchars($_POST['subaffiliation_name'] ?? '');
+    $employmentContract = htmlspecialchars($_POST['employmentContract'] ?? '');
+    $otherIncome = htmlspecialchars($_POST['otherIncome'] ?? '');
+    $startDate_buddhist = htmlspecialchars($_POST['startDate_buddhist'] ?? '');
+    $years = htmlspecialchars($_POST['years'] ?? '');
+    $months = htmlspecialchars($_POST['months'] ?? '');
+    $day = htmlspecialchars($_POST['day'] ?? '');
+    $salary = isset($_POST['salary']) ? number_format((float)$_POST['salary'], 0, '.', ',') : '';
 
-$salary = isset($_POST['salary']) ? number_format((float) $_POST['salary'], 0, '.', ',') : '';
-
-
+}
 
 // ฟังก์ชันแปลงเลขอาราบิกเป็นตัวเลขไทย
 function numberToThai($number)
@@ -148,7 +149,7 @@ body {
 </div>
 <table width="100%" border="0" cellspacing="0" cellpadding="5" class="custom-table">
     <tr>
-        <td>ที่ อว ๐๖๔๗.๐๑(๒)/' . numberToThai($mhesinumber) . '</td>
+        <td>ที่ อว ๐๖๔๗.๐๑(๒)/' . numberToThai($mhesinumber1) . '</td>
         <td width="28%" style="padding: 0px;">มหาวิทยาลัยราชภัฏร้อยเอ็ด</td>
     </tr>
     <tr>

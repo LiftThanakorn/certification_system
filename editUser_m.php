@@ -246,7 +246,7 @@ $executiveposition_id = $row['executiveposition_id'];
                                             </div>
                                         </div>
                                         <div class="row mb-3">
-                                            <div class="col">
+<!--                                             <div class="col">
                                                 <label for="password" class="form-label">รหัสผ่าน:</label>
                                                 <div class="input-group">
                                                     <input type="password" class="form-control" id="password" name="password">
@@ -263,7 +263,7 @@ $executiveposition_id = $row['executiveposition_id'];
                                                         <i class="fa fa-eye" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
-                                            </div>
+                                            </div> -->
                                             <div class="col">
                                                 <label for="user_level" class="form-label">ระดับผู้ใช้:</label>
                                                 <select class="form-select" id="user_level" name="user_level">

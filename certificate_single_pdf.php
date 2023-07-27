@@ -108,7 +108,7 @@ $currentDate = numberToThai(date('d')) . ' ' . convertToThaiMonth(date('m')) . '
 
 
 
-$pastContent = '<p class="custom-indent">หนังสือฉบับนี้ให้ไว้เพื่อรับรองว่า ' . $nameTitle . '' . $fname . ' ' . $lname . ' เป็น' . $employmentContract . ' ตำแหน่ง' . $position . ' ' . $positionlevel_name . ' สังกัดมหาวิทยาลัยราชภัฏร้อยเอ็ด กระทรวงการอุดมศึกษา วิทยาศาสตร์ วิจัยและนวัตกรรม เริ่มปฏิบัติงานในมหาวิทยาลัยราชภัฏร้อยเอ็ด ตั้งแต่วันที่ ' . numberToThai($startDate_buddhist) . ' จนถึงปัจจุบัน นับเป็นเวลา ' . numberToThai($years) . ' ปี ' . numberToThai($months) . ' เดือน' . '</p>';
+$pastContent = '<p class="custom-indent">หนังสือฉบับนี้ให้ไว้เพื่อรับรองว่า ' . $nameTitle . '' . $fname . ' ' . $lname . ' เป็น' . $employmentContract . ' ตำแหน่ง' . $position . '' . $positionlevel_name . ' สังกัดมหาวิทยาลัยราชภัฏร้อยเอ็ด กระทรวงการอุดมศึกษา วิทยาศาสตร์ วิจัยและนวัตกรรม เริ่มปฏิบัติงานในมหาวิทยาลัยราชภัฏร้อยเอ็ด ตั้งแต่วันที่ ' . numberToThai($startDate_buddhist) . ' จนถึงปัจจุบัน นับเป็นเวลา ' . numberToThai($years) . ' ปี ' . numberToThai($months) . ' เดือน' . ($maritalStatus ? ' และมีสถานภาพ' . $maritalStatus : '') . '</p>';
 
 
 
@@ -205,7 +205,7 @@ body {
         ';
 
 
-$mpdf->SetTitle('หนังสือรับรองการปฏิบัติงาน');
+$mpdf->SetTitle('หนังสือรับรองสถานภาพโสด');
 $mpdf->WriteHTML($content);
 
 $mpdf->Output();

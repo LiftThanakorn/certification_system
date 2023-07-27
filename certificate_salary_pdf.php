@@ -29,15 +29,11 @@ $mpdf = new \Mpdf\Mpdf([
     'margin_bottom' => 20 // 2 cm หรือ 20 mm
 ]);
 
-
-
-
-// รับข้อมูลที่ถูกส่งมา
+// รับข้อมูลที่ถูกส่งมาผ่าน AJAX
 $nameTitle = $_POST['nameTitle'] ?? '';
 $mhesinumber = $_POST['mhesinumber'] ?? '';
 $fname = $_POST['fname'] ?? '';
 $lname = $_POST['lname'] ?? '';
-$maritalStatus = $_POST['maritalStatus'] ?? '';
 $position = $_POST['position'] ?? '';
 $positionlevel_name = ($_POST['positionlevel_name'] ?? '') !== 'ไม่มีรหัสวิทยฐานะ' ? $_POST['positionlevel_name'] ?? '' : '';
 $affiliation_name = $_POST['affiliation_name'] ?? '';
@@ -50,8 +46,6 @@ $months = $_POST['months'] ?? '';
 $day = $_POST['day'] ?? '';
 
 $salary = isset($_POST['salary']) ? number_format((float) $_POST['salary'], 0, '.', ',') : '';
-
-
 
 // ฟังก์ชันแปลงเลขอาราบิกเป็นตัวเลขไทย
 function numberToThai($number)
@@ -105,11 +99,7 @@ function convertToBuddhistEra($date)
 
 $currentDate = numberToThai(date('d')) . ' ' . convertToThaiMonth(date('m')) . ' ' . convertToBuddhistEra(date('Y-m-d')); // แสดงผลในรูปแบบ "วันที่ รหัสเดือน พ.ศ. ปี"
 
-
-
-
-$pastContent = '<p class="custom-indent">หนังสือฉบับนี้ให้ไว้เพื่อรับรองว่า ' . $nameTitle . '' . $fname . ' ' . $lname . ' เป็น' . $employmentContract . ' ตำแหน่ง' . $position . ' ' . $positionlevel_name . ' สังกัดมหาวิทยาลัยราชภัฏร้อยเอ็ด กระทรวงการอุดมศึกษา วิทยาศาสตร์ วิจัยและนวัตกรรม เริ่มปฏิบัติงานในมหาวิทยาลัยราชภัฏร้อยเอ็ด ตั้งแต่วันที่ ' . numberToThai($startDate_buddhist) . ' จนถึงปัจจุบัน นับเป็นเวลา ' . numberToThai($years) . ' ปี ' . numberToThai($months) . ' เดือน' . '</p>';
-
+$pastContent = '<p class="custom-indent">หนังสือฉบับนี้ให้ไว้เพื่อรับรองว่า ' . $nameTitle . '' . $fname . ' ' . $lname . 'เป็น ' . $employmentContract . ' ตำแหน่ง' . $position . ' ' . $positionlevel_name . ' อัตราเงินเดือน ' . numberToThai($salary) . ' บาท สังกัดมหาวิทยาลัยราชภัฏร้อยเอ็ด กระทรวงการอุดมศึกษา วิทยาศาสตร์ วิจัยและนวัตกรรม เริ่มปฏิบัติงานในมหาวิทยาลัยราชภัฏร้อยเอ็ด ตั้งแต่วันที่ ' . numberToThai($startDate_buddhist) . ' จนถึงปัจจุบัน นับเป็นเวลา ' . numberToThai($years) . ' ปี ' . numberToThai($months) . ' เดือน ' .  '</p>';
 
 
 $content = '
@@ -126,7 +116,6 @@ body {
 }
 .custom-table {
     margin-top: -40px;
-
 }
 .custom-space td {
     height: 20pt;
@@ -140,7 +129,7 @@ body {
 .custom-indent {
     text-indent: 5em;
     text-align: justify;
-    white-space: pre-wrap;
+    
 }
 </style>
 <div class="center">
@@ -171,41 +160,39 @@ body {
 
 <p class="custom-indent">ให้ไว้ ณ วันที่  ' . $currentDate . '</p>
 
-
 <table width="100%" border="0" cellspacing="0" cellpadding="5" class="custom-space2">
-            <tr>
-                <td></td>
-            </tr>
-        </table>
+    <tr>
+        <td></td>
+    </tr>
+</table>
 
-        <table width="100%" border="0" cellspacing="0" cellpadding="5">
-            <tr>
-                <td></td>
-                <td width="72%" style="text-align:center;">
-                <p >(ผู้ช่วยศาสตราจารย์ ดร.เกรียงศักดิ์ ศรีสมบัติ)<br/>
+<table width="100%" border="0" cellspacing="0" cellpadding="5">
+    <tr>
+        <td></td>
+        <td width="72%" style="text-align:center;">
+            <p>
+                (ผู้ช่วยศาสตราจารย์ ดร.เกรียงศักดิ์ ศรีสมบัติ)<br/>
                 รองอธิการบดีฝ่ายทรัพยากรบุคคลและพัฒนาคุณภาพองค์กร<br /> 
-             ปฏิบัติราชการแทน รักษาราชการแทนอธิการบดีมหาวิทยาลัยราชภัฏร้อยเอ็ด
-             </p></td>
-            </tr>
-        </table>
+                ปฏิบัติราชการแทน รักษาราชการแทนอธิการบดีมหาวิทยาลัยราชภัฏร้อยเอ็ด
+            </p>
+        </td>
+    </tr>
+</table>
 
-        <table width="100%" border="0" cellspacing="0" cellpadding="5" class="custom-space3">
-            <tr>
-                <td></td>
-            </tr>
-        </table>
+<table width="100%" border="0" cellspacing="0" cellpadding="5" class="custom-space3">
+    <tr>
+        <td></td>
+    </tr>
+</table>
 
-        <b>หมายเหตุ : หนังสือฉบับนี้มีอายุ ๙๐ วัน นับตั้งแต่วันที่ออกหนังสือ</b>
+<b>หมายเหตุ : หนังสือฉบับนี้มีอายุ ๙๐ วัน นับตั้งแต่วันที่ออกหนังสือ</b>
 
-        <p>สำนักงานอธิการบดี : ฝ่ายการเจ้าหน้าที่<br />
-        โทร.  ๐ ๔๓๕๕ ๖๐๐๖<br />
-        โทรสาร  ๐ ๔๓๕๕ ๖๐๐๙ <br />
-        </p>
- 
-        ';
+<p>สำนักงานอธิการบดี : ฝ่ายการเจ้าหน้าที่<br />
+โทร. ๐ ๔๓๕๕ ๖๐๐๖<br />
+โทรสาร ๐ ๔๓๕๕ ๖๐๐๙ <br />
+</p>';
 
-
-$mpdf->SetTitle('หนังสือรับรองการปฏิบัติงาน');
+$mpdf->SetTitle('หนังสือรับรองเงินเดือน');
 $mpdf->WriteHTML($content);
 
 $mpdf->Output();

@@ -170,8 +170,8 @@
                   <select class="form-select" id="employmentContract" required>
                     <option value="">โปรดเลือก</option>
                     <option value="พนักงานมหาวิทยาลัย">พนักงานมหาวิทยาลัย</option>
-                    <option value="จ้างประจำ">จ้างประจำ</option>
-                    <option value="จ้างชั่วคราว">จ้างชั่วคราว</option>
+                    <option value="พนักงานประจำสัญญา">พนักงานประจำสัญญา</option>
+                    <option value="พนักงานงานสัญญาจ้างชั่วคราว">พนักงานงานสัญญาจ้างชั่วคราว</option>
                     <option value="ข้าราชการ">ข้าราชการ</option>
                     <option value="พนักงานราชการ">พนักงานราชการ</option>
                     <option value="พนักงานรัฐวิสาหกิจ">พนักงานรัฐวิสาหกิจ</option>

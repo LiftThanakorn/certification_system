@@ -364,17 +364,21 @@ if (isset($_SESSION['user_level'])) {
             cancelButtonText: 'ยกเลิก'
         }).then((result) => {
             if (result.isConfirmed) {
-                // แสดงกล่องข้อความให้ผู้ใช้กรอกข้อมูลเพิ่มเติม
+                // แสดงกล่องข้อความให้ผู้ใช้เลือกข้อมูลเพิ่มเติม
                 Swal.fire({
-                    title: 'เพิ่มข้อมูลเพิ่มเติม',
-                    html: '<textarea id="additionalData" class="swal2-textarea" placeholder="เช่น หนังสือรับรองธนาคารออมสิน,กรุงไทย"></textarea>',
+                    title: 'MOU',
+                    html: '<select id="additionalData" class="swal2-select">' +
+                        '<option value="MOU กรุงไทย">MOU กรุงไทย</option>' +
+                        '<option value="MOU ธนาคารออมสิน">MOU ธนาคารออมสิน</option>' +
+                        '<option value="MOU ธนาคารทหารไทย">MOU ธนาคารทหารไทย</option>' +
+                        '</select>',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
                     confirmButtonText: 'ส่ง',
                     cancelButtonText: 'ยกเลิก',
                     preConfirm: () => {
-                        // รับข้อมูลเพิ่มเติมจากกล่องข้อความ
+                        // รับข้อมูลเพิ่มเติมจากกล่องเลือก
                         const additionalData = Swal.getPopup().querySelector('#additionalData').value;
                         // ส่งคำขอหนังสือรับรองไปยังเซิร์ฟเวอร์พร้อมกับข้อมูลเพิ่มเติม
                         return $.ajax({
@@ -408,6 +412,7 @@ if (isset($_SESSION['user_level'])) {
         });
     }
 </script>
+
 
 
 <script>

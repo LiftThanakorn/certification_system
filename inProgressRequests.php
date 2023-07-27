@@ -24,17 +24,21 @@ if (isset($_SESSION['user_level'])) {
 }
 
 
-$sql = "SELECT sc.*, u.fname, u.lname, u.salary, u.otherIncome, u.maritalStatus, u.startDate, u.employmentContract, u.position, 
+$sql = "SELECT sc.*, u.fname, u.lname, u.nameTitle, u.salary, u.otherIncome, u.maritalStatus, u.startDate, u.employmentContract, u.position, 
+               pl.positionlevel_name AS positionlevel_name,
                cc.certificate_type_name, a.fname AS approver_fname, a.lname AS approver_lname,
-               s.subaffiliation_name, aff.affiliation_name
+               s.subaffiliation_name, aff.affiliation_name,
+               sc.additional_data -- เพิ่มตัวแปร additional_data เข้าไปใน SELECT
         FROM requestcertificate sc
         INNER JOIN users u ON sc.user_id = u.user_id
         INNER JOIN certificate_type cc ON sc.certificate_type_id = cc.certificate_type_id
         LEFT JOIN users a ON sc.approver_id = a.user_id
         LEFT JOIN tbl_subaffiliation s ON u.subaffiliation_id = s.subaffiliation_id
         LEFT JOIN tbl_affiliation aff ON s.affiliation_id = aff.affiliation_id
+        LEFT JOIN tbl_positionlevel pl ON u.positionlevel_id = pl.positionlevel_id 
         WHERE sc.status = 'กำลังดำเนินการ'
         ORDER BY sc.request_date";
+
 
 
 $result = mysqli_query($conn, $sql);
@@ -116,7 +120,7 @@ $result = mysqli_query($conn, $sql);
                                                             );
 
                                                             list($day, $month, $year) = explode('-', $startDate_buddhist);
-                                                            $startDate_buddhist = $day . ' ' . $months[$month] . ' ' . $year;
+                                                            $startDate_buddhist = ltrim($day, '0') . ' ' . $months[$month] . ' ' . $year;
 
 
                                                             /* คำนวณปีที่ทำงาน */
@@ -130,16 +134,74 @@ $result = mysqli_query($conn, $sql);
                                                             $day = $interval->d; // จำนวนวัน
                                                             ?>
 
-                                                            <?php echo '<b>ชื่อ - นามสกุล : </b>' . $row['fname'] . ' ' . $row['lname'] . '</br>' .
+                                                            <?php
+                                                            echo '<b>ชื่อ - นามสกุล : </b>' . $row['nameTitle'] . ' ' . $row['fname'] . ' ' . $row['lname'] . '</br>' .
+                                                                '<b>สถานะภาพ : </b>' . $row['maritalStatus'] . '</br>' .
                                                                 '<b>ตำแหน่ง : </b>' . $row['position'] . '</br>' .
+                                                                '<b>วิทยฐานะสายสนับสนุน: : </b>' . $row['positionlevel_name'] . '</br>' .
                                                                 '<b>สังกัด : </b>' . $row['affiliation_name'] . '</br>' .
                                                                 '<b>ฝ่ายงาน : </b>' . $row['subaffiliation_name'] . '</br>' .
                                                                 '<b>ประเภทสัญญาจ้าง : </b>' . $row['employmentContract'] . '</br>' .
                                                                 '<b>เงินเดือน : </b>' . $row['salary'] . '</br>' .
                                                                 '<b>เงินรายได้อื่น : </b>' . $row['otherIncome'] . '</br>' .
                                                                 '<b>วันที่เริ่มทำงาน : </b>' . $startDate_buddhist . '</br>' .
-                                                                '<b>จำนวนปีที่ทำงาน : </b>' . $years . ' ปี ' . $months . ' เดือน ' . $day .' วัน';
+                                                                '<b>จำนวนปีที่ทำงาน : </b>' . $years . ' ปี ' . $months . ' เดือน ' . $day . ' วัน';
                                                             ?>
+
+
+                                                            <form action="<?php echo ($certificate_type_name === 'หนังสือรับรองเงินเดือน') ? 'certificate_salary_pdf.php' : (($certificate_type_name === 'หนังสือรับรองสถานภาพโสด') ? 'certificate_single_pdf.php' : (($certificate_type_name === 'หนังสือรับรองการปฏิบัติงาน') ? 'certificate_work_pdf.php' : 'generateMou_pdf.php')); ?>" method="POST">
+
+
+                                                                <input type="hidden" name="nameTitle" value="<?php echo $row['nameTitle']; ?>">
+                                                                <input type="hidden" name="fname" value="<?php echo $row['fname']; ?>">
+                                                                <input type="hidden" name="lname" value="<?php echo $row['lname']; ?>">
+                                                                <input type="hidden" name="position" value="<?php echo $row['position']; ?>">
+                                                                <input type="hidden" name="positionlevel_name" value="<?php echo $row['positionlevel_name']; ?>">
+                                                                <input type="hidden" name="affiliation_name" value="<?php echo $row['affiliation_name']; ?>">
+                                                                <input type="hidden" name="subaffiliation_name" value="<?php echo $row['subaffiliation_name']; ?>">
+                                                                <input type="hidden" name="employmentContract" value="<?php echo $row['employmentContract']; ?>">
+                                                                <input type="hidden" name="salary" value="<?php echo $row['salary']; ?>">
+                                                                <input type="hidden" name="otherIncome" value="<?php echo $row['otherIncome']; ?>">
+                                                                <input type="hidden" name="startDate_buddhist" value="<?php echo $startDate_buddhist; ?>">
+                                                                <input type="hidden" name="years" value="<?php echo $years; ?>">
+                                                                <input type="hidden" name="months" value="<?php echo $months; ?>">
+                                                                <input type="hidden" name="day" value="<?php echo $day; ?>">
+                                                                <input type="hidden" name="maritalStatus" value="<?php echo $row['maritalStatus']; ?>">
+                                                                <input type="hidden" name="certificate_type_name" value="<?php echo $row['certificate_type_name']; ?>">
+                                                                <input type="hidden" name="additional_data" value="<?php echo $row['additional_data']; ?>">
+                                                                
+
+                                                                <?php if (
+                                                                    $certificate_type_name !== 'หนังสือรับรองเงินเดือน' && $certificate_type_name !== 'หนังสือรับรองสถานภาพโสด' && $certificate_type_name !== 'หนังสือรับรองการปฏิบัติงาน'
+                                                                ) { ?>
+                                                                    <hr>
+                                                                    <!-- ใส่ปุ่มส่งไปที่หน้า generateMou_pdf.php -->
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-10">
+
+                                                                            <button id='certificate-other' class="btn btn-info" type="submit">ไปที่หน้าส่งหนังสือรับรองอื่นๆ </button>
+
+                                                                        </div>
+                                                                    </div>
+                                                                <?php } else { ?>
+                                                                    <!-- ปุ่มส่งคำขอตามปกติ -->
+                                                                    <hr>
+                                                                    <div class="row justify-content-center">
+                                                                        <div class="col-10">
+                                                                            <div class="input-group">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text" id="basic-addon1">เลข อว.</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control" name="mhesinumber" aria-label="mhesinumber" aria-describedby="basic-addon1">
+                                                                                <button class="btn btn-info" type="submit"><i class="fa-solid fa-file-pdf"></i></button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                <?php } ?>
+                                                            </form>
+
+
+
                                                         </td>
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
@@ -283,4 +345,29 @@ $result = mysqli_query($conn, $sql);
     });
 </script>
 
+<script>
+    function showAdditionalData(additionalData) {
+        Swal.fire({
+            title: 'ข้อมูลเพิ่มเติม',
+            html: '<p style="font-size: 24px;">' + additionalData + '</p>',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'ตกลง',
+            customClass: {
+                content: 'custom-swal-content'
+            }
+        });
+    }
+</script>
 
+<script>
+    const certificateForm = document.getElementById('certificateForm');
+    const isCertificateSalary = <?php echo $isCertificateSalary ? 'true' : 'false'; ?>;
+
+    certificateForm.addEventListener('submit', function(event) {
+        if (isCertificateSalary) {
+            certificateForm.action = 'certificate_salary_pdf.php';
+        } else {
+            certificateForm.action = 'certificate_work_pdf.php';
+        }
+    });
+</script>

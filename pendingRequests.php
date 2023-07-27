@@ -145,37 +145,6 @@ $result = mysqli_stmt_get_result($stmt);
                                                                 '<b>วันที่เริ่มทำงาน : </b>' . $startDate_buddhist . '</br>' .
                                                                 '<b>จำนวนปีที่ทำงาน : </b>' . $years . ' ปี ' . $months . ' เดือน ' . $day . ' วัน';
                                                             ?>
-
-                                                            <!-- ปุ่มสำหรับส่งข้อมูลไปยังหน้า certificate_work_pdf.php -->
-                                                            <form action="certificate_work_pdf.php" method="POST">
-                                                                <input type="hidden" name="nameTitle" value="<?php echo $row['nameTitle']; ?>">
-                                                                <input type="hidden" name="fname" value="<?php echo $row['fname']; ?>">
-                                                                <input type="hidden" name="lname" value="<?php echo $row['lname']; ?>">
-                                                                <input type="hidden" name="position" value="<?php echo $row['position']; ?>">
-                                                                <input type="hidden" name="positionlevel_name" value="<?php echo $row['positionlevel_name']; ?>">
-                                                                <input type="hidden" name="affiliation_name" value="<?php echo $row['affiliation_name']; ?>">
-                                                                <input type="hidden" name="subaffiliation_name" value="<?php echo $row['subaffiliation_name']; ?>">
-                                                                <input type="hidden" name="employmentContract" value="<?php echo $row['employmentContract']; ?>">
-                                                                <input type="hidden" name="salary" value="<?php echo $row['salary']; ?>">
-                                                                <input type="hidden" name="otherIncome" value="<?php echo $row['otherIncome']; ?>">
-                                                                <input type="hidden" name="startDate_buddhist" value="<?php echo $startDate_buddhist; ?>">
-                                                                <input type="hidden" name="years" value="<?php echo $years; ?>">
-                                                                <input type="hidden" name="months" value="<?php echo $months; ?>">
-                                                                <input type="hidden" name="day" value="<?php echo $day; ?>">
-
-                                                                <hr>
-                                                                <div class="input-group mb-3">
-                                                                    <div class="input-group-prepend">
-                                                                        <span class="input-group-text" id="basic-addon1">เลข อว.</span>
-                                                                    </div>
-                                                                    <input type="text" class="form-control" name="mhesinumber" aria-label="mhesinumber" aria-describedby="basic-addon1">
-                                                                    <button class="btn btn-info" type="submit"><i class="fa-solid fa-file-pdf"></i></button>
-                                                                </div>
-
-                                                                
-                                                            </form>
-
-
                                                         </td>
                                                         <td style="width: 22%; text-align: center;">
                                                             <?php
